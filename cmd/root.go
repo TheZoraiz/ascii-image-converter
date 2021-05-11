@@ -41,12 +41,10 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(args) > 1 {
-				fmt.Println("Error: Too many arguments")
-				fmt.Println("\nUsage:\n\tascii-image-converter [image path] [flags]")
+				cmd.Help()
 				os.Exit(1)
 			} else if len(args) == 0 {
-				fmt.Println("Error: Need an image")
-				fmt.Println("\nUsage:\n\tascii-image-converter [image path] [flags]")
+				cmd.Help()
 				os.Exit(1)
 			}
 
@@ -70,8 +68,8 @@ var (
 				os.Exit(1)
 			}
 			if len(dims) > 0 && len(dims) != 2 {
-				fmt.Println("Error: Need two dimensions")
-				fmt.Println("\nExample:\n\tascii-image-converter [image path] -d 100,30")
+				fmt.Println("Error: Need two dimensions\n")
+				cmd.Help()
 				os.Exit(1)
 			}
 

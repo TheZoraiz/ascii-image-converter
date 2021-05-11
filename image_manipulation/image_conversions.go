@@ -25,6 +25,9 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
+	_ "golang.org/x/image/bmp"
+	_ "golang.org/x/image/webp"
+
 	"github.com/nathan-fiscaletti/consolesize-go"
 	"github.com/nfnt/resize"
 )
