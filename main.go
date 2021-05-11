@@ -22,4 +22,7 @@ import (
 
 func main() {
 	cmd.Execute()
+	// cols, rows := consolesize.GetConsoleSize()
+	// // fmt.Println(cols, rows)
+
 }

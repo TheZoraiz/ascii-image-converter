@@ -25,8 +25,8 @@ import (
 	_ "image/jpeg"
 	_ "image/png"
 
+	"github.com/nathan-fiscaletti/consolesize-go"
 	"github.com/nfnt/resize"
-	"golang.org/x/crypto/ssh/terminal"
 )
 
 // This function shrinks the passed image according to terminal size and
@@ -41,7 +41,12 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 	// Get dimensions of current terminal
 	if len(dimensions) == 0 {
 		var err error
-		terminalWidth, terminalHeight, err = terminal.GetSize(int(os.Stdin.Fd()))
+		terminalWidth, terminalHeight = consolesize.GetConsoleSize()
+
+		// To avoid cases where empty lines get printed between ascii lines
+		terminalWidth -= 1
+		terminalHeight -= 1
+
 		if err != nil {
 			panic(err)
 		}
@@ -64,7 +69,8 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 	}
 
 	if len(dimensions) > 0 {
-		defaultTermWidth, _, _ := terminal.GetSize(int(os.Stdin.Fd()))
+		defaultTermWidth, _ := consolesize.GetConsoleSize()
+		defaultTermWidth -= 1
 		if dimensions[0] > defaultTermWidth {
 			fmt.Println("Error: Set width is larger than terminal width")
 			os.Exit(1)
