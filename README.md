@@ -6,7 +6,7 @@ Currently, the tool supports PNG, JPEG/JPG, WEBP and BMP image formats
 
 <br>
 
-### Example ([Source]())
+### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062))
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
 
 ### ASCII Art:
@@ -88,6 +88,18 @@ ascii-image-converter [path to image] -Scd 100,30
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## Packges used
+
+[github.com/spf13/viper](https://github.com/spf13/viper)
+
+[github.com/spf13/cobra](https://github.com/spf13/cobra)
+
+[github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
+
+[github.com/nathan-fiscaletti/consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go)
+
+[github.com/nfnt/resize](https://github.com/nfnt/resize)
 
 
 ## License
