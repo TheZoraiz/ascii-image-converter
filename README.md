@@ -5,12 +5,6 @@ ascii-image-converter is a command-line tool that converts images into ascii art
 Currently, the tool supports PNG, JPEG/JPG, WEBP and BMP image formats
 
 <br>
-### Example ([source](https://miro.medium.com/max/3200/0*hd2Ib9nYpedgSDsf)):
-![Example1](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
-### ASCII art:
-![Example2](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/ascii_tree.png)
-
-<br>
 ## Installation
 First download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.1), and follow the steps with respect to your OS.
 
