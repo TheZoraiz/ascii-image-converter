@@ -40,17 +40,11 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 
 	// Get dimensions of current terminal
 	if len(dimensions) == 0 {
-		var err error
 		terminalWidth, terminalHeight = consolesize.GetConsoleSize()
 
 		// To avoid cases where empty lines get printed between ascii lines
 		terminalWidth -= 1
 		terminalHeight -= 1
-
-		if err != nil {
-			panic(err)
-		}
-
 		// Fix height
 		var ratio float32
 		imgHeight := img.Bounds().Max.Y
