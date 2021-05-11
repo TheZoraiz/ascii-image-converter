@@ -5,6 +5,15 @@ ascii-image-converter is a command-line tool that converts images into ascii art
 Currently, the tool supports PNG, JPEG/JPG, WEBP and BMP image formats
 
 <br>
+
+### Example ([Source]())
+![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
+
+### ASCII Art:
+![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/ascii_tree.png)
+
+<br>
+
 ## Installation
 First download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.1), and follow the steps with respect to your OS.
 
@@ -28,6 +37,7 @@ Extract Executables.zip and open the "Windows" folder. Copy the path to folder f
 * Afterwards, you can use it anywhere by typing "ascii-image-converter" in command prompt. Note: Make sure you restart the command prompt.
 
 <br>
+
 ## Usage
 To convert an image into ascii format, the usage is as follows:
 ```
@@ -38,6 +48,7 @@ Example
 ascii-image-converter myImage.jpeg
 ```
 <br>
+
 ### Flags
 
 #### --complex OR -c
@@ -65,16 +76,16 @@ Save the image ascii art in a file ascii-image.txt in the same directory
 ascii-image-converter [path to image] --save
 # Or
 ascii-image-converter [path to image] -S
-
 ```
 <br>
+
 You can combine commands as well
 ```
 ascii-image-converter [path to image] -Scd 100,30
-
 ```
 
 <br>
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
