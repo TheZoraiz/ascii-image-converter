@@ -65,6 +65,8 @@ ascii-image-converter myImage.jpeg
 Print the image with a wider array of ascii characters. Sometimes improves accuracy.
 ```
 ascii-image-converter [path to image] -c
+# Or
+ascii-image-converter [path to image] --complex
 ```
 
 
