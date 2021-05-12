@@ -16,11 +16,12 @@ limitations under the License.
 package cmd
 
 import (
-	imgMani "ascii-image-converter/image_manipulation"
 	"fmt"
 	"image"
 	"io/ioutil"
 	"os"
+
+	imgMani "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 
 	"github.com/spf13/cobra"
 
