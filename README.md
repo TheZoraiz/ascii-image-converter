@@ -20,7 +20,14 @@ Image formats currently supported:
 
 
 ## Installation
-First download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.1), and follow the steps with respect to your OS.
+
+### Go
+For custom Go installs
+```
+go install github.com/TheZoraiz/ascii-image-converter@latest
+```
+
+For physically installing the binaries, download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.1), and follow the steps with respect to your OS.
 
 ### Linux
 Extract Executables.zip and open the "Linux" directory.
