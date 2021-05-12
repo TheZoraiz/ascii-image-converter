@@ -29,9 +29,12 @@ sudo cp ascii-image-converter /usr/local/bin/
 Now you can use ascii-image-converter in the terminal. Execute "ascii-image-converter -h" for more details.
 
 ### Windows
-Extract Executables.zip and open the "Windows" folder. Copy the path to folder from the top of the file explorer and follow these instructions:
+
+You will need to set en Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
+
+Extract Executables.zip and open the "Windows" folder. Copy the path to folder from the top of the file explorer.
 * In Search, search for and then select: System (Control Panel)
-* Click the Advanced system settings link.
+* Click the Advanced System settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
 * In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
 * Afterwards, you can use it anywhere by typing "ascii-image-converter" in command prompt. Note: Make sure you restart the command prompt.
