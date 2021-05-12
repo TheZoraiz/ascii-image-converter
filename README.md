@@ -2,7 +2,11 @@
 
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported
 
-Currently, the tool supports PNG, JPEG/JPG, WEBP and BMP image formats
+Image formats currently supported:
+* PNG
+* JPEG/JPG
+* WEBP
+* BMP
 
 <br>
 
@@ -30,7 +34,7 @@ Now you can use ascii-image-converter in the terminal. Execute "ascii-image-conv
 
 ### Windows
 
-You will need to set en Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
+You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
 Extract Executables.zip and open the "Windows" folder. Copy the path to folder from the top of the file explorer.
 * In Search, search for and then select: System (Control Panel)
@@ -91,9 +95,6 @@ ascii-image-converter [path to image] -Scd 100,30
 ```
 
 <br>
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Packges used
 
