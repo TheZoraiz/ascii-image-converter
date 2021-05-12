@@ -16,13 +16,8 @@ limitations under the License.
 
 package main
 
-import (
-	"ascii-image-converter/cmd"
-)
+import "ascii-image-converter/cmd"
 
 func main() {
 	cmd.Execute()
-	// cols, rows := consolesize.GetConsoleSize()
-	// // fmt.Println(cols, rows)
-
 }

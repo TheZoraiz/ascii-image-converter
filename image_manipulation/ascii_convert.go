@@ -128,7 +128,7 @@ func ConvertToAsciiDetailed(imgSet [][]uint32) [][]string {
 
 			tempFloat := (value / MAX_VAL) * float32(len(asciiTableDetailed))
 			if value == MAX_VAL {
-				tempFloat = 68
+				tempFloat = float32(len(asciiTableDetailed) - 1)
 			}
 			tempInt := int(tempFloat)
 
@@ -160,6 +160,9 @@ func ConvertToAsciiSimple(imgSet [][]uint32) [][]string {
 
 			value := float32(imgSet[i][j])
 			tempFloat := (value / MAX_VAL) * float32(len(asciiTableSimple))
+			if value == MAX_VAL {
+				tempFloat = float32(len(asciiTableSimple) - 1)
+			}
 			tempInt := int(tempFloat)
 
 			tempSlice = append(tempSlice, asciiTableSimple[tempInt])
