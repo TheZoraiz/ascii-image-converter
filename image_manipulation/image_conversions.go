@@ -42,28 +42,22 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 
 	var terminalWidth, terminalHeight int
 
+	var smallImg image.Image
+
 	// Get dimensions of current terminal
 	if len(dimensions) == 0 {
-		terminalWidth, terminalHeight = consolesize.GetConsoleSize()
 
-		// To avoid cases where empty lines get printed between ascii lines
-		terminalWidth -= 1
-		terminalHeight -= 1
-		// Fix height
-		var ratio float32
-		imgHeight := img.Bounds().Max.Y
-		imgWidth := img.Bounds().Max.X
+		terminalWidth, _ = consolesize.GetConsoleSize()
+		smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
+		terminalHeight = smallImg.Bounds().Max.Y
+		terminalHeight -= terminalHeight / 2
 
-		if imgHeight > imgWidth {
-			ratio = float32(imgHeight) / float32(imgWidth)
-
-			terminalHeight = int(ratio * float32(terminalWidth))
-			terminalHeight -= terminalHeight / 2
-		}
+		smallImg = resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
 
 	} else {
 		terminalWidth = dimensions[0]
 		terminalHeight = dimensions[1]
+		smallImg = resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
 	}
 
 	if len(dimensions) > 0 {
@@ -81,7 +75,7 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 		imgSet[i] = make([]uint32, terminalWidth)
 	}
 
-	smallImg := resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
+	// smallImg := resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
 	b := smallImg.Bounds()
 
 	for y := b.Min.Y; y < b.Max.Y; y++ {
