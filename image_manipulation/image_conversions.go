@@ -33,11 +33,11 @@ import (
 )
 
 // This function shrinks the passed image according to passed dimensions or terminal
-// size if none are passed turns each pixel into grayscale to simplify getting numeric
-// data for ASCII character comparison
+// size if none are passed. It turns each pixel into grayscale to simplify getting numeric
+// data for ASCII character comparison.
 //
 // The returned 2D uint32 slice contains each corresponding pixel's value ranging from
-// 0 to 65535
+// 0 to 65535.
 func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 {
 
 	var terminalWidth, terminalHeight int

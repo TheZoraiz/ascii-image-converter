@@ -10,7 +10,7 @@ Image formats currently supported:
 
 <br>
 
-### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062))
+### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062)):
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
 
 ### ASCII Art:
