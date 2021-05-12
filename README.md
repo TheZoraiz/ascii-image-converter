@@ -40,7 +40,7 @@ Extract Executables.zip and open the "Windows" folder. Copy the path to folder f
 
 ## Usage
 
-Tip: Decrease font size or zoom out of terminal for maximum quality ascii art
+Note: Decrease font size or zoom out of terminal for maximum quality ascii art
 
 To convert an image into ascii format, the usage is as follows:
 ```
