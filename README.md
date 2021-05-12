@@ -14,6 +14,7 @@ Currently, the tool supports PNG, JPEG/JPG, WEBP and BMP image formats
 
 <br>
 
+
 ## Installation
 First download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.1), and follow the steps with respect to your OS.
 
@@ -29,7 +30,6 @@ Now you can use ascii-image-converter in the terminal. Execute "ascii-image-conv
 
 ### Windows
 Extract Executables.zip and open the "Windows" folder. Copy the path to folder from the top of the file explorer and follow these instructions:
-
 * In Search, search for and then select: System (Control Panel)
 * Click the Advanced system settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
@@ -39,6 +39,9 @@ Extract Executables.zip and open the "Windows" folder. Copy the path to folder f
 <br>
 
 ## Usage
+
+Tip: Decrease font size or zoom out of terminal for maximum quality ascii art
+
 To convert an image into ascii format, the usage is as follows:
 ```
 ascii-image-converter [path to image]
