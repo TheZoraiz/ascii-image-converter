@@ -32,11 +32,12 @@ import (
 	"github.com/nfnt/resize"
 )
 
-// This function shrinks the passed image according to terminal size and
-// turns it into grayscale pixel by pixel to make ASCII character matching easier
+// This function shrinks the passed image according to passed dimensions or terminal
+// size if none are passed turns each pixel into grayscale to simplify getting numeric
+// data for ASCII character comparison
 //
-// The returned 2D uint32 slice contains each corresponding pixel's value to be
-// compared to an ASCII character
+// The returned 2D uint32 slice contains each corresponding pixel's value ranging from
+// 0 to 65535
 func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 {
 
 	var terminalWidth, terminalHeight int
@@ -83,8 +84,6 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 	smallImg := resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
 	b := smallImg.Bounds()
 
-	newImg := image.NewGray(b)
-
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 
 		var temp []uint32
@@ -92,7 +91,6 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 
 			oldPixel := smallImg.At(x, y)
 			pixel := color.GrayModel.Convert(oldPixel)
-			newImg.Set(x, y, pixel)
 
 			// We only need Red from Red, Green, Blue since they have the same value for grayscale images
 			r, _, _, _ := pixel.RGBA()

@@ -106,10 +106,11 @@ var asciiTableDetailed = map[int]string{
 // For each individual element of imgSet in ConvertToASCIISlice()
 const MAX_VAL float32 = 65535
 
-// Converts the 2D uint32 slice of image data (each element being each pixel of shrinked image)
-// to a 2D string slice with each pixel value being compared to a map of hardcoded ascii characters.
+// Converts the 2D uint32 slice of image data (each value representing each pixel of image)
+// to a 2D string slice with each string having an ASCII character corresponding to
+// the original uint32 value.
 //
-// This function contains 69 characters
+// Values are compared to 69 ASCII characters
 func ConvertToAsciiDetailed(imgSet [][]uint32) [][]string {
 
 	height := len(imgSet)
@@ -140,10 +141,11 @@ func ConvertToAsciiDetailed(imgSet [][]uint32) [][]string {
 	return result
 }
 
-// Converts the 2D uint32 slice of image data (each element being each pixel of shrinked image)
-// to a 2D string slice with each pixel value being compared to a map of hardcoded ascii characters.
+// Converts the 2D uint32 slice of image data (each value representing each pixel of image)
+// to a 2D string slice with each string having an ASCII character corresponding to
+// the original uint32 value.
 //
-// This function contains 10 characters
+// Values are compared to 10 ASCII characters
 func ConvertToAsciiSimple(imgSet [][]uint32) [][]string {
 
 	height := len(imgSet)
