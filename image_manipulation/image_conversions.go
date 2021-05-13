@@ -54,7 +54,10 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 
 		smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
 		terminalHeight = smallImg.Bounds().Max.Y
+
+		// To fix height ratio
 		terminalHeight -= terminalHeight / 2
+		terminalHeight -= terminalHeight / 5
 
 		smallImg = resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
 
