@@ -48,6 +48,10 @@ func ConvertToTerminalSizedSlices(img image.Image, dimensions []int) [][]uint32 
 	if len(dimensions) == 0 {
 
 		terminalWidth, _ = consolesize.GetConsoleSize()
+
+		// Sometimes full length outputs print empty lines between ascii art
+		terminalWidth -= 1
+
 		smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
 		terminalHeight = smallImg.Bounds().Max.Y
 		terminalHeight -= terminalHeight / 2
