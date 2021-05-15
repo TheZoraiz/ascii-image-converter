@@ -20,6 +20,7 @@ import (
 	"image"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	imgMani "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 
@@ -31,7 +32,7 @@ import (
 
 var (
 	cfgFile    string
-	simple     bool
+	compl      bool
 	dimensions []int
 	save       bool
 
@@ -39,102 +40,59 @@ var (
 		Use:   "ascii-image-converter [image path]",
 		Short: "Converts images into ascii format",
 		Long:  `ascii-image-converter converts images into ascii format and prints them onto the terminal window. Further configuration can be managed with flags`,
-		Run: func(cmd *cobra.Command, args []string) {
-
-			if len(args) > 1 {
-				cmd.Help()
-				os.Exit(1)
-			} else if len(args) == 0 {
-				cmd.Help()
-				os.Exit(1)
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			numberOfDimensions := len(dimensions)
+			if dimensions != nil && numberOfDimensions != 2 {
+				return fmt.Errorf("-d requires two dimensions got %v", numberOfDimensions)
 			}
 
-			var imagePath string
-
-			isComplex, err := cmd.Flags().GetBool("complex")
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			save, err := cmd.Flags().GetBool("save")
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-
-			dims, err := cmd.Flags().GetIntSlice("dimensions")
-			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-			if len(dims) > 0 && len(dims) != 2 {
-				fmt.Println("Error: Need two dimensions\n")
-				cmd.Help()
-				os.Exit(1)
-			}
-
-			imagePath = args[0]
-
-			convertPicture(imagePath, isComplex, dims, save)
+			imagePath := args[0]
+			return convertPicture(imagePath, compl, dimensions, save)
 		},
 	}
 )
 
-func convertPicture(imagePath string, isComplex bool, dimensions []int, save bool) {
-
+func convertPicture(imagePath string, isComplex bool, dimensions []int, save bool) error {
 	pic, err := os.Open(imagePath)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("Unable to open file: %w", err)
 	}
 	defer pic.Close()
 
 	imData, _, err := image.Decode(pic)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("Unable to decode file: %w", err)
 	}
 
 	imgSet := imgMani.ConvertToTerminalSizedSlices(imData, dimensions)
+	var asciiSet [][]string
 
 	if isComplex {
-		printDetailedAscii(imgSet, save)
+		asciiSet = imgMani.ConvertToAsciiDetailed(imgSet)
 	} else {
-		printSimpleAscii(imgSet, save)
+		asciiSet = imgMani.ConvertToAsciiSimple(imgSet)
 	}
+
+	ascii := flattenAscii(asciiSet)
+	for _, line := range ascii {
+		fmt.Println(line)
+	}
+
+	if save {
+		return ioutil.WriteFile("ascii-image.txt", []byte(strings.Join(ascii, "\n")), 0777)
+	}
+	return nil
 }
 
-func printDetailedAscii(imgSet [][]uint32, save bool) {
-	final := imgMani.ConvertToAsciiDetailed(imgSet)
-
-	var temp string
-	for i := 0; i < len(final); i++ {
-		for j := 0; j < len(final[i]); j++ {
-			temp += fmt.Sprintf("%s", string(final[i][j]))
-			fmt.Printf("%s", string(final[i][j]))
-		}
-		temp += "\n"
-		fmt.Println()
+// flattenAscii flattens a two-dimensional grid of ascii characters into a one dimension
+// of lines of ascii
+func flattenAscii(asciiSet [][]string) []string {
+	var ascii []string
+	for _, line := range asciiSet {
+		ascii = append(ascii, strings.Join(line, ""))
 	}
-	if save {
-		ioutil.WriteFile("ascii-image.txt", []byte(temp), 0777)
-	}
-}
-
-func printSimpleAscii(imgSet [][]uint32, save bool) {
-	final := imgMani.ConvertToAsciiSimple(imgSet)
-
-	var temp string
-	for i := 0; i < len(final); i++ {
-		for j := 0; j < len(final[i]); j++ {
-			temp += fmt.Sprintf("%s", string(final[i][j]))
-			fmt.Printf("%s", string(final[i][j]))
-		}
-		temp += "\n"
-		fmt.Println()
-	}
-	if save {
-		ioutil.WriteFile("ascii-image.txt", []byte(temp), 0777)
-	}
+	return ascii
 }
 
 // Cobra configuration from here on
@@ -150,11 +108,9 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&simple, "complex", "c", false, "Prints ascii characters in a larger range, may result in higher quality")
+	rootCmd.PersistentFlags().BoolVarP(&compl, "complex", "c", false, "Prints ascii characters in a larger range, may result in higher quality")
 	rootCmd.PersistentFlags().IntSliceVarP(&dimensions, "dimensions", "d", nil, "Set width and height for ascii art in CHARACTER length e.g. 100,30 (defaults to terminal size)")
 	rootCmd.PersistentFlags().BoolVarP(&save, "save", "S", false, "Save ascii text in current directory in an ascii-image.txt file")
-
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 // initConfig reads in config file and ENV variables if set.
