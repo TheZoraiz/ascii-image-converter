@@ -105,6 +105,10 @@ ascii-image-converter [path to image] -Scd 100,30
 
 <br>
 
+## Contributing
+
+You can fork the project and implement any changes you want for a pull request. However, for major changes, please open an issue first to discuss what you would like to implement.
+
 ## Packges used
 
 [github.com/spf13/viper](https://github.com/spf13/viper)
