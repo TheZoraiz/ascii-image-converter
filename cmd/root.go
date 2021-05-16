@@ -22,6 +22,14 @@ import (
 	"os"
 	"strings"
 
+	// Image format initialization
+	_ "image/jpeg"
+	_ "image/png"
+
+	// Image format initialization
+	_ "golang.org/x/image/bmp"
+	_ "golang.org/x/image/webp"
+
 	imgMani "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 
 	"github.com/spf13/cobra"
