@@ -7,6 +7,7 @@ Image formats currently supported:
 * JPEG/JPG
 * WEBP
 * BMP
+* TIFF
 
 <br>
 
