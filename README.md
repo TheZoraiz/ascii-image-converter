@@ -28,7 +28,7 @@ For custom Go installs
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
 
-For physically installing the binaries, download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.1.16), and follow the steps with respect to your OS.
+For physically installing the binaries, download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/tag/v1.2.0), and follow the steps with respect to your OS.
 
 ### Linux
 Extract Executables.zip and open the "Linux" directory.
