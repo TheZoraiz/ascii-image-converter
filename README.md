@@ -3,11 +3,11 @@
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported
 
 Image formats currently supported:
-* PNG
 * JPEG/JPG
+* PNG
 * WEBP
 * BMP
-* TIFF
+* TIFF/TIF
 
 <br>
 
@@ -79,7 +79,7 @@ ascii-image-converter [path to image] --complex
 
 
 #### --dimensions OR -d
-Set the width and height of the printed ascii image in character lengths.
+Set the width and height for ascii art in CHARACTER lengths. (Don't immediately append another flag with -d)
 ```
 ascii-image-converter [path to image] -d <width>,<height>
 # Or
@@ -90,18 +90,45 @@ Example:
 ascii-image-converter [path to image] -d 100,30
 ```
 
-#### --save OR -S
-Save the image ascii art in a file ascii-image.txt in the same directory
+#### --color OR -C
+Display ascii art with the colors from original image. Works with the -n flag as well.
 ```
-ascii-image-converter [path to image] --save
+ascii-image-converter [path to image] -C
 # Or
-ascii-image-converter [path to image] -S
+ascii-image-converter [path to image] --color
 ```
+
+#### --negative OR -n
+Display ascii art in negative colors. Works with both uncolored and colored text from -C flag.
+```
+ascii-image-converter [path to image] -n
+# Or
+ascii-image-converter [path to image] --negative
+```
+
+#### --save OR -s
+Save the printed ascii art in a file ascii-image.txt in the directory passed alongside. (Don't immediately append another flag with -s)
+
+Example for current directory:
+```
+ascii-image-converter [path to image] --save ./
+# Or
+ascii-image-converter [path to image] -s ./
+```
+
+#### --formats OR -f
+Display supported image formats.
+```
+ascii-image-converter [path to image] --formats
+# Or
+ascii-image-converter [path to image] -f
+```
+
 <br>
 
-You can combine commands as well
+You can combine flags as well. Following command outputs colored and negative ascii art, with complex characters, fixed 100 by 30 character dimensions and saves the output in current directory as well.
 ```
-ascii-image-converter [path to image] -Scd 100,30
+ascii-image-converter [path to image] -Ccnd 100,30 -s ./
 ```
 
 <br>
@@ -121,6 +148,8 @@ You can fork the project and implement any changes you want for a pull request. 
 [github.com/nathan-fiscaletti/consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go)
 
 [github.com/nfnt/resize](https://github.com/nfnt/resize)
+
+[github.com/gookit/color](https://github.com/gookit/color)
 
 
 ## License

@@ -16,6 +16,12 @@ limitations under the License.
 
 package image_conversions
 
+import (
+	"strconv"
+
+	"github.com/gookit/color"
+)
+
 // Reference taken from http://paulbourke.net/dataformats/asciiart/
 var asciiTableSimple = map[int]string{
 	0: " ",
@@ -106,68 +112,71 @@ var asciiTableDetailed = map[int]string{
 // For each individual element of imgSet in ConvertToASCIISlice()
 const MAX_VAL float32 = 65535
 
-// Converts the 2D uint32 slice of image data (each value representing each pixel of image)
-// to a 2D string slice with each string having an ASCII character corresponding to
-// the original uint32 value.
-//
-// Values are compared to 69 ASCII characters
-func ConvertToAsciiDetailed(imgSet [][]uint32) [][]string {
-
-	height := len(imgSet)
-	width := len(imgSet[0])
-
-	result := make([][]string, height)
-	for i := range result {
-		result[i] = make([]string, width)
-	}
-
-	for i := 0; i < height; i++ {
-		var tempSlice []string
-		for j := 0; j < width; j++ {
-
-			value := float32(imgSet[i][j])
-
-			tempFloat := (value / MAX_VAL) * float32(len(asciiTableDetailed))
-			if value == MAX_VAL {
-				tempFloat = float32(len(asciiTableDetailed) - 1)
-			}
-			tempInt := int(tempFloat)
-
-			tempSlice = append(tempSlice, asciiTableDetailed[tempInt])
-		}
-		result[i] = tempSlice
-	}
-
-	return result
+type AsciiChar struct {
+	Colored string
+	Simple  string
 }
 
-// Converts the 2D uint32 slice of image data (each value representing each pixel of image)
-// to a 2D string slice with each string having an ASCII character corresponding to
-// the original uint32 value.
+// Converts the 2D AsciiPixel slice of image data (each instance representing each pixel of original image)
+// to a 2D AsciiChar slice with each colored and simple string having an ASCII character corresponding to
+// the original grayscale and RGB values in AsciiPixel.
 //
-// Values are compared to 10 ASCII characters
-func ConvertToAsciiSimple(imgSet [][]uint32) [][]string {
+// If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
+// Otherwise, values are compared to 10 levels of color density in ASCII characters.
+func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex bool) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
 
-	result := make([][]string, height)
+	var chosenTable map[int]string
+	if complex {
+		chosenTable = asciiTableDetailed
+	} else {
+		chosenTable = asciiTableSimple
+	}
+
+	result := make([][]AsciiChar, height)
 	for i := range result {
-		result[i] = make([]string, width)
+		result[i] = make([]AsciiChar, width)
 	}
 
 	for i := 0; i < height; i++ {
-		var tempSlice []string
-		for j := 0; j < width; j++ {
 
-			value := float32(imgSet[i][j])
-			tempFloat := (value / MAX_VAL) * float32(len(asciiTableSimple))
+		var tempSlice []AsciiChar
+
+		for j := 0; j < width; j++ {
+			value := float32(imgSet[i][j].grayscaleValue)
+
+			// Gets appropriate string index from asciiTableSimple by percentage comparisons with its length
+			tempFloat := (value / MAX_VAL) * float32(len(chosenTable))
 			if value == MAX_VAL {
-				tempFloat = float32(len(asciiTableSimple) - 1)
+				tempFloat = float32(len(chosenTable) - 1)
 			}
 			tempInt := int(tempFloat)
 
-			tempSlice = append(tempSlice, asciiTableSimple[tempInt])
+			r := int(imgSet[i][j].rgbValue[0])
+			g := int(imgSet[i][j].rgbValue[1])
+			b := int(imgSet[i][j].rgbValue[2])
+
+			if negative {
+				// Select character from opposite side of table as well as turn pixels negative
+				r = 255 - r
+				g = 255 - g
+				b = 255 - b
+
+				tempInt = (len(chosenTable) - 1) - tempInt
+			}
+
+			rStr := strconv.Itoa(r)
+			gStr := strconv.Itoa(g)
+			bStr := strconv.Itoa(b)
+
+			var char AsciiChar
+
+			char.Colored = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+			char.Simple = chosenTable[tempInt]
+
+			tempSlice = append(tempSlice, char)
 		}
 		result[i] = tempSlice
 	}
