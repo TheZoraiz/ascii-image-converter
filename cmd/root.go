@@ -51,9 +51,12 @@ var (
 
 	// Root commands
 	rootCmd = &cobra.Command{
-		Use:   "ascii-image-converter [image path]",
-		Short: "Converts images into ascii format",
-		Long:  `This tool converts images into ascii format and prints them onto the terminal window. Further configuration can be managed with flags`,
+		Use:     "ascii-image-converter [image path]",
+		Short:   "Converts images into ascii format",
+		Version: "1.2.0",
+		Example: "  ascii-image-converter myImage.jpeg\n\n" +
+			"For further details, visit https://github.com/TheZoraiz/ascii-image-converter",
+		Long: `This tool converts images into ascii format and prints them onto the terminal window. Further configuration can be managed with flags`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if formatsTrue {
@@ -153,6 +156,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&formatsTrue, "formats", "f", false, "Display supported image formats")
 	rootCmd.PersistentFlags().BoolVarP(&negative, "negative", "n", false, "Display ascii art in negative colors (Can work with the -C flag)")
 	rootCmd.PersistentFlags().StringVarP(&savePath, "save", "s", "", "Save ascii art in an ascii-image.txt file in a given path (pass ./ for current directory)")
+
 }
 
 // initConfig reads in config file and ENV variables if set.
