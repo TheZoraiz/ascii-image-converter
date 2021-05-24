@@ -53,7 +53,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image path]",
 		Short:   "Converts images into ascii format",
-		Version: "1.2.0",
+		Version: "1.2.1",
 		Example: "  ascii-image-converter myImage.jpeg\n\n" +
 			"For further details, visit https://github.com/TheZoraiz/ascii-image-converter",
 		Long: `This tool converts images into ascii format and prints them onto the terminal window. Further configuration can be managed with flags`,
