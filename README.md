@@ -29,7 +29,7 @@ You can download through snap. However, the snap will not have access to hidden 
 ```
 sudo snap install ascii-image-converter --stable
 ```
-Visit [the app's store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
+Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
 
 ### Go
 For custom Go installs
