@@ -22,6 +22,14 @@ Image formats currently supported:
 
 ## Installation
 
+### Snap
+
+You can download through snap. However, the snap will not have access to hidden images and images outside the $HOME directory.
+
+```
+sudo snap install ascii-image-converter --stable
+```
+
 ### Go
 For custom Go installs
 ```
