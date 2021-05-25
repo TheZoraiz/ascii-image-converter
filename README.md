@@ -29,6 +29,7 @@ You can download through snap. However, the snap will not have access to hidden 
 ```
 sudo snap install ascii-image-converter --stable
 ```
+Visit [the app's store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
 
 ### Go
 For custom Go installs
@@ -63,7 +64,7 @@ Extract Executables.zip and open the "Windows" folder. Copy the path to folder f
 
 ## Usage
 
-Note: Decrease font size or zoom out of terminal for maximum quality ascii art
+Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
 To convert an image into ascii format, the usage is as follows:
 ```
@@ -73,7 +74,6 @@ Example
 ```
 ascii-image-converter myImage.jpeg
 ```
-<br>
 
 ### Flags
 
