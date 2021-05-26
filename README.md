@@ -10,7 +10,7 @@ Image formats currently supported:
 * BMP
 * TIFF/TIF
 
-## Table of Conents
+## Table of Contents
 - [Example](#example)
 - [Installation](#installation)
 	* [Snap](#snap)
