@@ -37,10 +37,10 @@ For custom Go installs
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
 
-For physically installing the binaries, download the executables from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), and follow the steps with respect to your OS.
+For physically installing the binaries follow the steps with respect to your OS.
 
 ### Linux
-Extract Executables.zip and open the "Linux" directory.
+Extract the archive for the your chosen Linux architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), and open the directory it extracts.
 
 Now, open a terminal in the same directory and execute this command:
 
@@ -53,7 +53,7 @@ Now you can use ascii-image-converter in the terminal. Execute "ascii-image-conv
 
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
-Extract Executables.zip and open the "Windows" folder. Copy the path to folder from the top of the file explorer.
+Extract the archive for the your chosen Windows architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest). Open the newly created folder and copy the path to it from the top of the file explorer.
 * In Search, search for and then select: System (Control Panel)
 * Click the Advanced System settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".

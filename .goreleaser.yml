@@ -1,5 +1,5 @@
-# This is an example .goreleaser.yml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
+project_name: ascii-image-converter
+
 before:
   hooks:
     - go mod tidy
@@ -24,6 +24,7 @@ builds:
     
 archives:
   -
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
 
     format_overrides:
@@ -42,7 +43,7 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name_template: "{{ .Version }}-next"
 changelog:
   sort: asc
   filters:
