@@ -32,7 +32,7 @@ sudo snap install ascii-image-converter --stable
 Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
 
 ### Go
-For custom Go installs
+For installing through Go
 ```
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
