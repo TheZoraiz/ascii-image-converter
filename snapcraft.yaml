@@ -1,6 +1,6 @@
 name: ascii-image-converter
 base: core18 
-version: '1.2.2'
+version: "1.2.2"
 summary: Converts images into ascii format
 description: |
   This tool converts images into ascii format and prints them onto the terminal window.
@@ -16,7 +16,6 @@ parts:
     plugin: go
     go-importpath: github.com/TheZoraiz/ascii-image-converter
     source: .
-    source-type: git
     build-packages:
       - gcc
 
