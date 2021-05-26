@@ -20,6 +20,7 @@ import (
 	"image"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	// Image format initialization
@@ -53,7 +54,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image path]",
 		Short:   "Converts images into ascii format",
-		Version: "1.2.2",
+		Version: "1.2.3",
 		Example: "  ascii-image-converter myImage.jpeg\n\n" +
 			"For further details, visit https://github.com/TheZoraiz/ascii-image-converter",
 		Long: `This tool converts images into ascii format and prints them onto the terminal window. Further configuration can be managed with flags`,
@@ -80,6 +81,14 @@ var (
 	}
 )
 
+func checkOS() string {
+	if string(os.PathSeparator) == "/" && string(os.PathListSeparator) == ":" {
+		return "linux"
+	} else {
+		return "windows"
+	}
+}
+
 func convertImage(imagePath string) error {
 
 	pic, err := os.Open(imagePath)
@@ -104,19 +113,61 @@ func convertImage(imagePath string) error {
 	var ascii []string
 	ascii = flattenAscii(asciiSet, colored)
 
+	// Save art before printing it, if flag is passed
+	if savePath != "" {
+		if err := saveAsciiArt(asciiSet, imagePath); err != nil {
+			return err
+		}
+	}
+
 	for _, line := range ascii {
 		fmt.Println(line)
 	}
 
-	if savePath != "" {
-		// To make sure uncolored ascii art is the one saved
-		saveAscii := flattenAscii(asciiSet, false)
-		if savePath == "." {
-			savePath = "./"
-		}
-		return ioutil.WriteFile(savePath+"ascii-image.txt", []byte(strings.Join(saveAscii, "\n")), 0777)
-	}
 	return nil
+}
+
+func saveAsciiArt(asciiSet [][]imgMani.AsciiChar, imagePath string) error {
+	// To make sure uncolored ascii art is the one saved
+	saveAscii := flattenAscii(asciiSet, false)
+
+	saveFileName, err := createSaveFileName(imagePath)
+	if err != nil {
+		return err
+	}
+
+	savePathLastChar := string(savePath[len(savePath)-1])
+
+	// Check if path is closed with appropriate path separator
+	if savePathLastChar != string(os.PathSeparator) {
+		if checkOS() == "linux" {
+			savePath += "/"
+		} else if checkOS() == "windows" {
+			savePath += "\\"
+		} else {
+			return fmt.Errorf("Path not identified. OS isn't supported")
+		}
+	}
+
+	// If path exists
+	if _, err := os.Stat(savePath); !os.IsNotExist(err) {
+		return ioutil.WriteFile(savePath+saveFileName, []byte(strings.Join(saveAscii, "\n")), 0777)
+	} else {
+		return fmt.Errorf("Path does not exist.")
+	}
+}
+
+func createSaveFileName(imagePath string) (string, error) {
+	fileInfo, err := os.Stat(imagePath)
+	if err != nil {
+		return "", fmt.Errorf("Can't read file info for saving ascii art.")
+	}
+	currName := fileInfo.Name()
+	extension := filepath.Ext(imagePath)
+	newName := currName[:len(currName)-len(extension)]
+
+	// Something like myImage-jpeg-ascii-art.txt
+	return newName + "-" + extension[1:] + "-ascii-art.txt", nil
 }
 
 // flattenAscii flattens a two-dimensional grid of ascii characters into a one dimension
@@ -149,13 +200,13 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&colored, "color", "C", false, "Display ascii art with the colors from original image (Can work with the -n flag)")
 	rootCmd.PersistentFlags().BoolVarP(&compl, "complex", "c", false, "Display ascii characters in a larger range, may result in higher quality")
 	rootCmd.PersistentFlags().IntSliceVarP(&dimensions, "dimensions", "d", nil, "Set width and height for ascii art in CHARACTER length e.g. 100,30 (defaults to terminal size)")
 	rootCmd.PersistentFlags().BoolVarP(&formatsTrue, "formats", "f", false, "Display supported image formats")
 	rootCmd.PersistentFlags().BoolVarP(&negative, "negative", "n", false, "Display ascii art in negative colors (Can work with the -C flag)")
-	rootCmd.PersistentFlags().StringVarP(&savePath, "save", "s", "", "Save ascii art in an ascii-image.txt file in a given path (pass ./ for current directory)")
+	rootCmd.PersistentFlags().StringVarP(&savePath, "save", "s", "", "Save ascii art in an <image-name>-<image-extension>-ascii-art.txt file in a given path (pass . for current directory)")
 
 }
 

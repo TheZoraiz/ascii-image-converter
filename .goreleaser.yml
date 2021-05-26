@@ -17,10 +17,6 @@ builds:
       - arm64
       - arm
       - 386
-
-    ignore:
-      - goos: windows
-        goarch: arm
     
 archives:
   -
@@ -35,7 +31,6 @@ archives:
       - LICENSE
     
     replacements:
-      darwin: Darwin
       linux: Linux
       windows: Windows
       386: i386
