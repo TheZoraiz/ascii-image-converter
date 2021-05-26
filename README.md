@@ -11,7 +11,7 @@ Image formats currently supported:
 * TIFF/TIF
 
 ## Table of Contents
-- [Example](#example)
+- [Example](#example-source)
 - [Installation](#installation)
 	* [Snap](#snap)
 	* [Go](#go)
