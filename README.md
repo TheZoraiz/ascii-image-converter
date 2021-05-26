@@ -1,3 +1,4 @@
+
 # ascii-image-converter
 
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported
@@ -9,7 +10,19 @@ Image formats currently supported:
 * BMP
 * TIFF/TIF
 
-<br>
+## Table of Conents
+- [Example](#example)
+- [Installation](#installation)
+	* [Snap](#snap)
+	* [Go](#go)
+	* [Linux (binaries)](#linux)
+	* [Windows (binaries)](#windows)
+- [Usage](#usage)
+	* [Flags](#flags)
+- [Contributing](#contributing)
+- [Packages used](#packages-used)
+- [License](#license)
+
 
 ### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062)):
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
@@ -17,7 +30,7 @@ Image formats currently supported:
 ### ASCII Art:
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/ascii_tree.png)
 
-<br>
+
 
 
 ## Installation
@@ -30,14 +43,14 @@ You can download through snap. However, the snap will not have access to hidden 
 sudo snap install ascii-image-converter --stable
 ```
 Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
+<hr>
 
 ### Go
 For installing through Go
 ```
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
-
-
+<hr>
 For physically installing the binaries, follow the steps with respect to your OS.
 
 ### Linux
@@ -148,7 +161,7 @@ ascii-image-converter [path to image] -Ccnd 100,30 -s ./
 
 You can fork the project and implement any changes you want for a pull request. However, for major changes, please open an issue first to discuss what you would like to implement.
 
-## Packges used
+## Packages used
 
 [github.com/spf13/viper](https://github.com/spf13/viper)
 
