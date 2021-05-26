@@ -37,10 +37,11 @@ For installing through Go
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
 
-For physically installing the binaries follow the steps with respect to your OS.
+
+For physically installing the binaries, follow the steps with respect to your OS.
 
 ### Linux
-Extract the archive for the your chosen Linux architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), and open the directory it extracts.
+Extract the archive for your chosen Linux architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), and open the extracted directory.
 
 Now, open a terminal in the same directory and execute this command:
 
@@ -58,7 +59,9 @@ Extract the archive for the your chosen Windows architecture after downloading i
 * Click the Advanced System settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
 * In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
-* Afterwards, you can use it anywhere by typing "ascii-image-converter" in command prompt. Note: Make sure you restart the command prompt.
+* Click "Ok" on all open windows.
+
+Now, restart any open command prompt and execute "ascii-image-converter -h" for more details.
 
 <br>
 
