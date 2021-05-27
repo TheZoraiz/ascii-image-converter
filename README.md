@@ -68,7 +68,7 @@ Now you can use ascii-image-converter in the terminal. Execute "ascii-image-conv
 
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
-Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder.
+Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
 * In Search, search for and then select: System (Control Panel)
 * Click the Advanced System settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
