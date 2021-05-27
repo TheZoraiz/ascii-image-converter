@@ -33,8 +33,10 @@ archives:
     replacements:
       linux: Linux
       windows: Windows
-      386: i386
-      
+      386: 32bit_i386
+      amd64: 64bit_amd64
+      arm64: 64bit_arm64
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
