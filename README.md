@@ -117,6 +117,7 @@ ascii-image-converter [image-paths] --complex
 #### --dimensions OR -d
 
 Note: Don't immediately append another flag with -d
+
 Set the width and height for ascii art in CHARACTER lengths.
 ```
 ascii-image-converter [image-paths] -d <width>,<height>
@@ -131,6 +132,7 @@ ascii-image-converter [image-paths] -d 100,30
 #### --map OR -m
 
 Note: Don't immediately append another flag with -m
+
 Pass a string of your own ascii characters to map against. Passed characters must start from darkest character and end with lightest. There is no limit to number of characters.
 
 Notes: Empty spaces can be passed if string is passed inside quotation marks. You can use both single or double quote for quotation marks. For repeating quotation mark inside string, append it with \ (such as  \\").
@@ -156,6 +158,8 @@ ascii-image-converter [image-paths] --negative
 ```
 
 #### --save OR -s
+
+Note: Don't immediately append another flag with -s
 
 Save ascii art in the format `<image-name>-<image-extension>-ascii-art.txt` in the directory path passed to the flag. 
 
