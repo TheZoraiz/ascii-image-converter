@@ -38,31 +38,40 @@ type AsciiPixel struct {
 // ranges from 0 to 65535, while RGB values are separate.
 func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, error) {
 
-	var terminalWidth, terminalHeight int
+	var asciiWidth, asciiHeight int
 
 	var smallImg image.Image
 
-	// Get dimensions of current terminal
 	if len(dimensions) == 0 {
 
-		terminalWidth, _ = consolesize.GetConsoleSize()
+		// Following code in this condition calculates ratio according to terminal height
 
-		// Sometimes full length outputs print empty lines between ascii art
-		terminalWidth -= 1
+		terminalWidth, terminalHeight := consolesize.GetConsoleSize()
+		asciiHeight = terminalHeight - 1
 
-		// Passing 0 in place of height keeps the original image's aspect ratio
-		smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
-		terminalHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
+		// Passing 0 in place of width keeps the original image's aspect ratio
+		smallImg = resize.Resize(0, uint(asciiHeight), img, resize.Lanczos3)
+		asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
-		// To fix height ratio in eventual ascii art
-		terminalHeight = int(0.5 * float32(terminalHeight))
+		// To fix aspect ratio in eventual ascii art
+		asciiWidth = int(2 * float32(asciiWidth))
 
-		smallImg = resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
+		// If ascii width exceeds terminal width, change ratio with respect to terminal width
+		if asciiWidth > terminalWidth {
+			smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
+			asciiWidth = terminalWidth
+			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
+
+			// To fix aspect ratio in eventual ascii art
+			asciiHeight = int(0.5 * float32(asciiHeight))
+		}
+
+		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
 
 	} else {
-		terminalWidth = dimensions[0]
-		terminalHeight = dimensions[1]
-		smallImg = resize.Resize(uint(terminalWidth), uint(terminalHeight), img, resize.Lanczos3)
+		asciiWidth = dimensions[0]
+		asciiHeight = dimensions[1]
+		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
 	}
 
 	// If there are passed dimensions, check whether the width exceeds terminal width
@@ -75,9 +84,9 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, er
 	}
 
 	// Initialize imgSet 2D slice
-	imgSet := make([][]AsciiPixel, terminalHeight)
+	imgSet := make([][]AsciiPixel, asciiHeight)
 	for i := range imgSet {
-		imgSet[i] = make([]AsciiPixel, terminalWidth)
+		imgSet[i] = make([]AsciiPixel, asciiWidth)
 	}
 
 	b := smallImg.Bounds()

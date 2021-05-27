@@ -1,37 +1,35 @@
-
 # ascii-image-converter
 
-ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported
+ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported.
 
 Image formats currently supported:
 * JPEG/JPG
 * PNG
-* WEBP
 * BMP
+* WEBP
 * TIFF/TIF
 
 ## Table of Contents
-- [Example](#example-source)
-- [Installation](#installation)
-	* [Snap](#snap)
-	* [Go](#go)
-	* [Linux (binaries)](#linux)
-	* [Windows (binaries)](#windows)
-- [Usage](#usage)
-	* [Flags](#flags)
-- [Contributing](#contributing)
-- [Packages used](#packages-used)
-- [License](#license)
 
+-  [Example](#example-source)
+-  [Installation](#installation)
+	*  [Snap](#snap)
+	*  [Go](#go)
+	*  [Linux (binaries)](#linux)
+	*  [Windows (binaries)](#windows)
+-  [Usage](#usage)
+	*  [Flags](#flags)
+-  [Contributing](#contributing)
+-  [Packages used](#packages-used)
+-  [License](#license)
 
 ### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062)):
+
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
 
 ### ASCII Art:
+
 ![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/ascii_tree.png)
-
-
-
 
 ## Installation
 
@@ -40,12 +38,14 @@ Image formats currently supported:
 You can download through snap. However, the snap will not have access to hidden images and images outside the $HOME directory.
 
 ```
-sudo snap install ascii-image-converter --stable
+sudo snap install ascii-image-converter
 ```
 Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
+
 <hr>
 
 ### Go
+
 For installing through Go
 ```
 go install github.com/TheZoraiz/ascii-image-converter@latest
@@ -54,7 +54,8 @@ go install github.com/TheZoraiz/ascii-image-converter@latest
 For physically installing the binaries, follow the steps with respect to your OS.
 
 ### Linux
-Extract the archive for your chosen Linux architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), and open the extracted directory.
+
+Download the archive for your distribution's architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted directory.
 
 Now, open a terminal in the same directory and execute this command:
 
@@ -67,7 +68,7 @@ Now you can use ascii-image-converter in the terminal. Execute "ascii-image-conv
 
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
-Extract the archive for the your chosen Windows architecture after downloading it from [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest). Open the newly created folder and copy the path to it from the top of the file explorer.
+Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder.
 * In Search, search for and then select: System (Control Panel)
 * Click the Advanced System settings link.
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
@@ -82,77 +83,105 @@ Now, restart any open command prompt and execute "ascii-image-converter -h" for 
 
 Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
-To convert an image into ascii format, the usage is as follows:
+The basic usage for converting an image into ascii art is as follows. You can also supply paths to multiple images.
+
 ```
-ascii-image-converter [path to image]
+ascii-image-converter [image-paths]
 ```
-Example
+Example:
 ```
 ascii-image-converter myImage.jpeg
 ```
 
 ### Flags
 
-#### --complex OR -c
-Print the image with a wider array of ascii characters. Sometimes improves accuracy.
+#### --color OR -C
+
+Display ascii art with the colors from original image. Works with the --negative flag as well.
+
 ```
-ascii-image-converter [path to image] -c
+ascii-image-converter [image-paths] -C
 # Or
-ascii-image-converter [path to image] --complex
+ascii-image-converter [image-paths] --color
 ```
 
+#### --complex OR -c
+
+Print the image with a wider array of ascii characters for more detailed lighting density. Sometimes improves accuracy.
+```
+ascii-image-converter [image-paths] -c
+# Or
+ascii-image-converter [image-paths] --complex
+```
 
 #### --dimensions OR -d
-Set the width and height for ascii art in CHARACTER lengths. (Don't immediately append another flag with -d)
+
+Note: Don't immediately append another flag with -d
+Set the width and height for ascii art in CHARACTER lengths.
 ```
-ascii-image-converter [path to image] -d <width>,<height>
+ascii-image-converter [image-paths] -d <width>,<height>
 # Or
-ascii-image-converter [path to image] --dimensions <width>,<height>
+ascii-image-converter [image-paths] --dimensions <width>,<height>
 ```
 Example:
 ```
-ascii-image-converter [path to image] -d 100,30
+ascii-image-converter [image-paths] -d 100,30
 ```
 
-#### --color OR -C
-Display ascii art with the colors from original image. Works with the -n flag as well.
+#### --map OR -m
+
+Note: Don't immediately append another flag with -m
+Pass a string of your own ascii characters to map against. Passed characters must start from darkest character and end with lightest. There is no limit to number of characters.
+
+Notes: Empty spaces can be passed if string is passed inside quotation marks. You can use both single or double quote for quotation marks. For repeating quotation mark inside string, append it with \ (such as  \\").
+  
 ```
-ascii-image-converter [path to image] -C
+ascii-image-converter [image-paths] -m "<string-of-characters>"
 # Or
-ascii-image-converter [path to image] --color
+ascii-image-converter [image-paths] --map "<string-of-characters>"
+```
+Following example contains 7 depths of lighting.
+```
+ascii-image-converter [image-paths] -m " .-=+#@"
 ```
 
 #### --negative OR -n
-Display ascii art in negative colors. Works with both uncolored and colored text from -C flag.
+
+Display ascii art in negative colors. Works with both uncolored and colored text from --color flag.
+
 ```
-ascii-image-converter [path to image] -n
+ascii-image-converter [image-paths] -n
 # Or
-ascii-image-converter [path to image] --negative
+ascii-image-converter [image-paths] --negative
 ```
 
 #### --save OR -s
-Save the printed ascii art in a file ascii-image.txt in the directory passed alongside. (Don't immediately append another flag with -s)
+
+Save ascii art in the format `<image-name>-<image-extension>-ascii-art.txt` in the directory path passed to the flag. 
 
 Example for current directory:
+
 ```
-ascii-image-converter [path to image] --save ./
+ascii-image-converter [image-paths] --save .
 # Or
-ascii-image-converter [path to image] -s ./
+ascii-image-converter [image-paths] -s .
 ```
 
 #### --formats OR -f
+
 Display supported image formats.
+
 ```
-ascii-image-converter [path to image] --formats
+ascii-image-converter [image-paths] --formats
 # Or
-ascii-image-converter [path to image] -f
+ascii-image-converter [image-paths] -f
 ```
 
 <br>
+You can combine flags as well. Following command outputs colored and negative ascii art, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
 
-You can combine flags as well. Following command outputs colored and negative ascii art, with complex characters, fixed 100 by 30 character dimensions and saves the output in current directory as well.
 ```
-ascii-image-converter [path to image] -Ccnd 100,30 -s ./
+ascii-image-converter [image-paths] -Cnd 100,30 -m " .-=+#@" -s ./
 ```
 
 <br>
@@ -175,6 +204,6 @@ You can fork the project and implement any changes you want for a pull request. 
 
 [github.com/gookit/color](https://github.com/gookit/color)
 
-
 ## License
+
 [Apache-2.0](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE)

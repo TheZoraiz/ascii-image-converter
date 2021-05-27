@@ -28,7 +28,7 @@ archives:
         format: zip
 
     files:
-      - LICENSE
+      - LICENSE.txt
     
     replacements:
       linux: Linux

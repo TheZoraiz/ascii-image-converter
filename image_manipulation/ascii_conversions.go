@@ -123,16 +123,24 @@ type AsciiChar struct {
 //
 // If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
 // Otherwise, values are compared to 10 levels of color density in ASCII characters.
-func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex bool) [][]AsciiChar {
+func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex bool, customMap string) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
 
 	var chosenTable map[int]string
-	if complex {
-		chosenTable = asciiTableDetailed
+
+	if customMap == "" {
+		if complex {
+			chosenTable = asciiTableDetailed
+		} else {
+			chosenTable = asciiTableSimple
+		}
 	} else {
-		chosenTable = asciiTableSimple
+		chosenTable = map[int]string{}
+		for index, char := range customMap {
+			chosenTable[index] = string(char)
+		}
 	}
 
 	result := make([][]AsciiChar, height)
