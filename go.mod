@@ -3,7 +3,7 @@ module github.com/TheZoraiz/ascii-image-converter
 go 1.16
 
 require (
-	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
+	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gookit/color v1.4.2
 	github.com/magiconair/properties v1.8.5 // indirect

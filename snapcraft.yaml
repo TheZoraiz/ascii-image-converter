@@ -24,6 +24,7 @@ apps:
     command: bin/ascii-image-converter
     plugs:
     - home
+    - network
     
 architectures:
   - build-on: amd64

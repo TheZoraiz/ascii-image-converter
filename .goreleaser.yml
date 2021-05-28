@@ -17,10 +17,15 @@ builds:
       - arm64
       - arm
       - 386
+
+    goarm:
+      - 5
+      - 6
+      - 7
     
 archives:
   -
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}_v{{ .Arm }}{{ end }}"
     wrap_in_directory: true
 
     format_overrides:
