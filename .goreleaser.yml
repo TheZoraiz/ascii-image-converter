@@ -38,7 +38,9 @@ archives:
       arm64: 64bit_arm64
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: 'sha256_checksums.txt'
+  algorithm: sha256
+  
 snapshot:
   name_template: "{{ .Version }}-next"
 changelog:

@@ -1,7 +1,7 @@
 name: ascii-image-converter
 base: core18 
-version: "1.2.4"
-summary: Converts images into ascii format
+version: "1.2.5"
+summary: Converts images into ascii art
 description: |
   This tool converts images into ascii format and prints them onto the terminal window.
   Supported image formats are JPEG/JPG, PNG, WEBP, BMP and TIFF/TIF. Further configuration can be managed by flags.
@@ -27,4 +27,4 @@ apps:
     
 architectures:
   - build-on: amd64
-    run-on: [arm64, armhf, amd64, i386]
+    run-on: [amd64, i386, arm64, armhf, s390x, ppc64el]

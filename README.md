@@ -83,10 +83,10 @@ Now, restart any open command prompt and execute "ascii-image-converter -h" for 
 
 Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
-The basic usage for converting an image into ascii art is as follows. You can also supply paths to multiple images.
+The basic usage for converting an image into ascii art is as follows. You can also supply multiple image paths and urls.
 
 ```
-ascii-image-converter [image-paths]
+ascii-image-converter [image paths/urls]
 ```
 Example:
 ```
@@ -100,18 +100,18 @@ ascii-image-converter myImage.jpeg
 Display ascii art with the colors from original image. Works with the --negative flag as well.
 
 ```
-ascii-image-converter [image-paths] -C
+ascii-image-converter [image paths/urls] -C
 # Or
-ascii-image-converter [image-paths] --color
+ascii-image-converter [image paths/urls] --color
 ```
 
 #### --complex OR -c
 
 Print the image with a wider array of ascii characters for more detailed lighting density. Sometimes improves accuracy.
 ```
-ascii-image-converter [image-paths] -c
+ascii-image-converter [image paths/urls] -c
 # Or
-ascii-image-converter [image-paths] --complex
+ascii-image-converter [image paths/urls] --complex
 ```
 
 #### --dimensions OR -d
@@ -120,13 +120,13 @@ Note: Don't immediately append another flag with -d
 
 Set the width and height for ascii art in CHARACTER lengths.
 ```
-ascii-image-converter [image-paths] -d <width>,<height>
+ascii-image-converter [image paths/urls] -d <width>,<height>
 # Or
-ascii-image-converter [image-paths] --dimensions <width>,<height>
+ascii-image-converter [image paths/urls] --dimensions <width>,<height>
 ```
 Example:
 ```
-ascii-image-converter [image-paths] -d 100,30
+ascii-image-converter [image paths/urls] -d 100,30
 ```
 
 #### --map OR -m
@@ -135,16 +135,16 @@ Note: Don't immediately append another flag with -m
 
 Pass a string of your own ascii characters to map against. Passed characters must start from darkest character and end with lightest. There is no limit to number of characters.
 
-Notes: Empty spaces can be passed if string is passed inside quotation marks. You can use both single or double quote for quotation marks. For repeating quotation mark inside string, append it with \ (such as  \\").
+Empty spaces can be passed if string is passed inside quotation marks. You can use both single or double quote for quotation marks. For repeating quotation mark inside string, append it with \ (such as  \\").
   
 ```
-ascii-image-converter [image-paths] -m "<string-of-characters>"
+ascii-image-converter [image paths/urls] -m "<string-of-characters>"
 # Or
-ascii-image-converter [image-paths] --map "<string-of-characters>"
+ascii-image-converter [image paths/urls] --map "<string-of-characters>"
 ```
 Following example contains 7 depths of lighting.
 ```
-ascii-image-converter [image-paths] -m " .-=+#@"
+ascii-image-converter [image paths/urls] -m " .-=+#@"
 ```
 
 #### --negative OR -n
@@ -152,23 +152,23 @@ ascii-image-converter [image-paths] -m " .-=+#@"
 Display ascii art in negative colors. Works with both uncolored and colored text from --color flag.
 
 ```
-ascii-image-converter [image-paths] -n
+ascii-image-converter [image paths/urls] -n
 # Or
-ascii-image-converter [image-paths] --negative
+ascii-image-converter [image paths/urls] --negative
 ```
 
 #### --save OR -s
 
 Note: Don't immediately append another flag with -s
 
-Save ascii art in the format `<image-name>-<image-extension>-ascii-art.txt` in the directory path passed to the flag. 
+Save ascii art in the format `<image-name>.<image-extension>-ascii-art.txt` in the directory path passed to the flag.
 
 Example for current directory:
 
 ```
-ascii-image-converter [image-paths] --save .
+ascii-image-converter [image paths/urls] --save .
 # Or
-ascii-image-converter [image-paths] -s .
+ascii-image-converter [image paths/urls] -s .
 ```
 
 #### --formats OR -f
@@ -176,16 +176,16 @@ ascii-image-converter [image-paths] -s .
 Display supported image formats.
 
 ```
-ascii-image-converter [image-paths] --formats
+ascii-image-converter [image paths/urls] --formats
 # Or
-ascii-image-converter [image-paths] -f
+ascii-image-converter [image paths/urls] -f
 ```
 
 <br>
 You can combine flags as well. Following command outputs colored and negative ascii art, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
 
 ```
-ascii-image-converter [image-paths] -Cnd 100,30 -m " .-=+#@" -s ./
+ascii-image-converter [image paths/urls] -Cnd 100,30 -m " .-=+#@" -s ./
 ```
 
 <br>
@@ -196,8 +196,6 @@ You can fork the project and implement any changes you want for a pull request. 
 
 ## Packages used
 
-[github.com/spf13/viper](https://github.com/spf13/viper)
-
 [github.com/spf13/cobra](https://github.com/spf13/cobra)
 
 [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
@@ -207,6 +205,8 @@ You can fork the project and implement any changes you want for a pull request. 
 [github.com/nfnt/resize](https://github.com/nfnt/resize)
 
 [github.com/gookit/color](https://github.com/gookit/color)
+
+[github.com/asaskevich/govalidator](https://github.com/asaskevich/govalidator)
 
 ## License
 

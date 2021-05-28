@@ -39,7 +39,6 @@ type AsciiPixel struct {
 func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
-
 	var smallImg image.Image
 
 	if len(dimensions) == 0 {
@@ -59,7 +58,8 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, er
 		// If ascii width exceeds terminal width, change ratio with respect to terminal width
 		if asciiWidth > terminalWidth {
 			smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
-			asciiWidth = terminalWidth
+
+			asciiWidth = terminalWidth - 1
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 			// To fix aspect ratio in eventual ascii art

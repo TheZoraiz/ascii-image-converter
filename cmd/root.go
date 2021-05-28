@@ -16,11 +16,13 @@ limitations under the License.
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"io/ioutil"
+	"net/http"
 	"os"
-	"path/filepath"
+	"path"
 	"strings"
 
 	// Image format initialization
@@ -33,10 +35,9 @@ import (
 	_ "golang.org/x/image/webp"
 
 	imgMani "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
-
-	"github.com/spf13/cobra"
-
+	"github.com/asaskevich/govalidator"
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -53,37 +54,39 @@ var (
 
 	// Root commands
 	rootCmd = &cobra.Command{
-		Use:     "ascii-image-converter [image-paths]",
-		Short:   "Converts images into ascii format",
-		Version: "1.2.4",
+		Use:     "ascii-image-converter [image paths/urls]",
+		Short:   "Converts images into ascii art",
+		Version: "1.2.5",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+
+		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
+		Run: func(cmd *cobra.Command, args []string) {
 
 			if formatsTrue {
-				fmt.Println("Supported image formats: JPEG/JPG, PNG, WEBP, BMP, TIFF/TIF")
-				return nil
+				fmt.Printf("Supported image formats: JPEG/JPG, PNG, WEBP, BMP, TIFF/TIF\n\n")
+				return
 			}
 
 			numberOfDimensions := len(dimensions)
 			if dimensions != nil && numberOfDimensions != 2 {
-				return fmt.Errorf("-d requires 2 dimensions, got %v", numberOfDimensions)
+				fmt.Printf("-d requires 2 dimensions, got %v\n\n", numberOfDimensions)
+				return
 			}
 
 			if len(args) < 1 {
-				return fmt.Errorf("Need at least 1 image path")
+				fmt.Printf("Error: Need at least 1 image path/url\n\n")
+				cmd.Help()
+				return
 			}
 
-			if len(customMap) < 2 && customMap != "" {
-				fmt.Println("Need at least 2 characters")
-				os.Exit(0)
+			if customMap != "" && len(customMap) < 2 {
+				fmt.Printf("Need at least 2 characters for --map flag\n\n")
+				return
 			}
 
 			for _, imagePath := range args {
-				if err := convertImage(imagePath); err != nil {
-					return err
-				}
+				convertImage(imagePath)
 			}
-			return nil
 		},
 	}
 )
@@ -96,97 +99,87 @@ func checkOS() string {
 	}
 }
 
-func convertImage(imagePath string) error {
+func convertImage(imagePath string) {
 
-	pic, err := os.Open(imagePath)
-	if err != nil {
-		fmt.Printf("Unable to open file: %v\n", err)
-		os.Exit(0)
+	// Declared at the start since some variables are initially used in conditional blocks
+	var pic *os.File
+	var urlImgBytes []byte
+	var urlImgName string = ""
+	var err error
+
+	pathIsURl := govalidator.IsRequestURL(imagePath)
+
+	// Different modes of reading data depending upon whether or not imagePath is a url
+	if pathIsURl {
+		fmt.Printf("Fetching image from url...\r")
+
+		retrievedImage, err := http.Get(imagePath)
+		if err != nil {
+			fmt.Printf("Error fetching image: %v\n\n", err)
+			return
+		}
+
+		urlImgBytes, err = ioutil.ReadAll(retrievedImage.Body)
+		if err != nil {
+			fmt.Printf("Failed to read fetched content: %v\n\n", err)
+			return
+		}
+		defer retrievedImage.Body.Close()
+
+		urlImgName = path.Base(imagePath)
+		fmt.Printf("                          \r") // To erase "Fetching image from url..." text from console
+	} else {
+		pic, err = os.Open(imagePath)
+		if err != nil {
+			fmt.Printf("Unable to open file: %v\n\n", err)
+			return
+		}
+		defer pic.Close()
 	}
-	defer pic.Close()
 
-	imData, _, err := image.Decode(pic)
+	var imData image.Image
+
+	if pathIsURl {
+		imData, _, err = image.Decode(bytes.NewReader(urlImgBytes))
+	} else {
+		imData, _, err = image.Decode(pic)
+	}
 	if err != nil {
-		fmt.Printf("Error decoding file: %v\n", err)
-		os.Exit(0)
+		fmt.Printf("Error decoding %v. %v\n\n", imagePath, err)
+		return
 	}
 
 	imgSet, err := imgMani.ConvertToAsciiPixels(imData, dimensions)
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		os.Exit(0)
+		fmt.Printf("Error: %v\n\n", err)
+		return
 	}
 
-	var asciiSet [][]imgMani.AsciiChar
-	asciiSet = imgMani.ConvertToAscii(imgSet, negative, colored, compl, customMap)
+	asciiSet := imgMani.ConvertToAscii(imgSet, negative, colored, compl, customMap)
 
-	var ascii []string
-	ascii = flattenAscii(asciiSet, colored)
+	ascii := flattenAscii(asciiSet, colored)
 
-	// Save art before printing it, if flag is passed
+	// Save ascii art before printing it, if --save flag is passed
 	if savePath != "" {
-		if err := saveAsciiArt(asciiSet, imagePath); err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(0)
+		if err := saveAsciiArt(asciiSet, imagePath, urlImgName); err != nil {
+			fmt.Printf("Error: %v\n\n", err)
+			os.Exit(0) // Because this error will be thrown for every image passed to this function if we use "return"
 		}
 	}
 
 	for _, line := range ascii {
 		fmt.Println(line)
 	}
-
-	return nil
-}
-
-func saveAsciiArt(asciiSet [][]imgMani.AsciiChar, imagePath string) error {
-	// To make sure uncolored ascii art is the one saved
-	saveAscii := flattenAscii(asciiSet, false)
-
-	saveFileName, err := createSaveFileName(imagePath)
-	if err != nil {
-		return err
-	}
-
-	savePathLastChar := string(savePath[len(savePath)-1])
-
-	// Check if path is closed with appropriate path separator
-	if savePathLastChar != string(os.PathSeparator) {
-		if checkOS() == "linux" {
-			savePath += "/"
-		} else if checkOS() == "windows" {
-			savePath += "\\"
-		} else {
-			return fmt.Errorf("Path not identified. OS isn't supported")
-		}
-	}
-
-	// If path exists
-	if _, err := os.Stat(savePath); !os.IsNotExist(err) {
-		return ioutil.WriteFile(savePath+saveFileName, []byte(strings.Join(saveAscii, "\n")), 0777)
-	} else {
-		return fmt.Errorf("Save path does not exist.")
-	}
-}
-
-func createSaveFileName(imagePath string) (string, error) {
-	fileInfo, err := os.Stat(imagePath)
-	if err != nil {
-		return "", fmt.Errorf("Can't read file info for saving ascii art.")
-	}
-	currName := fileInfo.Name()
-	extension := filepath.Ext(imagePath)
-	newName := currName[:len(currName)-len(extension)]
-
-	// Something like myImage-jpeg-ascii-art.txt
-	return newName + "-" + extension[1:] + "-ascii-art.txt", nil
 }
 
 // flattenAscii flattens a two-dimensional grid of ascii characters into a one dimension
 // of lines of ascii
 func flattenAscii(asciiSet [][]imgMani.AsciiChar, color bool) []string {
 	var ascii []string
+
 	for _, line := range asciiSet {
 		var tempAscii []string
+
 		for i := 0; i < len(line); i++ {
 			if color {
 				tempAscii = append(tempAscii, line[i].Colored)
@@ -194,9 +187,57 @@ func flattenAscii(asciiSet [][]imgMani.AsciiChar, color bool) []string {
 				tempAscii = append(tempAscii, line[i].Simple)
 			}
 		}
+
 		ascii = append(ascii, strings.Join(tempAscii, ""))
 	}
+
 	return ascii
+}
+
+func saveAsciiArt(asciiSet [][]imgMani.AsciiChar, imagePath string, urlImgName string) error {
+	// To make sure uncolored ascii art is the one saved
+	saveAscii := flattenAscii(asciiSet, false)
+
+	saveFileName, err := createSaveFileName(imagePath, urlImgName)
+	if err != nil {
+		return err
+	}
+
+	savePathLastChar := string(savePath[len(savePath)-1])
+
+	// Check if path is closed with appropriate path separator (depending on OS)
+	if savePathLastChar != string(os.PathSeparator) {
+		if checkOS() == "linux" {
+			savePath += "/"
+		} else {
+			savePath += "\\"
+		}
+	}
+
+	// If path exists
+	if _, err := os.Stat(savePath); !os.IsNotExist(err) {
+		return ioutil.WriteFile(savePath+saveFileName, []byte(strings.Join(saveAscii, "\n")), 0666)
+	} else {
+		return fmt.Errorf("Save path does not exist.")
+	}
+}
+
+func createSaveFileName(imagePath string, urlImgName string) (string, error) {
+	if urlImgName != "" {
+		return urlImgName + "-ascii-art.txt", nil
+	}
+
+	fileInfo, err := os.Stat(imagePath)
+	if err != nil {
+		return "", err
+	}
+
+	currName := fileInfo.Name()
+	currExt := path.Ext(currName)
+	newName := currName[:len(currName)-len(currExt)] // e.g. Grabs myImage from myImage.jpeg
+
+	// Something like myImage.jpeg-ascii-art.txt
+	return newName + "." + currExt[1:] + "-ascii-art.txt", nil
 }
 
 // Cobra configuration from here on
@@ -218,7 +259,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&formatsTrue, "formats", "f", false, "Display supported image formats\n")
 	rootCmd.PersistentFlags().StringVarP(&customMap, "map", "m", "", "Give custom ascii characters to map against\nOrdered from darkest to lightest\ne.g. -m \" .-+#@\" (Quotation marks excluded from map)\n(Cancels --complex flag)\n")
 	rootCmd.PersistentFlags().BoolVarP(&negative, "negative", "n", false, "Display ascii art in negative colors\n(Can work with the --color flag)\n")
-	rootCmd.PersistentFlags().StringVarP(&savePath, "save", "s", "", "Save ascii art in the format:\n<image-name>-<image-extension>-ascii-art.txt\nFile will be saved in passed path\n(pass . for current directory)\n")
+	rootCmd.PersistentFlags().StringVarP(&savePath, "save", "s", "", "Save ascii art in the format:\n<image-name>.<image-extension>-ascii-art.txt\nFile will be saved in passed path\n(pass . for current directory)\n")
 
 	defaultUsageTemplate := rootCmd.UsageTemplate()
 	rootCmd.SetUsageTemplate("\nCopyright © 2021 Zoraiz Hassan <hzoraiz8@gmail.com>\n" +
