@@ -11,7 +11,6 @@ Image formats currently supported:
 
 ## Table of Contents
 
--  [Example](#example-source)
 -  [Installation](#installation)
 	*  [Snap](#snap)
 	*  [Go](#go)
@@ -22,14 +21,6 @@ Image formats currently supported:
 -  [Contributing](#contributing)
 -  [Packages used](#packages-used)
 -  [License](#license)
-
-### Example ([Source](https://medium.com/@sean.glancy/practical-applications-of-binary-trees-3097cf663062)):
-
-![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/tree.png)
-
-### ASCII Art:
-
-![Example](https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_images/ascii_tree.png)
 
 ## Installation
 
