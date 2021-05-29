@@ -238,4 +238,4 @@ You can fork the project and implement any changes you want for a pull request. 
 
 ## License
 
-[Apache-2.0](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)# ascii-image-converter
+[Apache-2.0](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
