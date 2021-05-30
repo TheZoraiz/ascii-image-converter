@@ -1,3 +1,4 @@
+
 project_name: ascii-image-converter
 
 before:
@@ -17,15 +18,10 @@ builds:
       - arm64
       - arm
       - 386
-
-    goarm:
-      - 5
-      - 6
-      - 7
     
 archives:
   -
-    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}_v{{ .Arm }}{{ end }}"
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
 
     format_overrides:
@@ -38,9 +34,10 @@ archives:
     replacements:
       linux: Linux
       windows: Windows
-      386: 32bit_i386
-      amd64: 64bit_amd64
-      arm64: 64bit_arm64
+      amd64: amd64_64bit
+      arm64: arm64_64bit
+      386: i386_32bit
+      arm: arm32_32bit
 
 checksum:
   name_template: 'sha256_checksums.txt'
