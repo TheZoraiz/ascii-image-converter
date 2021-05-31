@@ -36,7 +36,7 @@ type AsciiPixel struct {
 //
 // The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
 // ranges from 0 to 65535, while RGB values are separate.
-func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
@@ -79,7 +79,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, er
 		defaultTermWidth, _ := consolesize.GetConsoleSize()
 		defaultTermWidth -= 1
 		if dimensions[0] > defaultTermWidth {
-			return nil, fmt.Errorf("Set width is larger than terminal width")
+			return nil, fmt.Errorf("set width is larger than terminal width")
 		}
 	}
 
@@ -118,5 +118,29 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int) ([][]AsciiPixel, er
 		imgSet[y] = temp
 	}
 
+	// This rarely affects performance since the ascii art 2D slice size isn't that large
+	if flipX || flipY {
+		imgSet = reverse(imgSet, flipX, flipY)
+	}
+
 	return imgSet, nil
+}
+
+func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
+
+	if flipX {
+		for _, row := range imgSet {
+			for i, j := 0, len(row)-1; i < j; i, j = i+1, j-1 {
+				row[i], row[j] = row[j], row[i]
+			}
+		}
+	}
+
+	if flipY {
+		for i, j := 0, len(imgSet)-1; i < j; i, j = i+1, j-1 {
+			imgSet[i], imgSet[j] = imgSet[j], imgSet[i]
+		}
+	}
+
+	return imgSet
 }

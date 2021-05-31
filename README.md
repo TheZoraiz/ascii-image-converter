@@ -4,6 +4,8 @@
 
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported.
 
+It's also available as a package to be used in Go applications.
+
 Image formats currently supported:
 * JPEG/JPG
 * PNG
@@ -18,8 +20,9 @@ Image formats currently supported:
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
 	*  [Windows (binaries)](#windows)
--  [Usage](#usage)
+-  [CLI Usage](#cli-usage)
 	*  [Flags](#flags)
+-  [Library Usage](#library-usage)
 -  [Contributing](#contributing)
 -  [Packages used](#packages-used)
 -  [License](#license)
@@ -72,7 +75,7 @@ Now, restart any open command prompt and execute "ascii-image-converter -h" for 
 
 <br>
 
-## Usage
+## CLI Usage
 
 Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
@@ -211,11 +214,83 @@ ascii-image-converter [image paths/urls] --formats
 ascii-image-converter [image paths/urls] -f
 ```
 
+#### --flipX OR -x
+
+Flip the ascii art horizontally on the terminal.
+
+```
+ascii-image-converter [image paths/urls] --flipX
+# Or
+ascii-image-converter [image paths/urls] -x
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipx.gif">
+</p>
+
+#### --flipY OR -y
+Flip the ascii art vertically on the terminal.
+
+```
+ascii-image-converter [image paths/urls] --flipY
+# Or
+ascii-image-converter [image paths/urls] -y
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipy.gif">
+</p>
+
 <br>
+
 You can combine flags as well. Following command outputs colored and negative ascii art, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
 
 ```
 ascii-image-converter [image paths/urls] -Cnd 100,30 -m " .-=+#@" -s ./
+```
+<br>
+
+## Library Usage
+
+First import the library with:
+```
+go get github.com/TheZoraiz/ascii-image-converter/aic_package
+```
+
+The library is to be used as follows:
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/TheZoraiz/ascii-image-converter/aic_package"
+)
+
+func main() {
+	// If image is in current directory. This can also be a URL to an image.
+	imagePath := "myImage.jpeg"
+
+	flags := aic_package.DefaultFlags()
+
+	// This part is optional. You can directly pass flags variable to ConvertImage() if you wish.
+	// For clarity, all flags are covered in this example.
+	flags["complex"] = true  // Use complex character set
+	flags["dimensions"] = []int{50, 25} // 50 by 25 ascii art size
+	flags["savePath"] = "."  // Saves to current directory
+	flags["negative"] = true  // Ascii art will have negative color-depth
+	flags["colored"] = true  // Keep colors from original image
+	flags["customMap"] = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
+	flags["flipX"] = true  // Flips ascii art horizontally
+	flags["flipY"] = true  // Flips ascii art vertically
+	
+	// Return ascii art as a single string
+	asciiArt, err := aic_package.ConvertImage(imagePath, flags)
+	if err != nil {
+		fmt.Println(err)
+	}
+  
+	fmt.Printf("%v\n", asciiArt)
+}
 ```
 
 <br>
