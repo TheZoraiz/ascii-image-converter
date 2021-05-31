@@ -243,10 +243,10 @@ ascii-image-converter [image paths/urls] -y
 
 <br>
 
-You can combine flags as well. Following command outputs colored and negative ascii art, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
+You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
 
 ```
-ascii-image-converter [image paths/urls] -Cnd 100,30 -m " .-=+#@" -s ./
+ascii-image-converter [image paths/urls] -Cndxy 100,30 -m " .-=+#@" -s ./
 ```
 <br>
 
