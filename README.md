@@ -273,7 +273,7 @@ func main() {
 	flags := aic_package.DefaultFlags()
 
 	// This part is optional. You can directly pass flags variable to ConvertImage() if you wish.
-	// For clarity, all flags are covered in this example.
+	// For clarity, all flags are covered in this example, but you can use specific ones.
 	flags["complex"] = true  // Use complex character set
 	flags["dimensions"] = []int{50, 25} // 50 by 25 ascii art size
 	flags["savePath"] = "."  // Saves to current directory
