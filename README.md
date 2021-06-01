@@ -29,7 +29,7 @@ Image formats currently supported:
 
 ## Installation
 
-### Snap
+### Snap 
 
 You can download through snap. However, the snap will not have access to hidden images and images outside the $HOME directory.
 
@@ -37,6 +37,9 @@ You can download through snap. However, the snap will not have access to hidden 
 sudo snap install ascii-image-converter
 ```
 Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter) for instructions regarding enabling snapd on your distribution.
+
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/ascii-image-converter)
 
 <hr>
 
