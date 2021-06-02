@@ -51,6 +51,7 @@ func DefaultFlags() map[string]interface{} {
 		"customMap":  "",
 		"flipX":      false,
 		"flipY":      false,
+		"saveImage":  false,
 	}
 }
 
@@ -64,7 +65,8 @@ The "flags" argument should be declared as follows before passing:
  flags := map[string]interface{}{
  	"complex": bool, // Pass true for using complex character set
  	"dimensions": []int, // Pass 2 integer dimensions. Pass nil to ignore
- 	"savePath": string, // System path to save the ascii art string. Pass "" to ignore
+	"saveTxtPath": string, // System path to save the ascii art string as a .txt  file. Pass "" to ignore
+	"saveImagePath": string, // System path to save the ascii art string as a .txt  file. Pass "" to ignore
  	"negative": bool, // Pass true for negative color-depth ascii art
  	"colored": bool, // Pass true for returning colored ascii string
  	"customMap": string, // Custom map of ascii chars e.g. " .-+#@" . Nullifies "complex" flag. Pass "" to ignore.
@@ -74,24 +76,21 @@ The "flags" argument should be declared as follows before passing:
 */
 func ConvertImage(imagePath string, flags map[string]interface{}) (string, error) {
 
-	complex := flags["complex"].(bool)
 	var dimensions []int
 	if flags["dimensions"] == nil {
 		dimensions = nil
 	} else {
 		dimensions = flags["dimensions"].([]int)
 	}
-	savePath := flags["savePath"].(string)
+
+	complex := flags["complex"].(bool)
+	saveTxtPath := flags["saveTxtPath"].(string)
+	saveImagePath := flags["saveImagePath"].(string)
 	negative := flags["negative"].(bool)
 	colored := flags["colored"].(bool)
 	customMap := flags["customMap"].(string)
 	flipX := flags["flipX"].(bool)
 	flipY := flags["flipY"].(bool)
-
-	numberOfDimensions := len(dimensions)
-	if dimensions != nil && numberOfDimensions != 2 {
-		return "", fmt.Errorf("requires 2 dimensions, got %v", numberOfDimensions)
-	}
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (
@@ -109,7 +108,7 @@ func ConvertImage(imagePath string, flags map[string]interface{}) (string, error
 
 		retrievedImage, err := http.Get(imagePath)
 		if err != nil {
-			return "", fmt.Errorf("can't fetching image: %v", err)
+			return "", fmt.Errorf("can't fetch image: %v", err)
 		}
 
 		urlImgBytes, err = ioutil.ReadAll(retrievedImage.Body)
@@ -120,12 +119,15 @@ func ConvertImage(imagePath string, flags map[string]interface{}) (string, error
 
 		urlImgName = path.Base(imagePath)
 		fmt.Printf("                          \r") // To erase "Fetching image from url..." text from console
+
 	} else {
+
 		pic, err = os.Open(imagePath)
 		if err != nil {
 			return "", fmt.Errorf("unable to open file: %v", err)
 		}
 		defer pic.Close()
+
 	}
 
 	var imData image.Image
@@ -136,27 +138,36 @@ func ConvertImage(imagePath string, flags map[string]interface{}) (string, error
 		imData, _, err = image.Decode(pic)
 	}
 	if err != nil {
-		return "", fmt.Errorf("error decoding %v. %v", imagePath, err)
+		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, flipX, flipY)
+	// x and y are height and width of resulting ascii art
+	// These numbers are important for creating png image to save
+	imgSet, x, y, err := imgManip.ConvertToAsciiPixels(imData, dimensions, flipX, flipY)
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
 	}
 
 	asciiSet := imgManip.ConvertToAscii(imgSet, negative, colored, complex, customMap)
 
-	ascii := flattenAscii(asciiSet, colored)
-
-	// Save ascii art before printing it, if --save flag is passed
-	if savePath != "" {
-		if err := saveAsciiArt(asciiSet, imagePath, savePath, urlImgName); err != nil {
-			fmt.Printf("Error: %v\n\n", err)
-			os.Exit(0) // Because this error will be thrown for every image passed to this function if we use "return"
+	// Save ascii art as .png image before printing it, if --save-img flag is passed
+	if saveImagePath != "" {
+		if err := createImageToSave(asciiSet, x, y, colored, saveImagePath, imagePath, urlImgName); err != nil {
+			return "", fmt.Errorf("can't save file: %v", err)
 		}
 	}
 
+	// Save ascii art as .txt file before printing it, if --save-txt flag is passed
+	if saveTxtPath != "" {
+		if err := saveAsciiArt(asciiSet, imagePath, saveTxtPath, urlImgName); err != nil {
+			return "", fmt.Errorf("can't save file: %v", err)
+		}
+	}
+
+	ascii := flattenAscii(asciiSet, colored)
+
 	result := strings.Join(ascii, "\n")
+
 	return result, nil
 }
 
@@ -170,14 +181,14 @@ func checkOS() string {
 
 // flattenAscii flattens a two-dimensional grid of ascii characters into a one dimension
 // of lines of ascii
-func flattenAscii(asciiSet [][]imgManip.AsciiChar, color bool) []string {
+func flattenAscii(asciiSet [][]imgManip.AsciiChar, colored bool) []string {
 	var ascii []string
 
 	for _, line := range asciiSet {
 		var tempAscii []string
 
 		for i := 0; i < len(line); i++ {
-			if color {
+			if colored {
 				tempAscii = append(tempAscii, line[i].Colored)
 			} else {
 				tempAscii = append(tempAscii, line[i].Simple)
@@ -191,10 +202,10 @@ func flattenAscii(asciiSet [][]imgManip.AsciiChar, color bool) []string {
 }
 
 func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgName string) error {
-	// To make sure uncolored ascii art is the one saved
+	// To make sure uncolored ascii art is the one saved as .txt
 	saveAscii := flattenAscii(asciiSet, false)
 
-	saveFileName, err := createSaveFileName(imagePath, urlImgName)
+	saveFileName, err := createSaveFileName(imagePath, urlImgName, ".txt")
 	if err != nil {
 		return err
 	}
@@ -218,9 +229,12 @@ func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgNa
 	}
 }
 
-func createSaveFileName(imagePath string, urlImgName string) (string, error) {
+func createSaveFileName(imagePath, urlImgName, newExtension string) (string, error) {
 	if urlImgName != "" {
-		return urlImgName + "-ascii-art.txt", nil
+		currExt := path.Ext(urlImgName)
+		newName := urlImgName[:len(urlImgName)-len(currExt)] // e.g. Grabs myImage from myImage.jpeg
+
+		return newName + "-ascii-art.png", nil
 	}
 
 	fileInfo, err := os.Stat(imagePath)
@@ -233,5 +247,5 @@ func createSaveFileName(imagePath string, urlImgName string) (string, error) {
 	newName := currName[:len(currName)-len(currExt)] // e.g. Grabs myImage from myImage.jpeg
 
 	// Something like myImage.jpeg-ascii-art.txt
-	return newName + "." + currExt[1:] + "-ascii-art.txt", nil
+	return newName + "-ascii-art" + newExtension, nil
 }

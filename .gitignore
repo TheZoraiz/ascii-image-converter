@@ -2,3 +2,5 @@ pics/
 build/
 snap/
 dist/
+build.sh
+todo.txt

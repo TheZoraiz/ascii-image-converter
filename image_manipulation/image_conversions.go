@@ -36,7 +36,7 @@ type AsciiPixel struct {
 //
 // The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
 // ranges from 0 to 65535, while RGB values are separate.
-func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) ([][]AsciiPixel, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) ([][]AsciiPixel, int, int, error) {
 
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
@@ -77,9 +77,10 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 	// If there are passed dimensions, check whether the width exceeds terminal width
 	if len(dimensions) > 0 {
 		defaultTermWidth, _ := consolesize.GetConsoleSize()
+
 		defaultTermWidth -= 1
 		if dimensions[0] > defaultTermWidth {
-			return nil, fmt.Errorf("set width is larger than terminal width")
+			return nil, 0, 0, fmt.Errorf("set width is larger than terminal width")
 		}
 	}
 
@@ -123,7 +124,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 		imgSet = reverse(imgSet, flipX, flipY)
 	}
 
-	return imgSet, nil
+	return imgSet, asciiWidth, asciiHeight, nil
 }
 
 func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {

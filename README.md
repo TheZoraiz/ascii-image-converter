@@ -24,7 +24,7 @@ Image formats currently supported:
 	*  [Flags](#flags)
 -  [Library Usage](#library-usage)
 -  [Contributing](#contributing)
--  [Packages used](#packages-used)
+-  [Packages Used](#packages-used)
 -  [License](#license)
 
 ## Installation
@@ -189,22 +189,32 @@ ascii-image-converter [image paths/urls] --negative
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/negative.gif">
 </p>
 
-#### --save OR -s
+#### --save-img OR -s
 
 Note: Don't immediately append another flag with -s
 
-Save ascii art in the format `<image-name>.<image-extension>-ascii-art.txt` in the directory path passed to the flag.
+Saves the ascii as a PNG image in the with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
 
 Example for current directory:
 
 ```
-ascii-image-converter [image paths/urls] --save .
+ascii-image-converter [image paths/urls] --save-img .
 # Or
 ascii-image-converter [image paths/urls] -s .
 ```
 
+#### --save-txt
+
+Similar to --save-img as but it creates a TXT file with the name `<image-name>-ascii-art.txt` in the directory path passed to the flag. Only saves uncolored text.
+
+Example for current directory:
+
+```
+ascii-image-converter [image paths/urls] --save-txt .
+```
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save-image-txt-demo.gif">
 </p>
 
 #### --formats OR -f
@@ -227,10 +237,6 @@ ascii-image-converter [image paths/urls] --flipX
 ascii-image-converter [image paths/urls] -x
 ```
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipx.gif">
-</p>
-
 #### --flipY OR -y
 Flip the ascii art vertically on the terminal.
 
@@ -241,21 +247,23 @@ ascii-image-converter [image paths/urls] -y
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipy.gif">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipx-flipy.gif">
 </p>
 
 <br>
 
-You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 100 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the output in current directory as well.
+You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 60 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the a generated image and .txt file in current directory as well.
 
 ```
-ascii-image-converter [image paths/urls] -Cnxyd 100,30 -m " .-=+#@" -s ./
+ascii-image-converter [image paths/urls] -Cnxyd 60,30 -m " .-=+#@" -s . --save-txt .
 ```
 <br>
 
 ## Library Usage
 
-First import the library with:
+Note: The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Looking into this issue.
+
+First, install the library with:
 ```
 go get github.com/TheZoraiz/ascii-image-converter/aic_package
 ```
@@ -266,6 +274,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/TheZoraiz/ascii-image-converter/aic_package"
 )
 
@@ -279,7 +288,8 @@ func main() {
 	// For clarity, all flags are covered in this example, but you can use specific ones.
 	flags["complex"] = true  // Use complex character set
 	flags["dimensions"] = []int{50, 25} // 50 by 25 ascii art size
-	flags["savePath"] = "."  // Saves to current directory
+	flags["saveTxtPath"]: ".", // Save generated text in same directory
+	flags["saveImagePath"]: ".", //  Save generated image in same directory
 	flags["negative"] = true  // Ascii art will have negative color-depth
 	flags["colored"] = true  // Keep colors from original image
 	flags["customMap"] = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
@@ -302,9 +312,11 @@ func main() {
 
 You can fork the project and implement any changes you want for a pull request. However, for major changes, please open an issue first to discuss what you would like to implement.
 
-## Packages used
+## Packages Used
 
 [github.com/spf13/cobra](https://github.com/spf13/cobra)
+
+[github.com/fogleman/gg](https://github.com/fogleman/gg)
 
 [github.com/mitchellh/go-homedir](https://github.com/mitchellh/go-homedir)
 

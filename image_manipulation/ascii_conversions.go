@@ -113,8 +113,9 @@ var asciiTableDetailed = map[int]string{
 const MAX_VAL float32 = 65535
 
 type AsciiChar struct {
-	Colored string
-	Simple  string
+	Colored  string
+	Simple   string
+	RgbValue []uint32
 }
 
 // Converts the 2D AsciiPixel slice of image data (each instance representing each pixel of original image)
@@ -172,6 +173,9 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 				g = 255 - g
 				b = 255 - b
 
+				// To preserve negative rgb values for saving png image later down the line, since it uses imgSet
+				imgSet[i][j].rgbValue = []uint32{uint32(r), uint32(g), uint32(b)}
+
 				tempInt = (len(chosenTable) - 1) - tempInt
 			}
 
@@ -183,6 +187,8 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 
 			char.Colored = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
 			char.Simple = chosenTable[tempInt]
+
+			char.RgbValue = imgSet[i][j].rgbValue
 
 			tempSlice = append(tempSlice, char)
 		}
