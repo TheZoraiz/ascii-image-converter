@@ -67,7 +67,7 @@ The "flags" argument should be declared as follows before passing:
  	"complex": bool, // Pass true for using complex character set
  	"dimensions": []int, // Pass 2 integer dimensions. Pass nil to ignore
 	"saveTxtPath": string, // System path to save the ascii art string as a .txt  file. Pass "" to ignore
-	"saveImagePath": string, // System path to save the ascii art string as a .txt  file. Pass "" to ignore
+	"saveImagePath": string, // System path to save the ascii art string as a .png  file. Pass "" to ignore
  	"negative": bool, // Pass true for negative color-depth ascii art
  	"colored": bool, // Pass true for returning colored ascii string
  	"customMap": string, // Custom map of ascii chars e.g. " .-+#@" . Nullifies "complex" flag. Pass "" to ignore.
@@ -229,12 +229,13 @@ func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgNa
 	}
 }
 
+// Returns new image file name along with extension
 func createSaveFileName(imagePath, urlImgName, newExtension string) (string, error) {
 	if urlImgName != "" {
 		currExt := path.Ext(urlImgName)
 		newName := urlImgName[:len(urlImgName)-len(currExt)] // e.g. Grabs myImage from myImage.jpeg
 
-		return newName + "-ascii-art.png", nil
+		return newName + "-ascii-art" + newExtension, nil
 	}
 
 	fileInfo, err := os.Stat(imagePath)
@@ -246,6 +247,5 @@ func createSaveFileName(imagePath, urlImgName, newExtension string) (string, err
 	currExt := path.Ext(currName)
 	newName := currName[:len(currName)-len(currExt)] // e.g. Grabs myImage from myImage.jpeg
 
-	// Something like myImage.jpeg-ascii-art.txt
 	return newName + "-ascii-art" + newExtension, nil
 }
