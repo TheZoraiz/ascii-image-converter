@@ -43,15 +43,15 @@ import (
 // Return default configuration for flags
 func DefaultFlags() map[string]interface{} {
 	return map[string]interface{}{
-		"complex":    false,
-		"dimensions": nil,
-		"savePath":   "",
-		"negative":   false,
-		"colored":    false,
-		"customMap":  "",
-		"flipX":      false,
-		"flipY":      false,
-		"saveImage":  false,
+		"complex":       false,
+		"dimensions":    nil,
+		"saveTxtPath":   "",
+		"saveImagePath": "",
+		"negative":      false,
+		"colored":       false,
+		"customMap":     "",
+		"flipX":         false,
+		"flipY":         false,
 	}
 }
 
