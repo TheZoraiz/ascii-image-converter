@@ -56,7 +56,7 @@ var (
 			}
 
 			if len(args) < 1 {
-				fmt.Printf("Error: Need at least 1 image path/url\n\n")
+				fmt.Printf("Error: Need at least 1 image path/url\nUse the -h flag for more info\n\n")
 				return
 			}
 
