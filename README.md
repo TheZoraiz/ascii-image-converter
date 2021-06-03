@@ -195,7 +195,7 @@ ascii-image-converter [image paths/urls] --negative
 
 Note: Don't immediately append another flag with -s
 
-Saves the ascii as a PNG image in the with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
+Saves the ascii as a PNG image with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
 
 Example for current directory:
 
@@ -254,7 +254,7 @@ ascii-image-converter [image paths/urls] -y
 
 <br>
 
-You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 60 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves the a generated image and .txt file in current directory as well.
+You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 60 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves a generated image and .txt file in current directory as well.
 
 ```
 ascii-image-converter [image paths/urls] -Cnxyd 60,30 -m " .-=+#@" -s . --save-txt .
