@@ -2,7 +2,7 @@
 
 [![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)
 
-ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console as well as save them as PNG images. It is cross-platform so both Windows and Linux distributions are supported.
+ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported.
 
 It's also available as a package to be used in Go applications.
 
