@@ -17,10 +17,11 @@ limitations under the License.
 package aic_package
 
 import (
-	_ "embed"
 	"image"
 	"image/color"
 	"os"
+
+	_ "embed"
 
 	imgManip "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 	"github.com/golang/freetype/truetype"
@@ -32,7 +33,7 @@ import (
 // Will work on organizing it into a readable format soon. Apologies...
 
 // To embed font directly into the binary, instead of packaging it as a separate file
-//go:embed RobotoMono-Regular.ttf
+//go:embed RobotoMono-Bold.ttf
 var embeddedFontFile []byte
 
 func createImageToSave(asciiArt [][]imgManip.AsciiChar, x, y int, colored bool, saveImagePath, imagePath, urlImgName string) error {
@@ -72,9 +73,9 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, x, y int, colored bool, 
 	if err != nil {
 		return err
 	}
-	robotoFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: 21.0})
+	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: 21.0})
 
-	dc.SetFontFace(robotoFontFace)
+	dc.SetFontFace(robotoBoldFontFace)
 
 	// Font color of text on picture is white by default
 	dc.SetColor(color.White)

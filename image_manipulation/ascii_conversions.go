@@ -139,6 +139,7 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 		}
 	} else {
 		chosenTable = map[int]string{}
+
 		for index, char := range customMap {
 			chosenTable[index] = string(char)
 		}

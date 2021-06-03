@@ -44,7 +44,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images into ascii art",
-		Version: "1.3.0",
+		Version: "1.3.1",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -68,6 +68,11 @@ var (
 			numberOfDimensions := len(dimensions)
 			if dimensions != nil && numberOfDimensions != 2 {
 				fmt.Printf("Error: requires 2 dimensions, got %v\n\n", numberOfDimensions)
+				return
+			}
+
+			if dimensions != nil && (dimensions[0] < 1 || dimensions[1] < 1) {
+				fmt.Printf("Error: invalid values for dimensions\n\n")
 				return
 			}
 

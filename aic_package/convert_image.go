@@ -40,7 +40,8 @@ import (
 	"github.com/asaskevich/govalidator"
 )
 
-// Return default configuration for flags
+// Return default configuration for flags.
+// Can be sent directly to ConvertImage() for default ascii art
 func DefaultFlags() map[string]interface{} {
 	return map[string]interface{}{
 		"complex":       false,
@@ -141,9 +142,8 @@ func ConvertImage(imagePath string, flags map[string]interface{}) (string, error
 		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	// x and y are height and width of resulting ascii art
-	// These numbers are important for creating png image to save
-	imgSet, x, y, err := imgManip.ConvertToAsciiPixels(imData, dimensions, flipX, flipY)
+	// Ascii art height and width are important for creating png image to save
+	imgSet, imgWidth, imgHeight, err := imgManip.ConvertToAsciiPixels(imData, dimensions, flipX, flipY)
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
 	}
@@ -152,7 +152,7 @@ func ConvertImage(imagePath string, flags map[string]interface{}) (string, error
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed
 	if saveImagePath != "" {
-		if err := createImageToSave(asciiSet, x, y, colored, saveImagePath, imagePath, urlImgName); err != nil {
+		if err := createImageToSave(asciiSet, imgWidth, imgHeight, colored, saveImagePath, imagePath, urlImgName); err != nil {
 			return "", fmt.Errorf("can't save file: %v", err)
 		}
 	}
