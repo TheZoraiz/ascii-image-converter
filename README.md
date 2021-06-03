@@ -290,8 +290,8 @@ func main() {
 	// For clarity, all flags are covered in this example, but you can use specific ones.
 	flags["complex"] = true  // Use complex character set
 	flags["dimensions"] = []int{50, 25} // 50 by 25 ascii art size
-	flags["saveTxtPath"]: ".", // Save generated text in same directory
-	flags["saveImagePath"]: ".", //  Save generated image in same directory
+	flags["saveTxtPath"] = "."  // Save generated text in same directory
+	flags["saveImagePath"] = "."  // Save generated PNG image in same directory
 	flags["negative"] = true  // Ascii art will have negative color-depth
 	flags["colored"] = true  // Keep colors from original image
 	flags["customMap"] = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
