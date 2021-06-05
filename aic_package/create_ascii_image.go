@@ -48,11 +48,11 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, x, y int, colored bool, 
 	// until extreme cases' output images becaume right
 	x = int(12.6 * float32(x))
 
-	y = 14 * y
+	y = int(13.5 * float32(y))
 	y = y * 2
 
 	// To give small extra margins near the edges
-	y += 10
+	y += 5
 	x += 10
 
 	tempImg := image.NewRGBA(image.Rect(0, 0, x, y))
@@ -81,7 +81,7 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, x, y int, colored bool, 
 	dc.SetColor(color.White)
 
 	// Pointer to track y-axis on the image frame
-	yImgPointer := 5.0
+	yImgPointer := 2.5
 
 	// These nested loops print each character in asciArt 2D slice separately
 	// so that their RGB colors can be maintained in the resulting image
@@ -111,7 +111,7 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, x, y int, colored bool, 
 
 		// Incremet pointer for y axis after every line printed, so
 		// new line can start at below the previous one on next iteration
-		yImgPointer += 28
+		yImgPointer += 27
 	}
 
 	imageName, err := createSaveFileName(imagePath, urlImgName, ".png")
