@@ -44,7 +44,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images into ascii art",
-		Version: "1.3.3",
+		Version: "1.3.4",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -138,7 +138,7 @@ func init() {
 	defaultUsageTemplate := rootCmd.UsageTemplate()
 	rootCmd.SetUsageTemplate(defaultUsageTemplate + "\nCopyright © 2021 Zoraiz Hassan <hzoraiz8@gmail.com>\n" +
 		"Distributed under the Apache License Version 2.0 (Apache-2.0)\n" +
-		"For further details, visit https://github.com/TheZoraiz/ascii-image-converter\n\n")
+		"For further details, visit https://github.com/TheZoraiz/ascii-image-converter\n")
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -21,7 +21,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/nathan-fiscaletti/consolesize-go"
+	"github.com/TheZoraiz/ascii-image-converter/image_manipulation/winsize"
 	"github.com/nfnt/resize"
 )
 
@@ -45,7 +45,11 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 
 		// Following code in this condition calculates ratio according to terminal height
 
-		terminalWidth, terminalHeight := consolesize.GetConsoleSize()
+		terminalWidth, terminalHeight, err := winsize.GetTerminalSize()
+		if err != nil {
+			return nil, 0, 0, err
+		}
+
 		asciiHeight = terminalHeight - 1
 
 		// Passing 0 in place of width keeps the original image's aspect ratio
@@ -76,7 +80,10 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 
 	// If there are passed dimensions, check whether the width exceeds terminal width
 	if len(dimensions) > 0 {
-		defaultTermWidth, _ := consolesize.GetConsoleSize()
+		defaultTermWidth, _, err := winsize.GetTerminalSize()
+		if err != nil {
+			return nil, 0, 0, err
+		}
 
 		defaultTermWidth -= 1
 		if dimensions[0] > defaultTermWidth {
