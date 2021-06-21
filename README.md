@@ -1,6 +1,10 @@
 # ascii-image-converter
 
-[![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)
+[![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
+[![ascii-image-converter-lang](https://img.shields.io/badge/Language-Go-brightgreen)](https://golang.org/) 
+![Github All Releases](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=brightgreen&label=Release%20Downloads)
+[![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)  
 
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported.
 
