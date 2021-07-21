@@ -1,12 +1,13 @@
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
-[![ascii-image-converter-lang](https://img.shields.io/badge/Language-Go-brightgreen)](https://golang.org/) 
+[![ascii-image-converter-lang](https://img.shields.io/badge/Language-Go-blue)](https://golang.org/) 
 ![Github All Releases](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=brightgreen&label=Release%20Downloads)
 [![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)  
 
-ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported.
+ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported. GIFs are now experimentally supported as well.
 
 It's also available as a package to be used in Go applications.
 
@@ -16,6 +17,7 @@ Image formats currently supported:
 * BMP
 * WEBP
 * TIFF/TIF
+* GIF (Experimental)
 
 ## Table of Contents
 
@@ -88,7 +90,7 @@ Now, restart any open command prompt and execute "ascii-image-converter -h" for 
 
 Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
-The basic usage for converting an image into ascii art is as follows. You can also supply multiple image paths and urls.
+The basic usage for converting an image into ascii art is as follows. You can also supply multiple image paths and urls as well as a GIF.
 
 ```
 ascii-image-converter [image paths/urls]
@@ -110,10 +112,10 @@ Multiple images:
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/all.gif">
 </p>
 
-Image from URL:
+GIF:
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/url.gif">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/gif-example.gif">
 </p>
 
 ### Flags
@@ -132,15 +134,6 @@ ascii-image-converter [image paths/urls] --color
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/color.gif">
 </p>
 
-#### --complex OR -c
-
-Print the image with a wider array of ascii characters for more detailed lighting density. Sometimes improves accuracy.
-```
-ascii-image-converter [image paths/urls] -c
-# Or
-ascii-image-converter [image paths/urls] --complex
-```
-
 #### --dimensions OR -d
 
 Note: Don't immediately append another flag with -d
@@ -153,7 +146,7 @@ ascii-image-converter [image paths/urls] --dimensions <width>,<height>
 ```
 Example:
 ```
-ascii-image-converter [image paths/urls] -d 100,30
+ascii-image-converter [image paths/urls] -d 60,30
 ```
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/dimensions.gif">
@@ -195,42 +188,22 @@ ascii-image-converter [image paths/urls] --negative
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/negative.gif">
 </p>
 
-#### --save-img OR -s
+#### --complex OR -c
 
-Note: Don't immediately append another flag with -s
-
-Saves the ascii as a PNG image with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
-
-Example for current directory:
-
+Print the image with a wider array of ascii characters for more detailed lighting density. Sometimes improves accuracy.
 ```
-ascii-image-converter [image paths/urls] --save-img .
+ascii-image-converter [image paths/urls] -c
 # Or
-ascii-image-converter [image paths/urls] -s .
+ascii-image-converter [image paths/urls] --complex
 ```
 
-#### --save-txt
+#### --full OR -f
 
-Similar to --save-img as but it creates a TXT file with the name `<image-name>-ascii-art.txt` in the directory path passed to the flag. Only saves uncolored text.
-
-Example for current directory:
-
+Print ascii art that fits the terminal width while maintaining aspect ratio.
 ```
-ascii-image-converter [image paths/urls] --save-txt .
-```
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save-image-txt-demo.gif">
-</p>
-
-#### --formats OR -f
-
-Display supported image formats.
-
-```
-ascii-image-converter [image paths/urls] --formats
-# Or
 ascii-image-converter [image paths/urls] -f
+# Or
+ascii-image-converter [image paths/urls] --full
 ```
 
 #### --flipX OR -x
@@ -252,9 +225,49 @@ ascii-image-converter [image paths/urls] --flipY
 ascii-image-converter [image paths/urls] -y
 ```
 
+
+
+#### --save-img OR -s
+
+Note: Don't immediately append another flag with -s
+
+Saves the ascii as a PNG image with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
+
+Example for current directory:
+
+```
+ascii-image-converter [image paths/urls] --save-img .
+# Or
+ascii-image-converter [image paths/urls] -s .
+```
+
+#### --save-txt
+
+Similar to --save-img but it creates a TXT file with the name `<image-name>-ascii-art.txt` in the directory path passed to the flag. Only saves uncolored text.
+
+Example for current directory:
+
+```
+ascii-image-converter [image paths/urls] --save-txt .
+```
+
+#### --save-gif
+
+Note: This is an experimental feature and may not result in the finest quality GIFs, because all GIFs still aren't supported by ascii-image-converter.
+
+Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.gif` in the directory path passed to the flag.
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/flipx-flipy.gif">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
 </p>
+
+#### --formats
+
+Display supported input formats.
+
+```
+ascii-image-converter --formats
+```
 
 <br>
 
@@ -267,7 +280,7 @@ ascii-image-converter [image paths/urls] -Cnxyd 60,30 -m " .-=+#@" -s . --save-t
 
 ## Library Usage
 
-Note: The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Looking into this issue.
+Note: The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Furthermore, GIF conversion is not advised as it isn't fully library-compatible yet.
 
 First, install the library with:
 ```
@@ -275,6 +288,7 @@ go get github.com/TheZoraiz/ascii-image-converter/aic_package
 ```
 
 The library is to be used as follows:
+
 ```go
 package main
 
@@ -285,30 +299,41 @@ import (
 )
 
 func main() {
-	// If image is in current directory. This can also be a URL to an image.
-	imagePath := "myImage.jpeg"
+	// If file is in current directory. This can also be a URL to an image or gif.
+	filePath := "myImage.jpeg"
 
 	flags := aic_package.DefaultFlags()
 
-	// This part is optional. You can directly pass flags variable to ConvertImage() if you wish.
+	// This part is optional.
+	// You can directly pass default flags variable to Convert() if you wish.
 	// For clarity, all flags are covered in this example, but you can use specific ones.
-	flags["complex"] = true  // Use complex character set
-	flags["dimensions"] = []int{50, 25} // 50 by 25 ascii art size
-	flags["saveTxtPath"] = "."  // Save generated text in same directory
-	flags["saveImagePath"] = "."  // Save generated PNG image in same directory
-	flags["negative"] = true  // Ascii art will have negative color-depth
-	flags["colored"] = true  // Keep colors from original image
-	flags["customMap"] = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
-	flags["flipX"] = true  // Flips ascii art horizontally
-	flags["flipY"] = true  // Flips ascii art vertically
+	flags.Complex = true  // Use complex character set
+	flags.Dimensions = []int{50, 25} // 50 by 25 ascii art size
+	flags.SaveTxtPath = "."  // Save generated text in same directory
+	flags.SaveImagePath = "."  // Save generated PNG image in same directory
+	flags.SaveGifPath = "." // If gif was provided, save ascii art gif in same directory
+	flags.Negative = true  // Ascii art will have negative color-depth
+	flags.Colored = true  // Keep colors from original image
+	flags.CustomMap = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
+	flags.FlipX = true  // Flips ascii art horizontally
+	flags.FlipY = true  // Flips ascii art vertically
+	flags.Full = true  // Display ascii art that fills the terminal width
 	
-	// Return ascii art as a single string
-	asciiArt, err := aic_package.ConvertImage(imagePath, flags)
+	// For an image
+	asciiArt, err := aic_package.Convert(filePath, flags)
 	if err != nil {
 		fmt.Println(err)
 	}
-  
+
 	fmt.Printf("%v\n", asciiArt)
+
+	// GIF CONVERSION IS AN EXPERIMENTAL FEATURE
+	// For a gif. This function may run infinitely, depending on the gif
+	// Work needs to be done on gif conversion to be more library-compatible
+	_, err := aic_package.Convert(filePath, flags)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 ```
 

@@ -23,58 +23,73 @@ import (
 	_ "embed"
 
 	imgManip "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
-	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
+
+	"github.com/fogleman/gg"
 )
 
-// To embed font directly into the binary, instead of packaging it as a separate file
-//go:embed RobotoMono-Bold.ttf
-var embeddedFontFile []byte
-
 /*
-Unlike createGifFrameToSave(), this function is altered to ignore execution time and has a fixed font size.
-This creates maximum quality ascii art, although the resulting image will not have the same dimensions
-as the original image, but the ascii art quality will be maintained. This is required, since smaller provided
-images will considerably decrease ascii art quality because of smaller font size.
+Unlike createImageToSave(), this function is optimized to maintain original image dimensions and shrink ascii
+art font size to match it. This allows for greater execution speed, which is necessary since a gif contains
+multiple images that need to be converted to ascii art, and the potential loss of ascii art quality (since
+large ascii art instances will shrink the font too much).
 
-Size of resulting image may also be considerably larger than original image.
+Furthermore, maintaining original gif's width and height also allows for gifs of smaller size.
 */
-func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImagePath, imagePath, urlImgName string) error {
+func createGifFrameToSave(asciiArt [][]imgManip.AsciiChar, img image.Image, colored bool) (image.Image, error) {
 
-	constant := 14.0
+	// Original image dimensions
+	x := img.Bounds().Dx()
+	y := img.Bounds().Dy()
 
-	x := len(asciiArt[0])
-	y := len(asciiArt)
+	// Ascii art dimensions
+	asciiWidth := len(asciiArt[0])
+	asciiHeight := len(asciiArt)
 
-	// Multipying resulting image dimensions with respect to constant
-	x = int(constant * float64(x))
+	// Iterators to move pointer on the image to be made
+	var xIter float64
+	var yIter float64
 
-	y = int(constant * float64(y))
-	y = y * 2
+	var fontSize float64
+
+	// Conditions to alter resulting ascii gif dimensions according to ascii art dimensions
+	if asciiWidth > asciiHeight*2 {
+		yIter = float64(y) / float64(asciiHeight)
+
+		xIter = yIter / 2
+		x = int(xIter * float64(asciiWidth))
+
+		fontSize = xIter
+
+	} else {
+		xIter = float64(x) / float64(asciiWidth)
+
+		yIter = xIter * 2
+		y = int(yIter * float64(asciiHeight))
+
+		fontSize = xIter
+	}
 
 	// 10 extra pixels on both x and y-axis to have 5 pixels of padding on each side
-	y += 10
 	x += 10
+	y += 10
 
 	tempImg := image.NewRGBA(image.Rect(0, 0, x, y))
 
-	imgWidth := tempImg.Bounds().Dx()
-	imgHeight := tempImg.Bounds().Dy()
-
-	dc := gg.NewContext(imgWidth, imgHeight)
-
-	// Set image background as black
-	dc.SetRGB(0, 0, 0)
-	dc.Clear()
+	dc := gg.NewContext(x, y)
 
 	dc.DrawImage(tempImg, 0, 0)
+	// Set image background as black
+	dc.SetRGBA(0, 0, 0, 0)
+	dc.Clear()
 
 	// Load embedded font
 	tempFont, err := truetype.Parse(embeddedFontFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: constant * 1.5})
+	// Font size increased during assignment to become more visible. This will not affect image drawing
+	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: fontSize * 1.5})
 
 	dc.SetFontFace(robotoBoldFontFace)
 
@@ -106,25 +121,15 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 
 			// Incremet x-axis pointer character so new one can be printed after it
 			// Set to the same constant as in line
-			xImgPointer += float64(constant)
+			xImgPointer += xIter
 		}
 
 		dc.DrawStringWrapped("\n", xImgPointer, yImgPointer, 0, 0, float64(x), 1.8, gg.AlignLeft)
 
 		// Incremet pointer for y axis after every line printed, so
 		// new line can start at below the previous one on next iteration
-		yImgPointer += float64(constant * 2)
+		yImgPointer += yIter
 	}
 
-	imageName, err := createSaveFileName(imagePath, urlImgName, "-ascii-art.png")
-	if err != nil {
-		return err
-	}
-
-	fullPathName, err := getFullSavePath(imageName, saveImagePath)
-	if err != nil {
-		return err
-	}
-
-	return dc.SavePNG(fullPathName)
+	return dc.Image(), nil
 }

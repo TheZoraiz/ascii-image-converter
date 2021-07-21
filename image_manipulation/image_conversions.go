@@ -21,7 +21,7 @@ import (
 	"image"
 	"image/color"
 
-	"github.com/TheZoraiz/ascii-image-converter/image_manipulation/winsize"
+	"github.com/TheZoraiz/ascii-image-converter/aic_package/winsize"
 	"github.com/nfnt/resize"
 )
 
@@ -36,23 +36,34 @@ type AsciiPixel struct {
 //
 // The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
 // ranges from 0 to 65535, while RGB values are separate.
-func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) ([][]AsciiPixel, int, int, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full bool) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
 
-	if len(dimensions) == 0 {
+	terminalWidth, terminalHeight, err := winsize.GetTerminalSize()
+	if err != nil {
+		return nil, err
+	}
 
-		// Following code in this condition calculates ratio according to terminal height
+	if full {
+		asciiWidth = terminalWidth - 1
 
-		terminalWidth, terminalHeight, err := winsize.GetTerminalSize()
-		if err != nil {
-			return nil, 0, 0, err
-		}
+		// Passing 0 in place of width keeps the original image's aspect ratio
+		smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+		asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
+
+		// To fix aspect ratio in eventual ascii art
+		asciiHeight = int(0.5 * float32(asciiHeight))
+
+		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+
+	} else if len(dimensions) == 0 {
+
+		// Following code in this condition calculates aspect ratio according to terminal height
 
 		asciiHeight = terminalHeight - 1
 
-		// Passing 0 in place of width keeps the original image's aspect ratio
 		smallImg = resize.Resize(0, uint(asciiHeight), img, resize.Lanczos3)
 		asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
@@ -60,10 +71,11 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 		asciiWidth = int(2 * float32(asciiWidth))
 
 		// If ascii width exceeds terminal width, change ratio with respect to terminal width
-		if asciiWidth > terminalWidth {
-			smallImg = resize.Resize(uint(terminalWidth), 0, img, resize.Lanczos3)
-
+		if asciiWidth >= terminalWidth {
 			asciiWidth = terminalWidth - 1
+
+			smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 			// To fix aspect ratio in eventual ascii art
@@ -78,16 +90,18 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
 	}
 
+	// Repeated despite being in cmd/root.go to maintain support for library
+	//
 	// If there are passed dimensions, check whether the width exceeds terminal width
-	if len(dimensions) > 0 {
+	if len(dimensions) > 0 && !full {
 		defaultTermWidth, _, err := winsize.GetTerminalSize()
 		if err != nil {
-			return nil, 0, 0, err
+			return nil, err
 		}
 
 		defaultTermWidth -= 1
 		if dimensions[0] > defaultTermWidth {
-			return nil, 0, 0, fmt.Errorf("set width is larger than terminal width")
+			return nil, fmt.Errorf("set width must be lower than terminal width")
 		}
 	}
 
@@ -131,7 +145,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY bool) 
 		imgSet = reverse(imgSet, flipX, flipY)
 	}
 
-	return imgSet, asciiWidth, asciiHeight, nil
+	return imgSet, nil
 }
 
 func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
@@ -151,4 +165,8 @@ func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
 	}
 
 	return imgSet
+}
+
+func calculateDimensions() {
+
 }
