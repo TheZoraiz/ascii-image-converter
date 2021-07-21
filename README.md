@@ -11,7 +11,7 @@ ascii-image-converter is a command-line tool that converts images into ascii art
 
 It's also available as a package to be used in Go applications.
 
-Image formats currently supported:
+Input formats currently supported:
 * JPEG/JPG
 * PNG
 * BMP
