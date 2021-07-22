@@ -77,7 +77,8 @@ You will need to set an Environment Variable to the folder the ascii-image-conve
 
 Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
 * In Search, search for and then select "view advanced system settings" (Control Panel)
-* Click Environment Variables. In the section `User Variables`, find the `Path` environment variable and select it. Click "Edit".
+* Click `Environment Variables`.
+* In the section `User Variables`, find the `Path` environment variable and select it. Click `Edit`.
 * In the Edit Environment Variable window, click `New` on the right side and then paste the path of the folder that you copied initially.
 * Click `Ok` on all open windows.
 
