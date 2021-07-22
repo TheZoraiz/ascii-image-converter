@@ -1,4 +1,3 @@
-
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -256,6 +255,11 @@ ascii-image-converter [image paths/urls] --save-txt .
 Note: This is an experimental feature and may not result in the finest quality GIFs, because all GIFs still aren't supported by ascii-image-converter.
 
 Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.gif` in the directory path passed to the flag.
+
+Example for current directory:
+```
+ascii-image-converter [gif path/url] --save-gif .
+```
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
