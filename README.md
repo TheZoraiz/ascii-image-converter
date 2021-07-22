@@ -39,7 +39,7 @@ Input formats currently supported:
 
 You can download through snap.
 
-Note: The snap will not have access to hidden images and images outside the $HOME directory. This includes write access for saving ascii images and text files as well.
+Note: The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for the ascii art saving files as well.
 
 ```
 sudo snap install ascii-image-converter
@@ -69,20 +69,19 @@ Now, open a terminal in the same directory and execute this command:
 ```
 sudo cp ascii-image-converter /usr/local/bin/
 ```
-Now you can use ascii-image-converter in the terminal. Execute "ascii-image-converter -h" for more details.
+Now you can use ascii-image-converter in the terminal. Execute `ascii-image-converter -h` for more details.
 
 ### Windows
 
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
 Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
-* In Search, search for and then select: System (Control Panel)
-* Click the Advanced System settings link.
-* Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
-* In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
-* Click "Ok" on all open windows.
+* In Search, search for and then select "view advanced system settings" (Control Panel)
+* Click Environment Variables. In the section `User Variables`, find the `Path` environment variable and select it. Click "Edit".
+* In the Edit Environment Variable window, click `New` on the right side and then paste the path of the folder that you copied initially.
+* Click `Ok` on all open windows.
 
-Now, restart any open command prompt and execute "ascii-image-converter -h" for more details.
+Now, restart any open command prompt and execute `ascii-image-converter -h` for more details.
 
 <br>
 
