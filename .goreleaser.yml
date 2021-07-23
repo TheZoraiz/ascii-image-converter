@@ -13,10 +13,24 @@ builds:
       - windows
 
     goarch:
+      # Architectures for executable binary generation
       - amd64
       - arm64
       - arm
       - 386
+
+      # Specifying all architectures for .deb and .rpm generation
+      # - 386
+      # - amd64
+      # - arm
+      # - arm64
+      # - ppc64
+      # - ppc64le
+      # - mips
+      # - mipsle
+      # - mips64
+      # - mips64le
+
     
 archives:
   -
@@ -50,3 +64,25 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+
+nfpms:
+  -
+    package_name: ascii-image-converter
+    file_name_template: "{{ .ProjectName }}_{{ .Arch }}"
+      
+    homepage: https://github.com/TheZoraiz/ascii-image-converter
+    vendor: Zoraiz Hassan
+    maintainer: Zoraiz Hassan <hzoraiz8@gmail.com>
+    description: Convert images into ascii art
+    license: Apache 2.0
+
+    formats:
+      - deb
+      - rpm
+      
+    release: 1
+    section: graphics
+    priority: optional
+    
+    rpm:
+      compression: lzma

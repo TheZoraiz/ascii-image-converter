@@ -1,3 +1,5 @@
+
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -21,6 +23,7 @@ Input formats currently supported:
 ## Table of Contents
 
 -  [Installation](#installation)
+	*  [Ubuntu / Ubuntu-based](#ubuntu-or-ubuntu-based-distros)
 	*  [Snap](#snap)
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
@@ -34,11 +37,25 @@ Input formats currently supported:
 
 ## Installation
 
+###  Ubuntu or Ubuntu-based Distros
+
+Execute the following commands in order:
+
+```
+echo 'deb [trusted=yes] https://apt.fury.io/zoraiz/ /' | sudo tee -a /etc/apt/sources.list.d/fury.list
+```
+```
+sudo apt update
+```
+```
+sudo apt install -y ascii-image-converter
+```
+
 ### Snap 
 
 You can download through snap.
 
-Note: The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for the ascii art saving files as well.
+Note: The snap will not have access to hidden images and images outside the $HOME directory. This includes write access for saving ascii images and text files as well.
 
 ```
 sudo snap install ascii-image-converter
@@ -68,20 +85,20 @@ Now, open a terminal in the same directory and execute this command:
 ```
 sudo cp ascii-image-converter /usr/local/bin/
 ```
-Now you can use ascii-image-converter in the terminal. Execute `ascii-image-converter -h` for more details.
+Now you can use ascii-image-converter in the terminal. Execute "ascii-image-converter -h" for more details.
 
 ### Windows
 
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
 Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
-* In Search, search for and then select "view advanced system settings" (Control Panel)
-* Click `Environment Variables`.
-* In the section `User Variables`, find the `Path` environment variable and select it. Click `Edit`.
-* In the Edit Environment Variable window, click `New` on the right side and then paste the path of the folder that you copied initially.
-* Click `Ok` on all open windows.
+* In Search, search for and then select: System (Control Panel)
+* Click the Advanced System settings link.
+* Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
+* In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
+* Click "Ok" on all open windows.
 
-Now, restart any open command prompt and execute `ascii-image-converter -h` for more details.
+Now, restart any open command prompt and execute "ascii-image-converter -h" for more details.
 
 <br>
 
@@ -255,11 +272,6 @@ ascii-image-converter [image paths/urls] --save-txt .
 Note: This is an experimental feature and may not result in the finest quality GIFs, because all GIFs still aren't supported by ascii-image-converter.
 
 Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.gif` in the directory path passed to the flag.
-
-Example for current directory:
-```
-ascii-image-converter [gif path/url] --save-gif .
-```
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
