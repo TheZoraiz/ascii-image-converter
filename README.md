@@ -42,7 +42,7 @@ Input formats currently supported:
 Execute the following commands in order:
 
 ```
-echo 'deb [trusted=yes] https://apt.fury.io/zoraiz/ /' | sudo tee -a /etc/apt/sources.list.d/fury.list
+echo 'deb [trusted=yes] https://apt.fury.io/zoraiz/ /' | sudo tee /etc/apt/sources.list.d/ascii-image-converter.list
 ```
 ```
 sudo apt update
