@@ -78,10 +78,11 @@ func createGifFrameToSave(asciiArt [][]imgManip.AsciiChar, img image.Image, colo
 
 	dc := gg.NewContext(x, y)
 
-	dc.DrawImage(tempImg, 0, 0)
 	// Set image background as black
-	dc.SetRGBA(0, 0, 0, 0)
+	dc.SetRGB(0, 0, 0)
 	dc.Clear()
+
+	dc.DrawImage(tempImg, 0, 0)
 
 	// Load embedded font
 	tempFont, err := truetype.Parse(embeddedFontFile)

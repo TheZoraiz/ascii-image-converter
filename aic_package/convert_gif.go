@@ -129,10 +129,10 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 	wg.Wait()
 	fmt.Printf("                              \r")
 
-	// Save ascii art as .gif image before displaying it, if --save-gif flag is passed
+	// Save ascii art as .gif file before displaying it, if --save-gif flag is passed
 	if saveGifPath != "" {
 
-		// Storing save path string before executing the concurrent ascii art to gif conversion
+		// Storing save path string before executing ascii art to gif conversion
 		// This is done to avoid wasting time for invalid path errors
 
 		saveFileName, err := createSaveFileName(gifPath, urlImgName, "-ascii-art.gif")
