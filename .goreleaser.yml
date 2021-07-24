@@ -19,7 +19,7 @@ builds:
       - arm
       - 386
 
-      # Specifying all architectures for .deb and .rpm generation
+      # # Specifying all architectures for .deb and .rpm generation
       # - 386
       # - amd64
       # - arm
