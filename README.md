@@ -1,5 +1,3 @@
-
-
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -23,7 +21,7 @@ Input formats currently supported:
 ## Table of Contents
 
 -  [Installation](#installation)
-	*  [Ubuntu / Ubuntu-based](#ubuntu-or-ubuntu-based-distros)
+	*  [Debian / Ubuntu-based](#debian-or-ubuntu-based-distros)
 	*  [Snap](#snap)
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
@@ -37,7 +35,7 @@ Input formats currently supported:
 
 ## Installation
 
-###  Ubuntu or Ubuntu-based Distros
+###  Debian or Ubuntu-based Distros
 
 Execute the following commands in order:
 
