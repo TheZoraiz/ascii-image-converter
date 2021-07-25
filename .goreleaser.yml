@@ -68,7 +68,7 @@ changelog:
 nfpms:
   -
     package_name: ascii-image-converter
-    file_name_template: "{{ .ProjectName }}_{{ .Arch }}"
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Arch }}"
       
     homepage: https://github.com/TheZoraiz/ascii-image-converter
     vendor: Zoraiz Hassan
@@ -83,6 +83,7 @@ nfpms:
     release: 1
     section: graphics
     priority: optional
+    bindir: /usr/bin
     
     rpm:
       compression: lzma
