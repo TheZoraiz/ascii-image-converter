@@ -27,9 +27,16 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-// To embed font directly into the binary, instead of packaging it as a separate file
 //go:embed RobotoMono-Bold.ttf
 var embeddedFontFile []byte
+
+var tempFont *truetype.Font
+
+// Load embedded font
+func init() {
+	// Error not handled because the same font file will always be used
+	tempFont, _ = truetype.Parse(embeddedFontFile)
+}
 
 /*
 Unlike createGifFrameToSave(), this function is altered to ignore execution time and has a fixed font size.
@@ -69,13 +76,7 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 
 	dc.DrawImage(tempImg, 0, 0)
 
-	// Load embedded font
-	tempFont, err := truetype.Parse(embeddedFontFile)
-	if err != nil {
-		return err
-	}
 	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: constant * 1.5})
-
 	dc.SetFontFace(robotoBoldFontFace)
 
 	// Font color of text on picture is white by default
@@ -98,7 +99,7 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 			b := uint8(char.RgbValue[2])
 
 			if colored {
-				// Simple put, dc.SetColor() sets color for EACH character before printing it
+				// Simply put, dc.SetColor() sets color for EACH character before printing it
 				dc.SetColor(color.RGBA{r, g, b, 255})
 			}
 

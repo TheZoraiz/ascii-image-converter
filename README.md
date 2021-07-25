@@ -188,6 +188,16 @@ ascii-image-converter [image paths/urls] -m " .-=+#@"
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/map.gif">
 </p>
 
+#### --grayscale OR -g
+
+Display ascii art in grayscale colors. This is the same as --color flag, except each character will be encoded with a grayscale RGB value.
+
+```
+ascii-image-converter [image paths/urls] -g
+# Or
+ascii-image-converter [image paths/urls] --grayscale
+```
+
 #### --negative OR -n
 
 Display ascii art in negative colors. Works with both uncolored and colored text from --color flag.
@@ -327,11 +337,12 @@ func main() {
 	flags.SaveImagePath = "."  // Save generated PNG image in same directory
 	flags.SaveGifPath = "." // If gif was provided, save ascii art gif in same directory
 	flags.Negative = true  // Ascii art will have negative color-depth
-	flags.Colored = true  // Keep colors from original image
-	flags.CustomMap = " .-=+#@"  // Starting from darkest to brightest shades. This overrites "complex" flag
+	flags.Colored = true  // Keep colors from original image. This overrides flags.Grayscale
+	flags.Grayscale = true // Returns grayscale ascii art
+	flags.CustomMap = " .-=+#@"  // Starting from darkest to brightest shades. This overrides flags.Complex
 	flags.FlipX = true  // Flips ascii art horizontally
 	flags.FlipY = true  // Flips ascii art vertically
-	flags.Full = true  // Display ascii art that fills the terminal width
+	flags.Full = true  // Display ascii art that fills the terminal width. This overrides flags.Dimensions
 	
 	// For an image
 	asciiArt, err := aic_package.Convert(filePath, flags)

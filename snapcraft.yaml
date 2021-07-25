@@ -1,7 +1,7 @@
 name: ascii-image-converter
 base: core18 
-version: "1.4.0"
-summary: Converts images and gifs into ascii art
+version: "1.4.1"
+summary: Convert images and gifs into ascii art
 description: |
   This tool converts images and gifs into ascii format and prints them onto the terminal window.
   Supported input formats are JPEG/JPG, PNG, WEBP, BMP TIFF/TIF and GIF. Further configuration can be managed by flags.

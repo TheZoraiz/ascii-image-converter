@@ -110,12 +110,12 @@ var asciiTableDetailed = map[int]string{
 }
 
 // For each individual element of imgSet in ConvertToASCIISlice()
-const MAX_VAL float32 = 65535
+const MAX_VAL float64 = 65535
 
 type AsciiChar struct {
 	Colored  string
 	Simple   string
-	RgbValue []uint32
+	RgbValue [3]uint32
 }
 
 // Converts the 2D AsciiPixel slice of image data (each instance representing each pixel of original image)
@@ -124,7 +124,7 @@ type AsciiChar struct {
 //
 // If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
 // Otherwise, values are compared to 10 levels of color density in ASCII characters.
-func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex bool, customMap string) [][]AsciiChar {
+func ConvertToAscii(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
@@ -155,18 +155,26 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 		var tempSlice []AsciiChar
 
 		for j := 0; j < width; j++ {
-			value := float32(imgSet[i][j].grayscaleValue)
+			value := float64(imgSet[i][j].charDepth)
 
 			// Gets appropriate string index from asciiTableSimple by percentage comparisons with its length
-			tempFloat := (value / MAX_VAL) * float32(len(chosenTable))
+			tempFloat := (value / MAX_VAL) * float64(len(chosenTable))
 			if value == MAX_VAL {
-				tempFloat = float32(len(chosenTable) - 1)
+				tempFloat = float64(len(chosenTable) - 1)
 			}
 			tempInt := int(tempFloat)
 
-			r := int(imgSet[i][j].rgbValue[0])
-			g := int(imgSet[i][j].rgbValue[1])
-			b := int(imgSet[i][j].rgbValue[2])
+			var r, g, b int
+
+			if colored {
+				r = int(imgSet[i][j].rgbValue[0])
+				g = int(imgSet[i][j].rgbValue[1])
+				b = int(imgSet[i][j].rgbValue[2])
+			} else {
+				r = int(imgSet[i][j].grayscaleValue[0])
+				g = int(imgSet[i][j].grayscaleValue[1])
+				b = int(imgSet[i][j].grayscaleValue[2])
+			}
 
 			if negative {
 				// Select character from opposite side of table as well as turn pixels negative
@@ -175,7 +183,11 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 				b = 255 - b
 
 				// To preserve negative rgb values for saving png image later down the line, since it uses imgSet
-				imgSet[i][j].rgbValue = []uint32{uint32(r), uint32(g), uint32(b)}
+				if colored {
+					imgSet[i][j].rgbValue = [3]uint32{uint32(r), uint32(g), uint32(b)}
+				} else {
+					imgSet[i][j].grayscaleValue = [3]uint32{uint32(r), uint32(g), uint32(b)}
+				}
 
 				tempInt = (len(chosenTable) - 1) - tempInt
 			}
@@ -189,7 +201,11 @@ func ConvertToAscii(imgSet [][]AsciiPixel, negative bool, colored bool, complex 
 			char.Colored = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
 			char.Simple = chosenTable[tempInt]
 
-			char.RgbValue = imgSet[i][j].rgbValue
+			if colored {
+				char.RgbValue = imgSet[i][j].rgbValue
+			} else {
+				char.RgbValue = imgSet[i][j].grayscaleValue
+			}
 
 			tempSlice = append(tempSlice, char)
 		}

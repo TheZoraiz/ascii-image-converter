@@ -56,7 +56,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 	if saveImagePath != "" {
 		if err := createImageToSave(
 			asciiSet,
-			colored,
+			colored || grayscale,
 			saveImagePath,
 			imagePath,
 			urlImgName,
@@ -79,7 +79,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		}
 	}
 
-	ascii := flattenAscii(asciiSet, colored)
+	ascii := flattenAscii(asciiSet, colored || grayscale)
 	result := strings.Join(ascii, "\n")
 
 	return result, nil

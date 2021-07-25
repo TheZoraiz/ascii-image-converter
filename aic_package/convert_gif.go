@@ -107,7 +107,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]
 
-			ascii := flattenAscii(asciiCharSet, colored)
+			ascii := flattenAscii(asciiCharSet, colored || grayscale)
 
 			asciiArtSet[i] = strings.Join(ascii, "\n")
 
@@ -179,7 +179,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 				tempImg, err := createGifFrameToSave(
 					gifFrame.asciiCharSet,
 					img,
-					colored,
+					colored || grayscale,
 				)
 				if err != nil {
 					fmt.Println(err)

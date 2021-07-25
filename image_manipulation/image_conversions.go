@@ -26,8 +26,9 @@ import (
 )
 
 type AsciiPixel struct {
-	grayscaleValue uint32
-	rgbValue       []uint32
+	charDepth      uint32
+	grayscaleValue [3]uint32
+	rgbValue       [3]uint32
 }
 
 // This function shrinks the passed image according to passed dimensions or terminal
@@ -120,20 +121,25 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full 
 		for x := b.Min.X; x < b.Max.X; x++ {
 
 			oldPixel := smallImg.At(x, y)
-			pixel := color.GrayModel.Convert(oldPixel)
+			grayPixel := color.GrayModel.Convert(oldPixel)
 
 			// We only need Red from Red, Green, Blue (RGB) for grayscaleValue in AsciiPixel since they have the same value for grayscale images
-			r1, _, _, _ := pixel.RGBA()
+			r1, g1, b1, _ := grayPixel.RGBA()
+			charDepth := r1
+			r1 = uint32(r1 / 257)
+			g1 = uint32(g1 / 257)
+			b1 = uint32(b1 / 257)
 
-			// Get colored RGB values of original pixel for rgbValue in AsciiPixel
+			// Get co1ored RGB values of original pixel for rgbValue in AsciiPixel
 			r2, g2, b2, _ := oldPixel.RGBA()
 			r2 = uint32(r2 / 257)
 			g2 = uint32(g2 / 257)
 			b2 = uint32(b2 / 257)
 
 			temp = append(temp, AsciiPixel{
-				grayscaleValue: r1,
-				rgbValue:       []uint32{r2, g2, b2},
+				charDepth:      charDepth,
+				grayscaleValue: [3]uint32{r1, g1, b1},
+				rgbValue:       [3]uint32{r2, g2, b2},
 			})
 
 		}
@@ -165,8 +171,4 @@ func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
 	}
 
 	return imgSet
-}
-
-func calculateDimensions() {
-
 }

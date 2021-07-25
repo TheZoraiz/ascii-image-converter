@@ -43,6 +43,7 @@ type Flags struct {
 	SaveGifPath   string
 	Negative      bool
 	Colored       bool
+	Grayscale     bool
 	CustomMap     string
 	FlipX         bool
 	FlipY         bool
@@ -55,6 +56,7 @@ var (
 	saveTxtPath   string
 	saveImagePath string
 	saveGifPath   string
+	grayscale     bool
 	negative      bool
 	colored       bool
 	customMap     string
@@ -74,6 +76,7 @@ func DefaultFlags() Flags {
 		SaveGifPath:   "",
 		Negative:      false,
 		Colored:       false,
+		Grayscale:     false,
 		CustomMap:     "",
 		FlipX:         false,
 		FlipY:         false,
@@ -96,6 +99,7 @@ The "flags" argument should be declared as follows before passing:
 	SaveGifPath : string, // System path to save the ascii art gif as a .gif  file. Pass "" to ignore
  	Negative: bool, // Pass true for negative color-depth ascii art
  	Colored: bool, // Pass true for returning colored ascii string
+	Grayscale: bool // Pass true for returning grayscale ascii string
  	CustomMap: string, // Custom map of ascii chars e.g. " .-+#@" . Nullifies "complex" flag. Pass "" to ignore.
  	FlipX: bool, // Pass true to return horizontally flipped ascii art
  	FlipY: bool, // Pass true to return vertically flipped ascii art
@@ -115,6 +119,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	saveGifPath = flags.SaveGifPath
 	negative = flags.Negative
 	colored = flags.Colored
+	grayscale = flags.Grayscale
 	customMap = flags.CustomMap
 	flipX = flags.FlipX
 	flipY = flags.FlipY
