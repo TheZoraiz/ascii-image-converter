@@ -49,6 +49,8 @@ sudo apt update
 sudo apt install -y ascii-image-converter
 ```
 
+<hr>
+
 ### Snap 
 
 You can download through snap.
@@ -72,6 +74,7 @@ For installing through Go
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
 <hr>
+
 For physically installing the binaries, follow the steps with respect to your OS.
 
 ### Linux
