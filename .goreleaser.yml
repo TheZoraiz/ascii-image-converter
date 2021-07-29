@@ -11,6 +11,7 @@ builds:
     goos:
       - linux
       - windows
+      - darwin
 
     goarch:
       # Architectures for executable binary generation
@@ -47,6 +48,7 @@ archives:
     replacements:
       linux: Linux
       windows: Windows
+      darwin: macOS
       amd64: amd64_64bit
       arm64: arm64_64bit
       386: i386_32bit
