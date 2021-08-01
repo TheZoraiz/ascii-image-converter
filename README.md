@@ -1,4 +1,5 @@
 
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -57,6 +58,7 @@ Installation with homebrew is available for both Linux and macOS.
 ```
 brew install TheZoraiz/ascii-image-converter/ascii-image-converter
 ```
+[Link to homebrew repository](https://github.com/TheZoraiz/homebrew-ascii-image-converter)
 
 <hr>
 
