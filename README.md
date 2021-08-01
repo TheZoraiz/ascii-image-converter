@@ -1,5 +1,3 @@
-
-
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -48,6 +46,12 @@ sudo apt update
 ```
 ```
 sudo apt install -y ascii-image-converter
+```
+
+To remove the package source (which means you won't be getting any further updates), execute this command:
+
+```
+sudo rm -rfv /etc/apt/sources.list.d/ascii-image-converter.list
 ```
 
 <hr>
