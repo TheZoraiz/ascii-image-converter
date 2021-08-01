@@ -1,3 +1,4 @@
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -6,9 +7,7 @@
 ![Github All Releases](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=brightgreen&label=Release%20Downloads)
 [![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)  
 
-ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. It is cross-platform so both Windows and Linux distributions are supported. GIFs are now experimentally supported as well.
-
-It's also available as a package to be used in Go applications.
+ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. Available on Windows, Linux and macOS. GIFs are now experimentally supported as well.
 
 Input formats currently supported:
 * JPEG/JPG
@@ -22,7 +21,8 @@ Input formats currently supported:
 
 -  [Installation](#installation)
 	*  [Debian / Ubuntu-based](#debian-or-ubuntu-based-distros)
-	*  [Snap](#snap)
+	*  [Homebrew](#homebrew)
+	*  [Snap](#brew)
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
 	*  [Windows (binaries)](#windows)
@@ -51,11 +51,19 @@ sudo apt install -y ascii-image-converter
 
 <hr>
 
+### Homebrew
+
+Installation with homebrew is available for both Linux and macOS.
+```
+brew install TheZoraiz/ascii-image-converter/ascii-image-converter
+```
+
+<hr>
+
 ### Snap 
 
-You can download through snap.
 
-Note: The snap will not have access to hidden images and images outside the $HOME directory. This includes write access for saving ascii images and text files as well.
+Note: The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for saving ascii art as well.
 
 ```
 sudo snap install ascii-image-converter
@@ -311,7 +319,7 @@ Note: The library may throw errors during Go tests due to some unresolved bugs w
 
 First, install the library with:
 ```
-go get github.com/TheZoraiz/ascii-image-converter/aic_package
+go get -u github.com/TheZoraiz/ascii-image-converter/aic_package
 ```
 
 The library is to be used as follows:

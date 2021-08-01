@@ -4,10 +4,8 @@ before:
   hooks:
     - go mod tidy
     
-builds:
-  - env:
-      - CGO_ENABLED=0
-    
+builds:    
+  -
     goos:
       - linux
       - windows
@@ -66,6 +64,31 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+
+brews:
+  -
+    name: ascii-image-converter
+
+    tap:
+      owner: TheZoraiz
+      name: homebrew-ascii-image-converter
+
+    url_template: https://github.com/TheZoraiz/ascii-image-converter/releases/download/{{ .Tag }}/{{ .ArtifactName }}
+
+    commit_author:
+      name: Zoraiz Hassan
+      email: hzoraiz8@gmail.com
+
+    homepage: https://github.com/TheZoraiz/ascii-image-converter
+    description: Convert images into ascii art
+    license: Apache 2.0
+    skip_upload: true
+
+    test: |
+      system "#{bin}/ascii-image-converter --version"
+
+    install: |
+      bin.install "ascii-image-converter"
 
 nfpms:
   -
