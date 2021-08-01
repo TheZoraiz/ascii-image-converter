@@ -47,6 +47,7 @@ sudo apt update
 ```
 sudo apt install -y ascii-image-converter
 ```
+<br>
 
 To remove the package source (which means you won't be getting any further updates), execute this command:
 
