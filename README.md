@@ -1,3 +1,4 @@
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -47,6 +48,7 @@ sudo apt update
 ```
 sudo apt install -y ascii-image-converter
 ```
+<br>
 
 To remove the package source (which means you won't be getting any further updates), execute this command:
 
@@ -69,7 +71,7 @@ brew install TheZoraiz/ascii-image-converter/ascii-image-converter
 ### Snap 
 
 
-Note: The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for saving ascii art as well.
+> **Note:** The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for saving ascii art as well.
 
 ```
 sudo snap install ascii-image-converter
@@ -119,7 +121,7 @@ Now, restart any open command prompt and execute "ascii-image-converter -h" for 
 
 ## CLI Usage
 
-Note: Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
+> **Note:** Decrease font size or increase terminal width (like zooming out) for maximum quality ascii art
 
 The basic usage for converting an image into ascii art is as follows. You can also supply multiple image paths and urls as well as a GIF.
 
@@ -167,7 +169,7 @@ ascii-image-converter [image paths/urls] --color
 
 #### --dimensions OR -d
 
-Note: Don't immediately append another flag with -d
+> **Note:** Don't immediately append another flag with -d
 
 Set the width and height for ascii art in CHARACTER lengths.
 ```
@@ -185,7 +187,7 @@ ascii-image-converter [image paths/urls] -d 60,30
 
 #### --map OR -m
 
-Note: Don't immediately append another flag with -m
+> **Note:** Don't immediately append another flag with -m
 
 Pass a string of your own ascii characters to map against. Passed characters must start from darkest character and end with lightest. There is no limit to number of characters.
 
@@ -270,7 +272,7 @@ ascii-image-converter [image paths/urls] -y
 
 #### --save-img OR -s
 
-Note: Don't immediately append another flag with -s
+> **Note:** Don't immediately append another flag with -s
 
 Saves the ascii as a PNG image with the name `<image-name>-ascii-art.png` in the directory path passed to the flag. Can work with both --color and --negative flag.
 
@@ -294,7 +296,7 @@ ascii-image-converter [image paths/urls] --save-txt .
 
 #### --save-gif
 
-Note: This is an experimental feature and may not result in the finest quality GIFs, because all GIFs still aren't supported by ascii-image-converter.
+> **Note:** This is an experimental feature and may not result in the finest quality GIFs, because all GIFs still aren't supported by ascii-image-converter.
 
 Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.gif` in the directory path passed to the flag.
 
@@ -321,7 +323,7 @@ ascii-image-converter [image paths/urls] -Cnxyd 60,30 -m " .-=+#@" -s . --save-t
 
 ## Library Usage
 
-Note: The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Furthermore, GIF conversion is not advised as it isn't fully library-compatible yet.
+> **Note:** The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Furthermore, GIF conversion is not advised as it isn't fully library-compatible yet.
 
 First, install the library with:
 ```
