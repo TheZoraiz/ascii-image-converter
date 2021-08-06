@@ -124,7 +124,7 @@ type AsciiChar struct {
 //
 // If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
 // Otherwise, values are compared to 10 levels of color density in ASCII characters.
-func ConvertToAscii(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string) [][]AsciiChar {
+func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])

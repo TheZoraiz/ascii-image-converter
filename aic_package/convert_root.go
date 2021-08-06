@@ -33,25 +33,70 @@ import (
 	_ "golang.org/x/image/webp"
 
 	"github.com/asaskevich/govalidator"
+	"github.com/golang/freetype/truetype"
 )
 
 type Flags struct {
-	Dimensions    []int
-	Complex       bool
-	SaveTxtPath   string
+	// Set dimensions of ascii art. Accepts a slice of 2 integers
+	// e.g. []int{60,30}.
+	// This overrides Flags.Width and Flags.Height
+	Dimensions []int
+
+	// Set width of ascii art while calculating height from aspect ratio.
+	// Setting this along with Flags.Height will throw an error
+	Width int
+
+	// Set height of ascii art while calculating width from aspect ratio.
+	// Setting this along with Flags.Width will throw an error
+	Height int
+
+	// Use set of 69 characters instead of the default 10
+	Complex bool
+
+	// Path to save ascii art .txt file
+	SaveTxtPath string
+
+	// Path to save ascii art .png file
 	SaveImagePath string
-	SaveGifPath   string
-	Negative      bool
-	Colored       bool
-	Grayscale     bool
-	CustomMap     string
-	FlipX         bool
-	FlipY         bool
-	Full          bool
+
+	// Path to save ascii art .gif file, if gif is passed
+	SaveGifPath string
+
+	// Invert ascii art character mapping as well as colors
+	Negative bool
+
+	// Keep colors from the original image. This uses the True color codes for
+	// the terminal and will work on saved .png and .gif files as well.
+	// This overrides Flags.Grayscale
+	Colored bool
+
+	// Keep grayscale colors from the original image. This uses the True color
+	// codes for the terminal and will work on saved .png and .gif files as well
+	Grayscale bool
+
+	// Pass custom ascii art characters as a string.
+	// This overrides Flags.Complex
+	CustomMap string
+
+	// Flip ascii art horizontally
+	FlipX bool
+
+	// Flip ascii art vertically
+	FlipY bool
+
+	// Use terminal width to calculate ascii art size while keeping aspect ratio.
+	// This overrides Flags.Dimensions, Flags.Width and Flags.Height
+	Full bool
+
+	// File path to a font .ttf file to use when saving ascii art gif or png file.
+	// This will be ignored if Flags.SaveImagePath or Flags.SaveImagePath are not set
+	FontFilePath string
 }
 
 var (
 	dimensions    []int
+	width         int
+	height        int
 	complex       bool
 	saveTxtPath   string
 	saveImagePath string
@@ -63,6 +108,7 @@ var (
 	flipX         bool
 	flipY         bool
 	full          bool
+	fontPath      string
 )
 
 // Return default configuration for flags.
@@ -71,6 +117,8 @@ func DefaultFlags() Flags {
 	return Flags{
 		Complex:       false,
 		Dimensions:    nil,
+		Width:         0,
+		Height:        0,
 		SaveTxtPath:   "",
 		SaveImagePath: "",
 		SaveGifPath:   "",
@@ -81,30 +129,14 @@ func DefaultFlags() Flags {
 		FlipX:         false,
 		FlipY:         false,
 		Full:          false,
+		FontFilePath:  "",
 	}
 }
 
 /*
-Convert takes an image or gif path/url as its first argument
-and a Flags literal as the second argument, with which it alters
+Convert() takes an image or gif path/url as its first argument
+and a aic_package.Flags literal as the second argument, with which it alters
 the returned ascii art string.
-
-The "flags" argument should be declared as follows before passing:
-
- flags := aic_package.Flags{
- 	Complex: bool, // Pass true for using complex character set
- 	Dimensions: []int, // Pass 2 integer dimensions. Pass nil to ignore
-	SaveTxtPath: string, // System path to save the ascii art string as a .txt  file. Pass "" to ignore
-	SavefilePath: string, // System path to save the ascii art string as a .png  file. Pass "" to ignore
-	SaveGifPath : string, // System path to save the ascii art gif as a .gif  file. Pass "" to ignore
- 	Negative: bool, // Pass true for negative color-depth ascii art
- 	Colored: bool, // Pass true for returning colored ascii string
-	Grayscale: bool // Pass true for returning grayscale ascii string
- 	CustomMap: string, // Custom map of ascii chars e.g. " .-+#@" . Nullifies "complex" flag. Pass "" to ignore.
- 	FlipX: bool, // Pass true to return horizontally flipped ascii art
- 	FlipY: bool, // Pass true to return vertically flipped ascii art
-	Full: bool, // Pass true to use full terminal as ascii height
- }
 */
 func Convert(filePath string, flags Flags) (string, error) {
 
@@ -113,6 +145,8 @@ func Convert(filePath string, flags Flags) (string, error) {
 	} else {
 		dimensions = flags.Dimensions
 	}
+	width = flags.Width
+	height = flags.Height
 	complex = flags.Complex
 	saveTxtPath = flags.SaveTxtPath
 	saveImagePath = flags.SaveImagePath
@@ -124,6 +158,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	flipX = flags.FlipX
 	flipY = flags.FlipY
 	full = flags.Full
+	fontPath = flags.FontFilePath
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (
@@ -151,7 +186,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 		defer retrievedImage.Body.Close()
 
 		urlImgName = path.Base(filePath)
-		fmt.Printf("                          \r") // To erase "Fetching image from url..." text from console
+		fmt.Printf("                          \r") // To erase "Fetching image from url..." text from terminal
 
 	} else {
 
@@ -161,6 +196,19 @@ func Convert(filePath string, flags Flags) (string, error) {
 		}
 		defer localFile.Close()
 
+	}
+
+	// If path to font file is provided, use it
+	if fontPath != "" {
+		fontFile, err := ioutil.ReadFile(fontPath)
+		if err != nil {
+			return "", fmt.Errorf("unable to open font file: %v", err)
+		}
+
+		// tempFont is globally declared in aic_package/create_ascii_image.go
+		if tempFont, err = truetype.Parse(fontFile); err != nil {
+			return "", fmt.Errorf("unable to parse font file: %v", err)
+		}
 	}
 
 	if path.Ext(filePath) == ".gif" {

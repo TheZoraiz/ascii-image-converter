@@ -1,6 +1,6 @@
 name: ascii-image-converter
 base: core18 
-version: "1.4.2"
+version: "1.5.0"
 summary: Convert images and gifs into ascii art
 description: |
   This tool converts images and gifs into ascii format and prints them onto the terminal window.

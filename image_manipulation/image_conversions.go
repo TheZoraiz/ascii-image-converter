@@ -37,7 +37,7 @@ type AsciiPixel struct {
 //
 // The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
 // ranges from 0 to 65535, while RGB values are separate.
-func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full bool) ([][]AsciiPixel, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full bool) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
@@ -59,9 +59,50 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full 
 
 		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
 
-	} else if len(dimensions) == 0 {
+	} else if (width != 0 || height != 0) && len(dimensions) == 0 {
+		// If either width or height is set and dimensions aren't given
 
-		// Following code in this condition calculates aspect ratio according to terminal height
+		if width > terminalWidth-1 {
+			return nil, fmt.Errorf("set width must be lower than terminal width")
+		}
+
+		if width != 0 && height == 0 {
+			// If width is set and height is not set, use width to calculate aspect ratio
+
+			asciiWidth = width
+
+			smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
+
+			asciiHeight = int(0.5 * float32(asciiHeight))
+			if asciiHeight == 0 {
+				asciiHeight = 1
+			}
+
+			smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+
+		} else if height != 0 && width == 0 {
+			// If height is set and width is not set, use height to calculate aspect ratio
+
+			asciiHeight = height
+
+			smallImg = resize.Resize(0, uint(asciiHeight), img, resize.Lanczos3)
+			asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
+
+			asciiWidth = int(2 * float32(asciiWidth))
+
+			if asciiWidth > terminalWidth-1 {
+				return nil, fmt.Errorf("width calculated with aspect ratio exceeds terminal width")
+			}
+
+			smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+
+		} else {
+			return nil, fmt.Errorf("both width and height can't be set. Use dimensions instead")
+		}
+
+	} else if len(dimensions) == 0 {
+		// This condition calculates aspect ratio according to terminal height
 
 		asciiHeight = terminalHeight - 1
 
@@ -95,13 +136,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full 
 	//
 	// If there are passed dimensions, check whether the width exceeds terminal width
 	if len(dimensions) > 0 && !full {
-		defaultTermWidth, _, err := winsize.GetTerminalSize()
-		if err != nil {
-			return nil, err
-		}
-
-		defaultTermWidth -= 1
-		if dimensions[0] > defaultTermWidth {
+		if dimensions[0] > terminalWidth-1 {
 			return nil, fmt.Errorf("set width must be lower than terminal width")
 		}
 	}
@@ -123,8 +158,8 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, flipX, flipY, full 
 			oldPixel := smallImg.At(x, y)
 			grayPixel := color.GrayModel.Convert(oldPixel)
 
-			// We only need Red from Red, Green, Blue (RGB) for grayscaleValue in AsciiPixel since they have the same value for grayscale images
 			r1, g1, b1, _ := grayPixel.RGBA()
+			// We only need Red from Red, Green, Blue (RGB) for charDepth in AsciiPixel since they have the same value for grayscale images
 			charDepth := r1
 			r1 = uint32(r1 / 257)
 			g1 = uint32(g1 / 257)

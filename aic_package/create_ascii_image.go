@@ -27,14 +27,13 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-//go:embed RobotoMono-Bold.ttf
+//go:embed Hack-Regular.ttf
 var embeddedFontFile []byte
 
 var tempFont *truetype.Font
 
 // Load embedded font
 func init() {
-	// Error not handled because the same font file will always be used
 	tempFont, _ = truetype.Parse(embeddedFontFile)
 }
 
@@ -76,8 +75,8 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 
 	dc.DrawImage(tempImg, 0, 0)
 
-	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: constant * 1.5})
-	dc.SetFontFace(robotoBoldFontFace)
+	fontFace := truetype.NewFace(tempFont, &truetype.Options{Size: constant * 1.5})
+	dc.SetFontFace(fontFace)
 
 	// Font color of text on picture is white by default
 	dc.SetColor(color.White)

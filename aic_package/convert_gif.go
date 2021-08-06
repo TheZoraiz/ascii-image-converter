@@ -97,13 +97,13 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 			var imgSet [][]imgManip.AsciiPixel
 
-			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, flipX, flipY, full)
+			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full)
 			if err != nil {
-				fmt.Println(err)
+				fmt.Println("Error:", err)
 				os.Exit(0)
 			}
 
-			asciiCharSet := imgManip.ConvertToAscii(imgSet, negative, colored, complex, customMap)
+			asciiCharSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap)
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]
 
@@ -182,7 +182,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 					colored || grayscale,
 				)
 				if err != nil {
-					fmt.Println(err)
+					fmt.Println("Error:", err)
 					os.Exit(0)
 				}
 

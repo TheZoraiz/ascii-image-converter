@@ -26,9 +26,7 @@ import (
 	imgManip "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 )
 
-/*
-This function decodes the passed image and returns as an ascii art string, optionaly saving it as a .txt and/or .png file
-*/
+// This function decodes the passed image and returns an ascii art string, optionaly saving it as a .txt and/or .png file
 func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byte, localImg *os.File) (string, error) {
 
 	var (
@@ -45,12 +43,12 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, flipX, flipY, full)
+	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full)
 	if err != nil {
 		return "", err
 	}
 
-	asciiSet := imgManip.ConvertToAscii(imgSet, negative, colored, complex, customMap)
+	asciiSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap)
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed
 	if saveImagePath != "" {

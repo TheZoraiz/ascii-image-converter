@@ -1,4 +1,3 @@
-
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -102,7 +101,7 @@ Now, open a terminal in the same directory and execute this command:
 ```
 sudo cp ascii-image-converter /usr/local/bin/
 ```
-Now you can use ascii-image-converter in the terminal. Execute "ascii-image-converter -h" for more details.
+Now you can use ascii-image-converter in the terminal. Execute `ascii-image-converter -h` for more details.
 
 ### Windows
 
@@ -115,7 +114,7 @@ Download the archive for your Windows architecture [here](https://github.com/The
 * In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
 * Click "Ok" on all open windows.
 
-Now, restart any open command prompt and execute "ascii-image-converter -h" for more details.
+Now, restart any open command prompt and execute `ascii-image-converter -h` for more details.
 
 <br>
 
@@ -184,6 +183,36 @@ ascii-image-converter [image paths/urls] -d 60,30
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/dimensions.gif">
 </p>
+
+#### --width OR -W
+
+> **Note:** Don't immediately append another flag with -W
+
+Set width of ascii art. Height is calculated according to aspect ratio.
+```
+ascii-image-converter [image paths/urls] -W <width>
+# Or
+ascii-image-converter [image paths/urls] --width <width>
+```
+Example:
+```
+ascii-image-converter [image paths/urls] -W 60
+```
+
+#### --height OR -H
+
+> **Note:** Don't immediately append another flag with -H
+
+Set height of ascii art. Width is calculated according to aspect ratio.
+```
+ascii-image-converter [image paths/urls] -H <height>
+# Or
+ascii-image-converter [image paths/urls] --height <height>
+```
+Example:
+```
+ascii-image-converter [image paths/urls] -H 60
+```
 
 #### --map OR -m
 
@@ -303,6 +332,16 @@ Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.g
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
 </p>
+
+#### --font
+
+> **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set
+
+This flag takes path to a font .ttf file that will be used to set font in saved .png or .gif files if `--save-img` or `--save-gif` flags are set.
+
+```
+ascii-image-converter [image paths/urls] -s . --font /path/to/font-file.ttf
+```
 
 #### --formats
 

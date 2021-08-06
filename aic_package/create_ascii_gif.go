@@ -90,9 +90,9 @@ func createGifFrameToSave(asciiArt [][]imgManip.AsciiChar, img image.Image, colo
 		return nil, err
 	}
 	// Font size increased during assignment to become more visible. This will not affect image drawing
-	robotoBoldFontFace := truetype.NewFace(tempFont, &truetype.Options{Size: fontSize * 1.5})
+	fontFace := truetype.NewFace(tempFont, &truetype.Options{Size: fontSize * 1.5})
 
-	dc.SetFontFace(robotoBoldFontFace)
+	dc.SetFontFace(fontFace)
 
 	// Font color of text on picture is white by default
 	dc.SetColor(color.White)
