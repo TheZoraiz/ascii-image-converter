@@ -333,14 +333,32 @@ Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.g
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
 </p>
 
+#### --save-bg
+
+> **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set
+
+This flag takes an RGB value that sets the background color in saved png and gif files.
+
+```
+ascii-image-converter [image paths/urls] -s . --save-bg 255,255,255 # For white background
+```
+
 #### --font
 
 > **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set
 
-This flag takes path to a font .ttf file that will be used to set font in saved .png or .gif files if `--save-img` or `--save-gif` flags are set.
+This flag takes path to a font .ttf file that will be used to set font in saved png or gif files.
 
 ```
 ascii-image-converter [image paths/urls] -s . --font /path/to/font-file.ttf
+```
+
+#### --font-color
+
+This flag takes an RGB value that sets the font color in saved png and gif files as well as displayed ascii art in terminal.
+
+```
+ascii-image-converter [image paths/urls] -s . --font-color 0,0,0 # For black font color
 ```
 
 #### --formats
@@ -351,13 +369,6 @@ Display supported input formats.
 ascii-image-converter --formats
 ```
 
-<br>
-
-You can combine flags as well. Following command outputs colored and negative ascii art, flips ascii art horizontally and vertically, with fixed 60 by 30 character dimensions, custom defined ascii characters " .-=+#@" and saves a generated image and .txt file in current directory as well.
-
-```
-ascii-image-converter [image paths/urls] -Cnxyd 60,30 -m " .-=+#@" -s . --save-txt .
-```
 <br>
 
 ## Library Usage
@@ -389,20 +400,23 @@ func main() {
 	// This part is optional.
 	// You can directly pass default flags variable to Convert() if you wish.
 	// For clarity, all flags are covered in this example, but you can use specific ones.
-	flags.Complex = true  // Use complex character set
+	flags.Complex = false // Use complex character set
 	flags.Dimensions = []int{50, 25} // 50 by 25 ascii art size
 	flags.SaveTxtPath = "."  // Save generated text in same directory
 	flags.SaveImagePath = "."  // Save generated PNG image in same directory
-	flags.SaveGifPath = "." // If gif was provided, save ascii art gif in same directory
-	flags.Negative = true  // Ascii art will have negative color-depth
-	flags.Colored = true  // Keep colors from original image. This overrides flags.Grayscale
-	flags.Grayscale = true // Returns grayscale ascii art
+	flags.SaveGifPath = "." // If gif is provided, save ascii art gif in same directory
+	flags.Negative = false  // Ascii art will have negative color-depth
+	flags.Colored = true  // Keep colors from original image. This overrides flags.Grayscale and flags.FontColor
+	flags.Grayscale = false // Returns grayscale ascii art. This overrides flags.FontColor
 	flags.CustomMap = " .-=+#@"  // Starting from darkest to brightest shades. This overrides flags.Complex
-	flags.FlipX = true  // Flips ascii art horizontally
-	flags.FlipY = true  // Flips ascii art vertically
-	flags.Full = true  // Display ascii art that fills the terminal width. This overrides flags.Dimensions
+	flags.FlipX = false  // Flips ascii art horizontally
+	flags.FlipY = false  // Flips ascii art vertically
+	flags.Full = false  // Display ascii art that fills the terminal width. This overrides flags.Dimensions
+	flags.FontFilePath = "./RobotoMono-Regular.ttf" // File path to font .ttf file for saved png and gif files. Ignored if flags.SaveImagePath or flags.SaveGifPath are not set
+	flags.FontColor = [3]int{0, 0, 0} // Font color for terminal and saved png and gif files.
+	flags.SaveBackgroundColor = [3]int{255, 255, 255} // Font color for saved png and gif files. Ignored if flags.SaveImagePath or flags.SaveGifPath are not set.
 	
-	// For an image
+	// Conversion for an image
 	asciiArt, err := aic_package.Convert(filePath, flags)
 	if err != nil {
 		fmt.Println(err)

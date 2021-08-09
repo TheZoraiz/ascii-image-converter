@@ -30,7 +30,7 @@ import (
 
 func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgName string) error {
 	// To make sure uncolored ascii art is the one saved as .txt
-	saveAscii := flattenAscii(asciiSet, false)
+	saveAscii := flattenAscii(asciiSet, false, true)
 
 	saveFileName, err := createSaveFileName(imagePath, urlImgName, "-ascii-art.txt")
 	if err != nil {
@@ -75,15 +75,22 @@ func createSaveFileName(imagePath, urlImgName, label string) (string, error) {
 
 // flattenAscii flattens a two-dimensional grid of ascii characters into a one dimension
 // of lines of ascii
-func flattenAscii(asciiSet [][]imgManip.AsciiChar, colored bool) []string {
+func flattenAscii(asciiSet [][]imgManip.AsciiChar, colored, toSaveTxt bool) []string {
 	var ascii []string
 
 	for _, line := range asciiSet {
 		var tempAscii []string
 
 		for i := 0; i < len(line); i++ {
+			if toSaveTxt {
+				tempAscii = append(tempAscii, line[i].Simple)
+				continue
+			}
+
 			if colored {
-				tempAscii = append(tempAscii, line[i].Colored)
+				tempAscii = append(tempAscii, line[i].OriginalColor)
+			} else if fontColor != [3]int{255, 255, 255} {
+				tempAscii = append(tempAscii, line[i].SetColor)
 			} else {
 				tempAscii = append(tempAscii, line[i].Simple)
 			}

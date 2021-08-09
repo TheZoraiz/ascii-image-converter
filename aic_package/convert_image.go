@@ -48,7 +48,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		return "", err
 	}
 
-	asciiSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap)
+	asciiSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed
 	if saveImagePath != "" {
@@ -77,7 +77,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		}
 	}
 
-	ascii := flattenAscii(asciiSet, colored || grayscale)
+	ascii := flattenAscii(asciiSet, colored || grayscale, false)
 	result := strings.Join(ascii, "\n")
 
 	return result, nil

@@ -113,18 +113,18 @@ var asciiTableDetailed = map[int]string{
 const MAX_VAL float64 = 65535
 
 type AsciiChar struct {
-	Colored  string
-	Simple   string
-	RgbValue [3]uint32
+	OriginalColor string
+	SetColor      string
+	Simple        string
+	RgbValue      [3]uint32
 }
 
-// Converts the 2D AsciiPixel slice of image data (each instance representing each pixel of original image)
-// to a 2D AsciiChar slice with each colored and simple string having an ASCII character corresponding to
-// the original grayscale and RGB values in AsciiPixel.
+// Converts the 2D image_conversions.AsciiPixel slice of image data (each instance representing each compressed pixel of original image)
+// to a 2D image_conversions.AsciiChar slice
 //
 // If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
 // Otherwise, values are compared to 10 levels of color density in ASCII characters.
-func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string) [][]AsciiChar {
+func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string, fontColor [3]int) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
@@ -157,7 +157,7 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 		for j := 0; j < width; j++ {
 			value := float64(imgSet[i][j].charDepth)
 
-			// Gets appropriate string index from asciiTableSimple by percentage comparisons with its length
+			// Gets appropriate string index from chosenTable by percentage comparisons with its length
 			tempFloat := (value / MAX_VAL) * float64(len(chosenTable))
 			if value == MAX_VAL {
 				tempFloat = float64(len(chosenTable) - 1)
@@ -198,7 +198,17 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 
 			var char AsciiChar
 
-			char.Colored = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+			char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+
+			// If font color is not set, use a simple string. Otherwise, use True color
+			if fontColor != [3]int{255, 255, 255} {
+				fcR := strconv.Itoa(fontColor[0])
+				fcG := strconv.Itoa(fontColor[1])
+				fcB := strconv.Itoa(fontColor[2])
+
+				char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", chosenTable[tempInt])
+			}
+
 			char.Simple = chosenTable[tempInt]
 
 			if colored {

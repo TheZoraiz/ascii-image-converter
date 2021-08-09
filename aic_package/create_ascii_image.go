@@ -69,8 +69,12 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 
 	dc := gg.NewContext(imgWidth, imgHeight)
 
-	// Set image background as black
-	dc.SetRGB(0, 0, 0)
+	// Set image background
+	dc.SetRGB(
+		float64(saveBgColor[0])/255,
+		float64(saveBgColor[1])/255,
+		float64(saveBgColor[2])/255,
+	)
 	dc.Clear()
 
 	dc.DrawImage(tempImg, 0, 0)
@@ -93,12 +97,17 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 
 		for _, char := range line {
 
-			r := uint8(char.RgbValue[0])
-			g := uint8(char.RgbValue[1])
-			b := uint8(char.RgbValue[2])
-
 			if colored {
-				// Simply put, dc.SetColor() sets color for EACH character before printing it
+				// dc.SetColor() sets color for EACH character before printing it
+				r := uint8(char.RgbValue[0])
+				g := uint8(char.RgbValue[1])
+				b := uint8(char.RgbValue[2])
+				dc.SetColor(color.RGBA{r, g, b, 255})
+
+			} else {
+				r := uint8(fontColor[0])
+				g := uint8(fontColor[1])
+				b := uint8(fontColor[2])
 				dc.SetColor(color.RGBA{r, g, b, 255})
 			}
 

@@ -36,100 +36,27 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
-type Flags struct {
-	// Set dimensions of ascii art. Accepts a slice of 2 integers
-	// e.g. []int{60,30}.
-	// This overrides Flags.Width and Flags.Height
-	Dimensions []int
-
-	// Set width of ascii art while calculating height from aspect ratio.
-	// Setting this along with Flags.Height will throw an error
-	Width int
-
-	// Set height of ascii art while calculating width from aspect ratio.
-	// Setting this along with Flags.Width will throw an error
-	Height int
-
-	// Use set of 69 characters instead of the default 10
-	Complex bool
-
-	// Path to save ascii art .txt file
-	SaveTxtPath string
-
-	// Path to save ascii art .png file
-	SaveImagePath string
-
-	// Path to save ascii art .gif file, if gif is passed
-	SaveGifPath string
-
-	// Invert ascii art character mapping as well as colors
-	Negative bool
-
-	// Keep colors from the original image. This uses the True color codes for
-	// the terminal and will work on saved .png and .gif files as well.
-	// This overrides Flags.Grayscale
-	Colored bool
-
-	// Keep grayscale colors from the original image. This uses the True color
-	// codes for the terminal and will work on saved .png and .gif files as well
-	Grayscale bool
-
-	// Pass custom ascii art characters as a string.
-	// This overrides Flags.Complex
-	CustomMap string
-
-	// Flip ascii art horizontally
-	FlipX bool
-
-	// Flip ascii art vertically
-	FlipY bool
-
-	// Use terminal width to calculate ascii art size while keeping aspect ratio.
-	// This overrides Flags.Dimensions, Flags.Width and Flags.Height
-	Full bool
-
-	// File path to a font .ttf file to use when saving ascii art gif or png file.
-	// This will be ignored if Flags.SaveImagePath or Flags.SaveImagePath are not set
-	FontFilePath string
-}
-
-var (
-	dimensions    []int
-	width         int
-	height        int
-	complex       bool
-	saveTxtPath   string
-	saveImagePath string
-	saveGifPath   string
-	grayscale     bool
-	negative      bool
-	colored       bool
-	customMap     string
-	flipX         bool
-	flipY         bool
-	full          bool
-	fontPath      string
-)
-
 // Return default configuration for flags.
 // Can be sent directly to ConvertImage() for default ascii art
 func DefaultFlags() Flags {
 	return Flags{
-		Complex:       false,
-		Dimensions:    nil,
-		Width:         0,
-		Height:        0,
-		SaveTxtPath:   "",
-		SaveImagePath: "",
-		SaveGifPath:   "",
-		Negative:      false,
-		Colored:       false,
-		Grayscale:     false,
-		CustomMap:     "",
-		FlipX:         false,
-		FlipY:         false,
-		Full:          false,
-		FontFilePath:  "",
+		Complex:             false,
+		Dimensions:          nil,
+		Width:               0,
+		Height:              0,
+		SaveTxtPath:         "",
+		SaveImagePath:       "",
+		SaveGifPath:         "",
+		Negative:            false,
+		Colored:             false,
+		Grayscale:           false,
+		CustomMap:           "",
+		FlipX:               false,
+		FlipY:               false,
+		Full:                false,
+		FontFilePath:        "",
+		FontColor:           [3]int{255, 255, 255},
+		SaveBackgroundColor: [3]int{0, 0, 0},
 	}
 }
 
@@ -159,6 +86,8 @@ func Convert(filePath string, flags Flags) (string, error) {
 	flipY = flags.FlipY
 	full = flags.Full
 	fontPath = flags.FontFilePath
+	fontColor = flags.FontColor
+	saveBgColor = flags.SaveBackgroundColor
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (

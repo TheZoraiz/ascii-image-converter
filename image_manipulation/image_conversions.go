@@ -159,8 +159,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			grayPixel := color.GrayModel.Convert(oldPixel)
 
 			r1, g1, b1, _ := grayPixel.RGBA()
-			// We only need Red from Red, Green, Blue (RGB) for charDepth in AsciiPixel since they have the same value for grayscale images
-			charDepth := r1
+			charDepth := r1 // Only Red is needed from RGB for charDepth in AsciiPixel since they have the same value for grayscale images
 			r1 = uint32(r1 / 257)
 			g1 = uint32(g1 / 257)
 			b1 = uint32(b1 / 257)

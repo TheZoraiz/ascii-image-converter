@@ -103,11 +103,11 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 				os.Exit(0)
 			}
 
-			asciiCharSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap)
+			asciiCharSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]
 
-			ascii := flattenAscii(asciiCharSet, colored || grayscale)
+			ascii := flattenAscii(asciiCharSet, colored || grayscale, false)
 
 			asciiArtSet[i] = strings.Join(ascii, "\n")
 
