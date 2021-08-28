@@ -56,6 +56,7 @@ type Flags struct {
 	Grayscale bool
 
 	// Pass custom ascii art characters as a string.
+	// e.g. " .-=+#@".
 	// This overrides Flags.Complex
 	CustomMap string
 

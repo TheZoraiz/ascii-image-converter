@@ -23,91 +23,8 @@ import (
 )
 
 // Reference taken from http://paulbourke.net/dataformats/asciiart/
-var asciiTableSimple = map[int]string{
-	0: " ",
-	1: ".",
-	2: ":",
-	3: "-",
-	4: "=",
-	5: "+",
-	6: "*",
-	7: "#",
-	8: "%",
-	9: "@",
-}
-
-// Reference taken from http://paulbourke.net/dataformats/asciiart/
-var asciiTableDetailed = map[int]string{
-	0:  " ",
-	1:  ".",
-	2:  "'",
-	3:  "`",
-	4:  "^",
-	5:  "\"",
-	6:  ",",
-	7:  ":",
-	8:  ";",
-	9:  "I",
-	10: "l",
-	11: "!",
-	12: "i",
-	13: ">",
-	14: "<",
-	15: "~",
-	16: "+",
-	17: "_",
-	18: "-",
-	19: "?",
-	20: "]",
-	21: "[",
-	22: "}",
-	23: "{",
-	24: "1",
-	25: ")",
-	26: "(",
-	27: "|",
-	28: "/",
-	29: "t",
-	30: "f",
-	31: "j",
-	32: "r",
-	33: "x",
-	34: "n",
-	35: "u",
-	36: "v",
-	37: "c",
-	38: "z",
-	39: "X",
-	40: "Y",
-	41: "U",
-	42: "J",
-	43: "C",
-	44: "L",
-	45: "Q",
-	46: "0",
-	47: "O",
-	48: "Z",
-	49: "m",
-	50: "w",
-	51: "q",
-	52: "p",
-	53: "d",
-	54: "b",
-	55: "k",
-	56: "h",
-	57: "a",
-	58: "o",
-	59: "*",
-	60: "#",
-	61: "M",
-	62: "W",
-	63: "&",
-	64: "8",
-	65: "%",
-	66: "B",
-	67: "@",
-	68: "$",
-}
+var asciiTableSimple = " .:-=+*#%@"
+var asciiTableDetailed = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
 
 // For each individual element of imgSet in ConvertToASCIISlice()
 const MAX_VAL float64 = 65535
@@ -119,24 +36,34 @@ type AsciiChar struct {
 	RgbValue      [3]uint32
 }
 
-// Converts the 2D image_conversions.AsciiPixel slice of image data (each instance representing each compressed pixel of original image)
-// to a 2D image_conversions.AsciiChar slice
-//
-// If complex parameter is true, values are compared to 69 levels of color density in ASCII characters.
-// Otherwise, values are compared to 10 levels of color density in ASCII characters.
+/*
+Converts the 2D image_conversions.AsciiPixel slice of image data (each instance representing each compressed pixel of original image)
+to a 2D image_conversions.AsciiChar slice
+
+If complex parameter is true, values are compared to 70 levels of color density in ASCII characters.
+Otherwise, values are compared to 10 levels of color density in ASCII characters.
+*/
 func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string, fontColor [3]int) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
 
-	var chosenTable map[int]string
+	chosenTable := map[int]string{}
 
+	// Turn ascii character-set string into map[int]string{} literal
 	if customMap == "" {
+		var charSet string
+
 		if complex {
-			chosenTable = asciiTableDetailed
+			charSet = asciiTableDetailed
 		} else {
-			chosenTable = asciiTableSimple
+			charSet = asciiTableSimple
 		}
+
+		for index, char := range charSet {
+			chosenTable[index] = string(char)
+		}
+
 	} else {
 		chosenTable = map[int]string{}
 

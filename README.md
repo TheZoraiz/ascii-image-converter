@@ -84,7 +84,6 @@ Visit [the app's snap store listing](https://snapcraft.io/ascii-image-converter)
 
 ### Go
 
-For installing through Go
 ```
 go install github.com/TheZoraiz/ascii-image-converter@latest
 ```
@@ -398,23 +397,15 @@ func main() {
 	flags := aic_package.DefaultFlags()
 
 	// This part is optional.
-	// You can directly pass default flags variable to Convert() if you wish.
-	// For clarity, all flags are covered in this example, but you can use specific ones.
-	flags.Complex = false // Use complex character set
-	flags.Dimensions = []int{50, 25} // 50 by 25 ascii art size
-	flags.SaveTxtPath = "."  // Save generated text in same directory
-	flags.SaveImagePath = "."  // Save generated PNG image in same directory
-	flags.SaveGifPath = "." // If gif is provided, save ascii art gif in same directory
-	flags.Negative = false  // Ascii art will have negative color-depth
-	flags.Colored = true  // Keep colors from original image. This overrides flags.Grayscale and flags.FontColor
-	flags.Grayscale = false // Returns grayscale ascii art. This overrides flags.FontColor
-	flags.CustomMap = " .-=+#@"  // Starting from darkest to brightest shades. This overrides flags.Complex
-	flags.FlipX = false  // Flips ascii art horizontally
-	flags.FlipY = false  // Flips ascii art vertically
-	flags.Full = false  // Display ascii art that fills the terminal width. This overrides flags.Dimensions
-	flags.FontFilePath = "./RobotoMono-Regular.ttf" // File path to font .ttf file for saved png and gif files. Ignored if flags.SaveImagePath or flags.SaveGifPath are not set
-	flags.FontColor = [3]int{0, 0, 0} // Font color for terminal and saved png and gif files.
-	flags.SaveBackgroundColor = [3]int{255, 255, 255} // Font color for saved png and gif files. Ignored if flags.SaveImagePath or flags.SaveGifPath are not set.
+	// You can directly pass default flags variable to aic_package.Convert() if you wish.
+	// There are more flags, but these are the ones shown for demonstration
+	flags.Dimensions = []int{50, 25}
+	flags.Colored = true
+	flags.SaveTxtPath = "." 
+	flags.SaveImagePath = "."
+	flags.CustomMap = " .-=+#@"
+	flags.FontFilePath = "./RobotoMono-Regular.ttf" // If file is in current directory
+	flags.SaveBackgroundColor = [3]int{50, 50, 50}
 	
 	// Conversion for an image
 	asciiArt, err := aic_package.Convert(filePath, flags)
@@ -424,9 +415,13 @@ func main() {
 
 	fmt.Printf("%v\n", asciiArt)
 
+	// -----
 	// GIF CONVERSION IS AN EXPERIMENTAL FEATURE
 	// For a gif. This function may run infinitely, depending on the gif
 	// Work needs to be done on gif conversion to be more library-compatible
+
+	filePath = "myGif.gif"
+
 	_, err := aic_package.Convert(filePath, flags)
 	if err != nil {
 		fmt.Println(err)
@@ -450,7 +445,7 @@ You can fork the project and implement any changes you want for a pull request. 
 
 [github.com/nathan-fiscaletti/consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go)
 
-[github.com/nfnt/resize](https://github.com/nfnt/resize)
+[github.com/disintegration/imaging](https://github.com/disintegration/imaging)
 
 [github.com/gookit/color](https://github.com/gookit/color)
 

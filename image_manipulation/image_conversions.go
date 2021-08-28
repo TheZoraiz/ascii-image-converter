@@ -22,7 +22,7 @@ import (
 	"image/color"
 
 	"github.com/TheZoraiz/ascii-image-converter/aic_package/winsize"
-	"github.com/nfnt/resize"
+	"github.com/disintegration/imaging"
 )
 
 type AsciiPixel struct {
@@ -31,12 +31,14 @@ type AsciiPixel struct {
 	rgbValue       [3]uint32
 }
 
-// This function shrinks the passed image according to passed dimensions or terminal
-// size if none are passed. Stores each pixel's grayscale and RGB values in an AsciiPixel
-// instance to simplify getting numeric data for ASCII character comparison.
-//
-// The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
-// ranges from 0 to 65535, while RGB values are separate.
+/*
+This function shrinks the passed image according to passed dimensions or terminal
+size if none are passed. Stores each pixel's grayscale and RGB values in an AsciiPixel
+instance to simplify getting numeric data for ASCII character comparison.
+
+The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
+ranges from 0 to 65535, while RGB values are separate.
+*/
 func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full bool) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
@@ -51,13 +53,13 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 		asciiWidth = terminalWidth - 1
 
 		// Passing 0 in place of width keeps the original image's aspect ratio
-		smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+		smallImg = imaging.Resize(img, asciiWidth, 0, imaging.Lanczos)
 		asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 		// To fix aspect ratio in eventual ascii art
 		asciiHeight = int(0.5 * float32(asciiHeight))
 
-		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 	} else if (width != 0 || height != 0) && len(dimensions) == 0 {
 		// If either width or height is set and dimensions aren't given
@@ -71,7 +73,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 
 			asciiWidth = width
 
-			smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+			smallImg = imaging.Resize(img, asciiWidth, 0, imaging.Lanczos)
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 			asciiHeight = int(0.5 * float32(asciiHeight))
@@ -79,14 +81,14 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 				asciiHeight = 1
 			}
 
-			smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+			smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 		} else if height != 0 && width == 0 {
 			// If height is set and width is not set, use height to calculate aspect ratio
 
 			asciiHeight = height
 
-			smallImg = resize.Resize(0, uint(asciiHeight), img, resize.Lanczos3)
+			smallImg = imaging.Resize(img, 0, asciiHeight, imaging.Lanczos)
 			asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
 			asciiWidth = int(2 * float32(asciiWidth))
@@ -95,7 +97,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 				return nil, fmt.Errorf("width calculated with aspect ratio exceeds terminal width")
 			}
 
-			smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+			smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 		} else {
 			return nil, fmt.Errorf("both width and height can't be set. Use dimensions instead")
@@ -106,7 +108,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 
 		asciiHeight = terminalHeight - 1
 
-		smallImg = resize.Resize(0, uint(asciiHeight), img, resize.Lanczos3)
+		smallImg = imaging.Resize(img, 0, asciiHeight, imaging.Lanczos)
 		asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
 		// To fix aspect ratio in eventual ascii art
@@ -116,7 +118,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 		if asciiWidth >= terminalWidth {
 			asciiWidth = terminalWidth - 1
 
-			smallImg = resize.Resize(uint(asciiWidth), 0, img, resize.Lanczos3)
+			smallImg = imaging.Resize(img, asciiWidth, 0, imaging.Lanczos)
 
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
@@ -124,12 +126,12 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			asciiHeight = int(0.5 * float32(asciiHeight))
 		}
 
-		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 	} else {
 		asciiWidth = dimensions[0]
 		asciiHeight = dimensions[1]
-		smallImg = resize.Resize(uint(asciiWidth), uint(asciiHeight), img, resize.Lanczos3)
+		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 	}
 
 	// Repeated despite being in cmd/root.go to maintain support for library
