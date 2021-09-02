@@ -185,7 +185,7 @@ ascii-image-converter [image paths/urls] --braille
 
 #### --threshold
 
-Set threshold value to compare when converting each pixel into a dot. Value must be between 0 and 255. 
+Set threshold value to compare for braille art when converting each pixel into a dot. Value must be between 0 and 255.
 
 Example:
 ```
