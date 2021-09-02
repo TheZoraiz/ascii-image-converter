@@ -31,6 +31,10 @@ type AsciiPixel struct {
 	rgbValue       [3]uint32
 }
 
+func resizeForBraille(asciiWidth, asciiHeight int) (int, int) {
+	return asciiWidth * 2, asciiHeight * 4
+}
+
 /*
 This function shrinks the passed image according to passed dimensions or terminal
 size if none are passed. Stores each pixel's grayscale and RGB values in an AsciiPixel
@@ -39,7 +43,7 @@ instance to simplify getting numeric data for ASCII character comparison.
 The returned 2D AsciiPixel slice contains each corresponding pixel's values. Grayscale value
 ranges from 0 to 65535, while RGB values are separate.
 */
-func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full bool) ([][]AsciiPixel, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full, isBraille bool) ([][]AsciiPixel, error) {
 
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
@@ -57,8 +61,11 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 		asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 		// To fix aspect ratio in eventual ascii art
-		asciiHeight = int(0.5 * float32(asciiHeight))
+		asciiHeight = int(0.5 * float64(asciiHeight))
 
+		if isBraille {
+			asciiWidth, asciiHeight = resizeForBraille(asciiWidth, asciiHeight)
+		}
 		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 	} else if (width != 0 || height != 0) && len(dimensions) == 0 {
@@ -76,12 +83,10 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			smallImg = imaging.Resize(img, asciiWidth, 0, imaging.Lanczos)
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
-			asciiHeight = int(0.5 * float32(asciiHeight))
+			asciiHeight = int(0.5 * float64(asciiHeight))
 			if asciiHeight == 0 {
 				asciiHeight = 1
 			}
-
-			smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 		} else if height != 0 && width == 0 {
 			// If height is set and width is not set, use height to calculate aspect ratio
@@ -91,17 +96,20 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			smallImg = imaging.Resize(img, 0, asciiHeight, imaging.Lanczos)
 			asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
-			asciiWidth = int(2 * float32(asciiWidth))
+			asciiWidth = int(2 * float64(asciiWidth))
 
 			if asciiWidth > terminalWidth-1 {
 				return nil, fmt.Errorf("width calculated with aspect ratio exceeds terminal width")
 			}
 
-			smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
-
 		} else {
 			return nil, fmt.Errorf("both width and height can't be set. Use dimensions instead")
 		}
+
+		if isBraille {
+			asciiWidth, asciiHeight = resizeForBraille(asciiWidth, asciiHeight)
+		}
+		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 	} else if len(dimensions) == 0 {
 		// This condition calculates aspect ratio according to terminal height
@@ -112,7 +120,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 		asciiWidth = smallImg.Bounds().Max.X - smallImg.Bounds().Min.X
 
 		// To fix aspect ratio in eventual ascii art
-		asciiWidth = int(2 * float32(asciiWidth))
+		asciiWidth = int(2 * float64(asciiWidth))
 
 		// If ascii width exceeds terminal width, change ratio with respect to terminal width
 		if asciiWidth >= terminalWidth {
@@ -123,14 +131,21 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			asciiHeight = smallImg.Bounds().Max.Y - smallImg.Bounds().Min.Y
 
 			// To fix aspect ratio in eventual ascii art
-			asciiHeight = int(0.5 * float32(asciiHeight))
+			asciiHeight = int(0.5 * float64(asciiHeight))
 		}
 
+		if isBraille {
+			asciiWidth, asciiHeight = resizeForBraille(asciiWidth, asciiHeight)
+		}
 		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
 	} else {
 		asciiWidth = dimensions[0]
 		asciiHeight = dimensions[1]
+
+		if isBraille {
+			asciiWidth, asciiHeight = resizeForBraille(asciiWidth, asciiHeight)
+		}
 		smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 	}
 
@@ -143,11 +158,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 		}
 	}
 
-	// Initialize imgSet 2D slice
-	imgSet := make([][]AsciiPixel, asciiHeight)
-	for i := range imgSet {
-		imgSet[i] = make([]AsciiPixel, asciiWidth)
-	}
+	var imgSet [][]AsciiPixel
 
 	b := smallImg.Bounds()
 
@@ -161,7 +172,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			grayPixel := color.GrayModel.Convert(oldPixel)
 
 			r1, g1, b1, _ := grayPixel.RGBA()
-			charDepth := r1 // Only Red is needed from RGB for charDepth in AsciiPixel since they have the same value for grayscale images
+			charDepth := r1 / 257 // Only Red is needed from RGB for charDepth in AsciiPixel since they have the same value for grayscale images
 			r1 = uint32(r1 / 257)
 			g1 = uint32(g1 / 257)
 			b1 = uint32(b1 / 257)
@@ -179,7 +190,7 @@ func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, 
 			})
 
 		}
-		imgSet[y] = temp
+		imgSet = append(imgSet, temp)
 	}
 
 	// This rarely affects performance since the ascii art 2D slice size isn't that large

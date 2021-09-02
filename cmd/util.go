@@ -57,7 +57,7 @@ func checkInputAndFlags(args []string) bool {
 			"WEBP\n" +
 			"BMP\n" +
 			"TIFF/TIF\n" +
-			"GIF (Experimental)\n\n")
+			"GIF\n\n")
 		return true
 	}
 
@@ -169,6 +169,15 @@ func checkInputAndFlags(args []string) bool {
 			fmt.Printf("Error: RBG values must be between 0 and 255\n\n")
 			return true
 		}
+	}
+
+	if threshold == 0 {
+		threshold = 128
+	}
+
+	if threshold < 0 || threshold > 255 {
+		fmt.Printf("Error: threshold must be between 0 and 255\n\n")
+		return true
 	}
 
 	return false

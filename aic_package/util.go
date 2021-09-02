@@ -79,24 +79,24 @@ func flattenAscii(asciiSet [][]imgManip.AsciiChar, colored, toSaveTxt bool) []st
 	var ascii []string
 
 	for _, line := range asciiSet {
-		var tempAscii []string
+		var tempAscii string
 
-		for i := 0; i < len(line); i++ {
+		for _, char := range line {
 			if toSaveTxt {
-				tempAscii = append(tempAscii, line[i].Simple)
+				tempAscii += char.Simple
 				continue
 			}
 
 			if colored {
-				tempAscii = append(tempAscii, line[i].OriginalColor)
+				tempAscii += char.OriginalColor
 			} else if fontColor != [3]int{255, 255, 255} {
-				tempAscii = append(tempAscii, line[i].SetColor)
+				tempAscii += char.SetColor
 			} else {
-				tempAscii = append(tempAscii, line[i].Simple)
+				tempAscii += char.Simple
 			}
 		}
 
-		ascii = append(ascii, strings.Join(tempAscii, ""))
+		ascii = append(ascii, tempAscii)
 	}
 
 	return ascii

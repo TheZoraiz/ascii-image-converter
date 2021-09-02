@@ -43,15 +43,24 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full)
+	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille)
 	if err != nil {
 		return "", err
 	}
 
-	asciiSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+	var asciiSet [][]imgManip.AsciiChar
+
+	if braille {
+		asciiSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, fontColor, threshold)
+	} else {
+		asciiSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+	}
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed
 	if saveImagePath != "" {
+		if braille {
+			return "", fmt.Errorf("saving braille art as an image is not supported")
+		}
 		if err := createImageToSave(
 			asciiSet,
 			colored || grayscale,

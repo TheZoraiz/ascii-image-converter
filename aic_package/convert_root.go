@@ -57,6 +57,8 @@ func DefaultFlags() Flags {
 		FontFilePath:        "",
 		FontColor:           [3]int{255, 255, 255},
 		SaveBackgroundColor: [3]int{0, 0, 0},
+		Braille:             false,
+		Threshold:           128,
 	}
 }
 
@@ -88,6 +90,8 @@ func Convert(filePath string, flags Flags) (string, error) {
 	fontPath = flags.FontFilePath
 	fontColor = flags.FontColor
 	saveBgColor = flags.SaveBackgroundColor
+	braille = flags.Braille
+	threshold = flags.Threshold
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (
@@ -141,7 +145,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	}
 
 	if path.Ext(filePath) == ".gif" {
-		return pathIsGif(filePath, urlImgName, pathIsURl, urlImgBytes, localFile)
+		return "", pathIsGif(filePath, urlImgName, pathIsURl, urlImgBytes, localFile)
 	} else {
 		return pathIsImage(filePath, urlImgName, pathIsURl, urlImgBytes, localFile)
 	}

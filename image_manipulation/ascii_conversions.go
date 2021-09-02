@@ -22,12 +22,24 @@ import (
 	"github.com/gookit/color"
 )
 
-// Reference taken from http://paulbourke.net/dataformats/asciiart/
-var asciiTableSimple = " .:-=+*#%@"
-var asciiTableDetailed = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+var (
+	// Reference taken from http://paulbourke.net/dataformats/asciiart/
+	asciiTableSimple   = " .:-=+*#%@"
+	asciiTableDetailed = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+
+	// Structure for braille dots
+	BrailleStruct = [4][2]int{
+		{0x1, 0x8},
+		{0x2, 0x10},
+		{0x4, 0x20},
+		{0x40, 0x80},
+	}
+
+	BrailleThreshold uint32
+)
 
 // For each individual element of imgSet in ConvertToASCIISlice()
-const MAX_VAL float64 = 65535
+const MAX_VAL float64 = 255
 
 type AsciiChar struct {
 	OriginalColor string
@@ -72,10 +84,7 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 		}
 	}
 
-	result := make([][]AsciiChar, height)
-	for i := range result {
-		result[i] = make([]AsciiChar, width)
-	}
+	var result [][]AsciiChar
 
 	for i := 0; i < height; i++ {
 
@@ -146,8 +155,111 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 
 			tempSlice = append(tempSlice, char)
 		}
-		result[i] = tempSlice
+		result = append(result, tempSlice)
 	}
 
 	return result
+}
+
+/*
+Converts the 2D image_conversions.AsciiPixel slice of image data (each instance representing each compressed pixel of original image)
+to a 2D image_conversions.AsciiChar slice
+
+Unlike ConvertToAsciiChars(), this function calculates braille characters instead of ascii
+*/
+func ConvertToBrailleChars(imgSet [][]AsciiPixel, negative, colored bool, fontColor [3]int, threshold int) [][]AsciiChar {
+
+	BrailleThreshold = uint32(threshold)
+
+	height := len(imgSet)
+	width := len(imgSet[0])
+
+	var result [][]AsciiChar
+
+	for i := 0; i < height; i += 4 {
+
+		var tempSlice []AsciiChar
+
+		for j := 0; j < width; j += 2 {
+
+			brailleChar := getBrailleChar(i, j, negative, imgSet)
+
+			var r, g, b int
+
+			if colored {
+				r = int(imgSet[i][j].rgbValue[0])
+				g = int(imgSet[i][j].rgbValue[1])
+				b = int(imgSet[i][j].rgbValue[2])
+			} else {
+				r = int(imgSet[i][j].grayscaleValue[0])
+				g = int(imgSet[i][j].grayscaleValue[1])
+				b = int(imgSet[i][j].grayscaleValue[2])
+			}
+
+			if negative {
+				// Select character from opposite side of table as well as turn pixels negative
+				r = 255 - r
+				g = 255 - g
+				b = 255 - b
+
+				if colored {
+					imgSet[i][j].rgbValue = [3]uint32{uint32(r), uint32(g), uint32(b)}
+				} else {
+					imgSet[i][j].grayscaleValue = [3]uint32{uint32(r), uint32(g), uint32(b)}
+				}
+			}
+
+			rStr := strconv.Itoa(r)
+			gStr := strconv.Itoa(g)
+			bStr := strconv.Itoa(b)
+
+			var char AsciiChar
+
+			char.Simple = brailleChar
+			char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", brailleChar)
+
+			// If font color is not set, use a simple string. Otherwise, use True color
+			if fontColor != [3]int{255, 255, 255} {
+				fcR := strconv.Itoa(fontColor[0])
+				fcG := strconv.Itoa(fontColor[1])
+				fcB := strconv.Itoa(fontColor[2])
+
+				char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", brailleChar)
+			}
+
+			if colored {
+				char.RgbValue = imgSet[i][j].rgbValue
+			} else {
+				char.RgbValue = imgSet[i][j].grayscaleValue
+			}
+
+			tempSlice = append(tempSlice, char)
+		}
+
+		result = append(result, tempSlice)
+	}
+
+	return result
+}
+
+// Iterate through the BrailleStruct table to see which dots need to be highlighted
+func getBrailleChar(x, y int, negative bool, imgSet [][]AsciiPixel) string {
+
+	brailleChar := 0x2800
+
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 2; j++ {
+			if negative {
+				if imgSet[x+i][y+j].charDepth <= BrailleThreshold {
+					brailleChar += BrailleStruct[i][j]
+				}
+			} else {
+				if imgSet[x+i][y+j].charDepth >= BrailleThreshold {
+					brailleChar += BrailleStruct[i][j]
+				}
+			}
+		}
+	}
+
+	return string(brailleChar)
 }

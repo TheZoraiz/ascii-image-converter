@@ -45,7 +45,7 @@ as an ascii art gif.
 
 Multi-threading has been implemented in multiple places due to long execution time
 */
-func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, localGif *os.File) (string, error) {
+func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, localGif *os.File) error {
 
 	var (
 		originalGif *gif.GIF
@@ -58,7 +58,12 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 		originalGif, err = gif.DecodeAll(localGif)
 	}
 	if err != nil {
-		return "", fmt.Errorf("can't decode %v: %v", gifPath, err)
+		return fmt.Errorf("can't decode %v: %v", gifPath, err)
+	}
+
+	// Error handled earlier to save time in case of long gif processing
+	if braille && saveGifPath != "" {
+		return fmt.Errorf("saving braille art as a gif is not supported")
 	}
 
 	var (
@@ -97,13 +102,18 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 			var imgSet [][]imgManip.AsciiPixel
 
-			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full)
+			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille)
 			if err != nil {
 				fmt.Println("Error:", err)
 				os.Exit(0)
 			}
 
-			asciiCharSet := imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+			var asciiCharSet [][]imgManip.AsciiChar
+			if braille {
+				asciiCharSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, fontColor, threshold)
+			} else {
+				asciiCharSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+			}
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]
 
@@ -137,12 +147,12 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 		saveFileName, err := createSaveFileName(gifPath, urlImgName, "-ascii-art.gif")
 		if err != nil {
-			return "", err
+			return err
 		}
 
 		fullPathName, err := getFullSavePath(saveFileName, saveGifPath)
 		if err != nil {
-			return "", fmt.Errorf("can't save file: %v", err)
+			return fmt.Errorf("can't save file: %v", err)
 		}
 
 		// Initializing some constants for gif. Done outside loop to save execution
@@ -219,7 +229,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 		gifFile, err := os.OpenFile(fullPathName, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
-			return "", fmt.Errorf("can't save file: %v", err)
+			return fmt.Errorf("can't save file: %v", err)
 		}
 		defer gifFile.Close()
 
@@ -248,5 +258,5 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 		}
 	}
 
-	return "", nil
+	return nil
 }

@@ -74,13 +74,22 @@ type Flags struct {
 	// This will be ignored if Flags.SaveImagePath or Flags.SaveGifPath are not set
 	FontFilePath string
 
-	// Font RGB color in saved png or gif files.
-	// This will be ignored if Flags.SaveImagePath or Flags.SaveGifPath are not set
+	// Font RGB color for terminal display and saved png or gif files.
 	FontColor [3]int
 
 	// Background RGB color in saved png or gif files.
 	// This will be ignored if Flags.SaveImagePath or Flags.SaveGifPath are not set
 	SaveBackgroundColor [3]int
+
+	// Use braille characters instead of ascii. Terminal must support UTF-8 encoding.
+	// Otherwise, problems may be encountered with colored or even uncolored braille art.
+	// This overrides Flags.Complex and Flags.CustomMap
+	Braille bool
+
+	// Threshold for braille art if Flags.Braille is set to true. Value provided must
+	// be between 0 and 255. Ideal value is 128.
+	// This will be ignored if Flags.Braille is not set
+	Threshold int
 }
 
 var (
@@ -101,4 +110,6 @@ var (
 	fontPath      string
 	fontColor     [3]int
 	saveBgColor   [3]int
+	braille       bool
+	threshold     int
 )

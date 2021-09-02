@@ -6,7 +6,9 @@
 ![Github All Releases](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=brightgreen&label=Release%20Downloads)
 [![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)  
 
-ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. Available on Windows, Linux and macOS. GIFs are now experimentally supported as well.
+ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. Available on Windows, Linux and macOS.
+
+Now supports braille art!
 
 Input formats currently supported:
 * JPEG/JPG
@@ -14,7 +16,28 @@ Input formats currently supported:
 * BMP
 * WEBP
 * TIFF/TIF
-* GIF (Experimental)
+* GIF
+
+<br>
+Single image:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/base.gif">
+</p>
+
+Multiple images:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/all.gif">
+</p>
+
+GIF:
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/gif-example.gif">
+</p>
+
+
 
 ## Table of Contents
 
@@ -130,24 +153,6 @@ Example:
 ```
 ascii-image-converter myImage.jpeg
 ```
-<br>
-Single image:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/base.gif">
-</p>
-
-Multiple images:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/all.gif">
-</p>
-
-GIF:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/gif-example.gif">
-</p>
 
 ### Flags
 
@@ -164,6 +169,28 @@ ascii-image-converter [image paths/urls] --color
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/color.gif">
 </p>
+
+#### --braille OR -b
+
+Use braille characters instead of ascii. For this flag, your terminal must support braille patters (UTF-8) properly. Otherwise, you may encounter problems with colored or even uncolored braille art.
+```
+ascii-image-converter [image paths/urls] -b
+# Or
+ascii-image-converter [image paths/urls] --braille
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/braille.gif">
+</p>
+
+#### --threshold
+
+Set threshold value to compare when converting each pixel into a dot. Value must be between 0 and 255. 
+
+Example:
+```
+ascii-image-converter [image paths/urls] -b --threshold 170
+```
 
 #### --dimensions OR -d
 
