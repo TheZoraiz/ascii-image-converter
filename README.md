@@ -44,7 +44,7 @@ GIF:
 -  [Installation](#installation)
 	*  [Debian / Ubuntu-based](#debian-or-ubuntu-based-distros)
 	*  [Homebrew](#homebrew)
-	*  [Snap](#brew)
+	*  [Snap](#snap)
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
 	*  [Windows (binaries)](#windows)
