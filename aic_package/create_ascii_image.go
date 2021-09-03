@@ -28,13 +28,16 @@ import (
 )
 
 //go:embed Hack-Regular.ttf
-var embeddedFontFile []byte
+var embeddedHackRegularFont []byte
+
+//go:embed DejaVuSans-Oblique.ttf
+var embeddedDejaVuObliqueFont []byte
 
 var tempFont *truetype.Font
 
 // Load embedded font
 func init() {
-	tempFont, _ = truetype.Parse(embeddedFontFile)
+	tempFont, _ = truetype.Parse(embeddedHackRegularFont)
 }
 
 /*

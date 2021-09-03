@@ -58,9 +58,6 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed
 	if saveImagePath != "" {
-		if braille {
-			return "", fmt.Errorf("saving braille art as an image is not supported")
-		}
 		if err := createImageToSave(
 			asciiSet,
 			colored || grayscale,

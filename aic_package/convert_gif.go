@@ -61,11 +61,6 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 		return fmt.Errorf("can't decode %v: %v", gifPath, err)
 	}
 
-	// Error handled earlier to save time in case of long gif processing
-	if braille && saveGifPath != "" {
-		return fmt.Errorf("saving braille art as a gif is not supported")
-	}
-
 	var (
 		asciiArtSet    = make([]string, len(originalGif.Image))
 		gifFramesSlice = make([]GifFrame, len(originalGif.Image))

@@ -88,11 +88,6 @@ func createGifFrameToSave(asciiArt [][]imgManip.AsciiChar, img image.Image, colo
 
 	dc.DrawImage(tempImg, 0, 0)
 
-	// Load embedded font
-	tempFont, err := truetype.Parse(embeddedFontFile)
-	if err != nil {
-		return nil, err
-	}
 	// Font size increased during assignment to become more visible. This will not affect image drawing
 	fontFace := truetype.NewFace(tempFont, &truetype.Options{Size: fontSize * 1.5})
 

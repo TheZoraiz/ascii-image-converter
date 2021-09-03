@@ -142,6 +142,8 @@ func Convert(filePath string, flags Flags) (string, error) {
 		if tempFont, err = truetype.Parse(fontFile); err != nil {
 			return "", fmt.Errorf("unable to parse font file: %v", err)
 		}
+	} else if braille {
+		tempFont, _ = truetype.Parse(embeddedDejaVuObliqueFont)
 	}
 
 	if path.Ext(filePath) == ".gif" {
