@@ -5,6 +5,7 @@ summary: Convert images and gifs into ascii art
 description: |
   ascii-image-converter is a command-line tool that converts images into ascii art and prints
   them out onto the console. Supported input formats are JPEG/JPG, PNG, WEBP, BMP, TIFF/TIF and GIF
+  Now supports braille art.
 
 grade: stable
 confinement: strict

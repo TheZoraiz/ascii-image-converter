@@ -172,6 +172,8 @@ ascii-image-converter [image paths/urls] --color
 
 #### --braille OR -b
 
+> **Note:** Braille pattern display heavily depends on which terminal or font you're using. In windows, try changing the font from command prompt properties if braille characters don't display
+
 Use braille characters instead of ascii. For this flag, your terminal must support braille patters (UTF-8) properly. Otherwise, you may encounter problems with colored or even uncolored braille art.
 ```
 ascii-image-converter [image paths/urls] -b
