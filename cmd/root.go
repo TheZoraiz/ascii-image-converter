@@ -55,7 +55,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.7.0",
+		Version: "1.7.1",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
