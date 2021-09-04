@@ -19,26 +19,9 @@ Input formats currently supported:
 * TIFF/TIF
 * GIF
 
-<br>
-Single image:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/base.gif">
-</p>
-
-Multiple images:
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/all.gif">
 </p>
-
-GIF:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/gif-example.gif">
-</p>
-
-
 
 ## Table of Contents
 
