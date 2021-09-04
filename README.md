@@ -1,4 +1,5 @@
 
+
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -186,6 +187,13 @@ Set threshold value to compare for braille art when converting each pixel into a
 Example:
 ```
 ascii-image-converter [image paths/urls] -b --threshold 170
+```
+
+#### --color-bg
+
+If any of the coloring flags is passed, this flag will transfer its color to each character's background. instead of foreground. However, this option isn't available for `--save-img` and `--save-gif`
+```
+ascii-image-converter [image paths/urls] -C --color-bg
 ```
 
 #### --dimensions OR -d
