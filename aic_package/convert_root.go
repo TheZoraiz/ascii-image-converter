@@ -49,6 +49,7 @@ func DefaultFlags() Flags {
 		SaveGifPath:         "",
 		Negative:            false,
 		Colored:             false,
+		CharBackgroundColor: false,
 		Grayscale:           false,
 		CustomMap:           "",
 		FlipX:               false,
@@ -82,6 +83,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	saveGifPath = flags.SaveGifPath
 	negative = flags.Negative
 	colored = flags.Colored
+	colorBg = flags.CharBackgroundColor
 	grayscale = flags.Grayscale
 	customMap = flags.CustomMap
 	flipX = flags.FlipX

@@ -50,6 +50,10 @@ type Flags struct {
 	// This overrides Flags.Grayscale and Flags.FontColor
 	Colored bool
 
+	// If Flags.Colored, Flags.Grayscale or Flags.FontColor is set, use that color
+	// on each character's background in the terminal
+	CharBackgroundColor bool
+
 	// Keep grayscale colors from the original image. This uses the True color
 	// codes for the terminal and will work on saved .png and .gif files as well
 	// This overrides Flags.FontColor
@@ -103,6 +107,7 @@ var (
 	grayscale     bool
 	negative      bool
 	colored       bool
+	colorBg       bool
 	customMap     string
 	flipX         bool
 	flipY         bool

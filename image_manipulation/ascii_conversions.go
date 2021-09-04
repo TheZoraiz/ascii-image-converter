@@ -55,7 +55,7 @@ to a 2D image_conversions.AsciiChar slice
 If complex parameter is true, values are compared to 70 levels of color density in ASCII characters.
 Otherwise, values are compared to 10 levels of color density in ASCII characters.
 */
-func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool, customMap string, fontColor [3]int) [][]AsciiChar {
+func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex, colorBg bool, customMap string, fontColor [3]int) [][]AsciiChar {
 
 	height := len(imgSet)
 	width := len(imgSet[0])
@@ -134,7 +134,12 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 
 			var char AsciiChar
 
-			char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+			char.Simple = chosenTable[tempInt]
+			if colorBg {
+				char.OriginalColor = color.Sprintf("<bg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+			} else {
+				char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", chosenTable[tempInt])
+			}
 
 			// If font color is not set, use a simple string. Otherwise, use True color
 			if fontColor != [3]int{255, 255, 255} {
@@ -142,10 +147,12 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, complex bool,
 				fcG := strconv.Itoa(fontColor[1])
 				fcB := strconv.Itoa(fontColor[2])
 
-				char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", chosenTable[tempInt])
+				if colorBg {
+					char.SetColor = color.Sprintf("<bg="+fcR+","+fcG+","+fcB+">%v</>", chosenTable[tempInt])
+				} else {
+					char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", chosenTable[tempInt])
+				}
 			}
-
-			char.Simple = chosenTable[tempInt]
 
 			if colored {
 				char.RgbValue = imgSet[i][j].rgbValue
@@ -167,7 +174,7 @@ to a 2D image_conversions.AsciiChar slice
 
 Unlike ConvertToAsciiChars(), this function calculates braille characters instead of ascii
 */
-func ConvertToBrailleChars(imgSet [][]AsciiPixel, negative, colored bool, fontColor [3]int, threshold int) [][]AsciiChar {
+func ConvertToBrailleChars(imgSet [][]AsciiPixel, negative, colored, colorBg bool, fontColor [3]int, threshold int) [][]AsciiChar {
 
 	BrailleThreshold = uint32(threshold)
 
@@ -216,7 +223,11 @@ func ConvertToBrailleChars(imgSet [][]AsciiPixel, negative, colored bool, fontCo
 			var char AsciiChar
 
 			char.Simple = brailleChar
-			char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", brailleChar)
+			if colorBg {
+				char.OriginalColor = color.Sprintf("<bg="+rStr+","+gStr+","+bStr+">%v</>", brailleChar)
+			} else {
+				char.OriginalColor = color.Sprintf("<fg="+rStr+","+gStr+","+bStr+">%v</>", brailleChar)
+			}
 
 			// If font color is not set, use a simple string. Otherwise, use True color
 			if fontColor != [3]int{255, 255, 255} {
@@ -224,7 +235,11 @@ func ConvertToBrailleChars(imgSet [][]AsciiPixel, negative, colored bool, fontCo
 				fcG := strconv.Itoa(fontColor[1])
 				fcB := strconv.Itoa(fontColor[2])
 
-				char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", brailleChar)
+				if colorBg {
+					char.SetColor = color.Sprintf("<bg="+fcR+","+fcG+","+fcB+">%v</>", brailleChar)
+				} else {
+					char.SetColor = color.Sprintf("<fg="+fcR+","+fcG+","+fcB+">%v</>", brailleChar)
+				}
 			}
 
 			if colored {

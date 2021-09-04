@@ -105,9 +105,9 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 			var asciiCharSet [][]imgManip.AsciiChar
 			if braille {
-				asciiCharSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, fontColor, threshold)
+				asciiCharSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, colorBg, fontColor, threshold)
 			} else {
-				asciiCharSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+				asciiCharSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, colorBg, customMap, fontColor)
 			}
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]

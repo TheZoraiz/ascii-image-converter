@@ -51,9 +51,9 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 	var asciiSet [][]imgManip.AsciiChar
 
 	if braille {
-		asciiSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, fontColor, threshold)
+		asciiSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, colorBg, fontColor, threshold)
 	} else {
-		asciiSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, customMap, fontColor)
+		asciiSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, colorBg, customMap, fontColor)
 	}
 
 	// Save ascii art as .png image before printing it, if --save-img flag is passed

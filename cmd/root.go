@@ -40,6 +40,7 @@ var (
 	negative      bool
 	formatsTrue   bool
 	colored       bool
+	colorBg       bool
 	grayscale     bool
 	customMap     string
 	flipX         bool
@@ -55,7 +56,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.7.1",
+		Version: "1.8.0",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -75,6 +76,7 @@ var (
 				SaveGifPath:         saveGifPath,
 				Negative:            negative,
 				Colored:             colored,
+				CharBackgroundColor: colorBg,
 				Grayscale:           grayscale,
 				CustomMap:           customMap,
 				FlipX:               flipX,
@@ -124,6 +126,7 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&colored, "color", "C", false, "Display ascii art with original colors\n(Inverts with --negative flag)\n(Overrides --grayscale and --font-color flags)\n")
+	rootCmd.PersistentFlags().BoolVar(&colorBg, "color-bg", false, "If some color flag is passed, use that color\non character background instead of foreground\n(Inverts with --negative flag)\n(Doesn't work for --save-img or --save-gif)\n")
 	rootCmd.PersistentFlags().IntSliceVarP(&dimensions, "dimensions", "d", nil, "Set width and height for ascii art in CHARACTER length\ne.g. -d 60,30 (defaults to terminal height)\n(Overrides --width and --height flags)\n")
 	rootCmd.PersistentFlags().IntVarP(&width, "width", "W", 0, "Set width for ascii art in CHARACTER length\nHeight is kept to aspect ratio\ne.g. -W 60\n")
 	rootCmd.PersistentFlags().IntVarP(&height, "height", "H", 0, "Set height for ascii art in CHARACTER length\nWidth is kept to aspect ratio\ne.g. -H 60\n")
