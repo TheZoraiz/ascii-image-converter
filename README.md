@@ -1,5 +1,3 @@
-
-
 # ascii-image-converter
 
 [![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
@@ -79,18 +77,18 @@ brew install TheZoraiz/ascii-image-converter/ascii-image-converter
 ### AUR
 
 The AUR repo is maintained by [magnus-tesshu](https://aur.archlinux.org/account/magnus-tesshu)
-2 ways to install from AUR :
-> The usual way :
+
+Standard way:
 ```
-╰─❯ git clone https://aur.archlinux.org/ascii-image-converter-git.git
-```
-```
-╰─❯ cd ascii-image-converter-git/
+git clone https://aur.archlinux.org/ascii-image-converter-git.git
 ```
 ```
-╰─❯ makepkg -si
+cd ascii-image-converter-git/
 ```
-> The aur helper way:
+```
+makepkg -si
+```
+AUR helper:
 ```
 <aur-helper> -S ascii-image-converter-git
 ```
