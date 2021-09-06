@@ -1,10 +1,10 @@
 # ascii-image-converter
 
-[![release version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
-[![ascii-image-converter-lang](https://img.shields.io/badge/Language-Go-blue)](https://golang.org/) 
-![Github All Releases](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=brightgreen&label=Release%20Downloads)
-[![ascii-image-converter](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)  
+[![release-version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
+[![language](https://img.shields.io/badge/Language-Go-blue)](https://golang.org/) 
+![release-downloads](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=1d872d&label=Release%20Downloads)
+[![ascii-image-converter-snap](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)
 
 ascii-image-converter is a command-line tool that converts images into ascii art and prints them out onto the console. Available on Windows, Linux and macOS.
 
@@ -135,8 +135,7 @@ Now you can use ascii-image-converter in the terminal. Execute `ascii-image-conv
 You will need to set an Environment Variable to the folder the ascii-image-converter.exe executable is placed in to be able to use it in the command prompt. Follow the instructions in case of confusion:
 
 Download the archive for your Windows architecture [here](https://github.com/TheZoraiz/ascii-image-converter/releases/latest), extract it, and open the extracted folder. Now, copy the folder path from the top of the file explorer and follow these instructions:
-* In Search, search for and then select: System (Control Panel)
-* Click the Advanced System settings link.
+* In Search, search for and then select: Advanced System Settings
 * Click Environment Variables. In the section User Variables find the Path environment variable and select it. Click "Edit".
 * In the Edit Environment Variable window, click "New" and then paste the path of the folder that you copied initially.
 * Click "Ok" on all open windows.
@@ -198,6 +197,19 @@ Example:
 ```
 ascii-image-converter [image paths/urls] -b --threshold 170
 ```
+
+#### --dither
+
+Apply dithering on image to make braille art more visible. Since braille dots can only be on or off, dithering images makes them more visible in braille art.
+
+Example:
+```
+ascii-image-converter [image paths/urls] -b --dither
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/dither.gif">
+</p>
 
 #### --color-bg
 
@@ -491,6 +503,8 @@ You can fork the project and implement any changes you want for a pull request. 
 [github.com/gookit/color](https://github.com/gookit/color)
 
 [github.com/asaskevich/govalidator](https://github.com/asaskevich/govalidator)
+
+[github.com/makeworld-the-better-one/dither/v2](https://github.com/makeworld-the-better-one/dither/v2)
 
 ## License
 

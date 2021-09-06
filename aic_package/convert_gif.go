@@ -97,7 +97,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 			var imgSet [][]imgManip.AsciiPixel
 
-			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille)
+			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille, dither)
 			if err != nil {
 				fmt.Println("Error:", err)
 				os.Exit(0)

@@ -10,6 +10,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/gookit/color v1.4.2
 	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/makeworld-the-better-one/dither/v2 v2.2.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/nathan-fiscaletti/consolesize-go v0.0.0-20210105204122-a87d9f614b9d

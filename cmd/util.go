@@ -180,5 +180,10 @@ func checkInputAndFlags(args []string) bool {
 		return true
 	}
 
+	if dither && !braille {
+		fmt.Printf("Error: image dithering is only reserved for --braille flag\n\n")
+		return true
+	}
+
 	return false
 }

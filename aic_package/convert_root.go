@@ -60,6 +60,7 @@ func DefaultFlags() Flags {
 		SaveBackgroundColor: [3]int{0, 0, 0},
 		Braille:             false,
 		Threshold:           128,
+		Dither:              false,
 	}
 }
 
@@ -94,6 +95,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	saveBgColor = flags.SaveBackgroundColor
 	braille = flags.Braille
 	threshold = flags.Threshold
+	dither = flags.Dither
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (

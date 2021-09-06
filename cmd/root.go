@@ -51,12 +51,13 @@ var (
 	saveBgColor   []int
 	braille       bool
 	threshold     int
+	dither        bool
 
 	// Root commands
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.8.0",
+		Version: "1.9.0",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -87,6 +88,7 @@ var (
 				SaveBackgroundColor: [3]int{saveBgColor[0], saveBgColor[1], saveBgColor[2]},
 				Braille:             braille,
 				Threshold:           threshold,
+				Dither:              dither,
 			}
 
 			for _, imagePath := range args {
@@ -126,13 +128,14 @@ func init() {
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&colored, "color", "C", false, "Display ascii art with original colors\n(Inverts with --negative flag)\n(Overrides --grayscale and --font-color flags)\n")
-	rootCmd.PersistentFlags().BoolVar(&colorBg, "color-bg", false, "If some color flag is passed, use that color\non character background instead of foreground\n(Inverts with --negative flag)\n(Doesn't work for --save-img or --save-gif)\n")
+	rootCmd.PersistentFlags().BoolVar(&colorBg, "color-bg", false, "If some color flag is passed, use that color\non character background instead of foreground\n(Inverts with --negative flag)\n(Only applicable for terminal display)\n")
 	rootCmd.PersistentFlags().IntSliceVarP(&dimensions, "dimensions", "d", nil, "Set width and height for ascii art in CHARACTER length\ne.g. -d 60,30 (defaults to terminal height)\n(Overrides --width and --height flags)\n")
 	rootCmd.PersistentFlags().IntVarP(&width, "width", "W", 0, "Set width for ascii art in CHARACTER length\nHeight is kept to aspect ratio\ne.g. -W 60\n")
 	rootCmd.PersistentFlags().IntVarP(&height, "height", "H", 0, "Set height for ascii art in CHARACTER length\nWidth is kept to aspect ratio\ne.g. -H 60\n")
 	rootCmd.PersistentFlags().StringVarP(&customMap, "map", "m", "", "Give custom ascii characters to map against\nOrdered from darkest to lightest\ne.g. -m \" .-+#@\" (Quotation marks excluded from map)\n(Overrides --complex flag)\n")
 	rootCmd.PersistentFlags().BoolVarP(&braille, "braille", "b", false, "Use braille characters instead of ascii\nTerminal must support braille patterns properly\n(Overrides --complex and --map flags)\n")
 	rootCmd.PersistentFlags().IntVar(&threshold, "threshold", 0, "Threshold for braille art\nValue between 0-255 is accepted\ne.g. --threshold 170\n(Defaults to 128)\n")
+	rootCmd.PersistentFlags().BoolVar(&dither, "dither", false, "Apply dithering on image for braille\nart conversion\n(Only applicable with --braille flag)\n(Negates --threshold flag)\n")
 	rootCmd.PersistentFlags().BoolVarP(&grayscale, "grayscale", "g", false, "Display grayscale ascii art\n(Inverts with --negative flag)\n(Overrides --font-color flag)\n")
 	rootCmd.PersistentFlags().BoolVarP(&complex, "complex", "c", false, "Display ascii characters in a larger range\nMay result in higher quality\n")
 	rootCmd.PersistentFlags().BoolVarP(&full, "full", "f", false, "Use largest dimensions for ascii art\nthat fill the terminal width\n(Overrides --dimensions, --width and --height flags)\n")

@@ -94,6 +94,10 @@ type Flags struct {
 	// be between 0 and 255. Ideal value is 128.
 	// This will be ignored if Flags.Braille is not set
 	Threshold int
+
+	// Apply FloydSteinberg dithering on an image before ascii conversion. This option
+	// is meant for braille art. Therefore, it will be ignored if Flags.Braille is false
+	Dither bool
 }
 
 var (
@@ -117,4 +121,5 @@ var (
 	saveBgColor   [3]int
 	braille       bool
 	threshold     int
+	dither        bool
 )
