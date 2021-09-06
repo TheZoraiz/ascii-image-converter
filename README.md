@@ -504,7 +504,7 @@ You can fork the project and implement any changes you want for a pull request. 
 
 [github.com/asaskevich/govalidator](https://github.com/asaskevich/govalidator)
 
-[github.com/makeworld-the-better-one/dither/v2](https://github.com/makeworld-the-better-one/dither/v2)
+[github.com/makeworld-the-better-one/dither](https://github.com/makeworld-the-better-one/dither)
 
 ## License
 
