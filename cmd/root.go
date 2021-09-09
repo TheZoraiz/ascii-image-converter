@@ -57,7 +57,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.9.0",
+		Version: "1.9.1",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -68,27 +68,28 @@ var (
 			}
 
 			flags := aic_package.Flags{
-				Complex:             complex,
-				Dimensions:          dimensions,
-				Width:               width,
-				Height:              height,
-				SaveTxtPath:         saveTxtPath,
-				SaveImagePath:       saveImagePath,
-				SaveGifPath:         saveGifPath,
-				Negative:            negative,
-				Colored:             colored,
-				CharBackgroundColor: colorBg,
-				Grayscale:           grayscale,
-				CustomMap:           customMap,
-				FlipX:               flipX,
-				FlipY:               flipY,
-				Full:                full,
-				FontFilePath:        fontFile,
-				FontColor:           [3]int{fontColor[0], fontColor[1], fontColor[2]},
-				SaveBackgroundColor: [3]int{saveBgColor[0], saveBgColor[1], saveBgColor[2]},
-				Braille:             braille,
-				Threshold:           threshold,
-				Dither:              dither,
+				Complex:              complex,
+				Dimensions:           dimensions,
+				Width:                width,
+				Height:               height,
+				SaveTxtPath:          saveTxtPath,
+				SaveImagePath:        saveImagePath,
+				SaveGifPath:          saveGifPath,
+				Negative:             negative,
+				Colored:              colored,
+				CharBackgroundColor:  colorBg,
+				Grayscale:            grayscale,
+				CustomMap:            customMap,
+				FlipX:                flipX,
+				FlipY:                flipY,
+				Full:                 full,
+				FontFilePath:         fontFile,
+				FontColor:            [3]int{fontColor[0], fontColor[1], fontColor[2]},
+				SaveBackgroundColor:  [3]int{saveBgColor[0], saveBgColor[1], saveBgColor[2]},
+				Braille:              braille,
+				Threshold:            threshold,
+				Dither:               dither,
+				NoTermSizeComparison: false,
 			}
 
 			for _, imagePath := range args {
@@ -145,8 +146,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&saveImagePath, "save-img", "s", "", "Save ascii art as a .png file\nFormat: <image-name>-ascii-art.png\nImage will be saved in passed path\n(pass . for current directory)\n")
 	rootCmd.PersistentFlags().StringVar(&saveTxtPath, "save-txt", "", "Save ascii art as a .txt file\nFormat: <image-name>-ascii-art.txt\nFile will be saved in passed path\n(pass . for current directory)\n")
 	rootCmd.PersistentFlags().StringVar(&saveGifPath, "save-gif", "", "If input is a gif, save it as a .gif file\nFormat: <gif-name>-ascii-art.gif\nGif will be saved in passed path\n(pass . for current directory)\n")
-	rootCmd.PersistentFlags().IntSliceVar(&saveBgColor, "save-bg", nil, "Set background color for --save-img and --save-gif flags\nPass an RGB value\ne.g. --save-bg 255,255,255\n(Defaults to 0,0,0)\n")
-	rootCmd.PersistentFlags().StringVar(&fontFile, "font", "", "Set font for --save-img and --save-gif flags\nPass file path to font .ttf file\ne.g. --font ./RobotoMono-Regular.ttf\n(Defaults to Hack-Regular)\n")
+	rootCmd.PersistentFlags().IntSliceVar(&saveBgColor, "save-bg", nil, "Set background color for --save-img\nand --save-gif flags\nPass an RGB value\ne.g. --save-bg 255,255,255\n(Defaults to 0,0,0)\n")
+	rootCmd.PersistentFlags().StringVar(&fontFile, "font", "", "Set font for --save-img and --save-gif flags\nPass file path to font .ttf file\ne.g. --font ./RobotoMono-Regular.ttf\n(Defaults to Hack-Regular for ascii and\n DejaVuSans-Oblique for braille)\n")
 	rootCmd.PersistentFlags().IntSliceVar(&fontColor, "font-color", nil, "Set font color for terminal as well as\n--save-img and --save-gif flags\nPass an RGB value\ne.g. --font-color 0,0,0\n(Defaults to 255,255,255)\n")
 	rootCmd.PersistentFlags().BoolVar(&formatsTrue, "formats", false, "Display supported input formats\n")
 

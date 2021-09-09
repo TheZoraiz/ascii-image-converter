@@ -40,27 +40,28 @@ import (
 // Can be sent directly to ConvertImage() for default ascii art
 func DefaultFlags() Flags {
 	return Flags{
-		Complex:             false,
-		Dimensions:          nil,
-		Width:               0,
-		Height:              0,
-		SaveTxtPath:         "",
-		SaveImagePath:       "",
-		SaveGifPath:         "",
-		Negative:            false,
-		Colored:             false,
-		CharBackgroundColor: false,
-		Grayscale:           false,
-		CustomMap:           "",
-		FlipX:               false,
-		FlipY:               false,
-		Full:                false,
-		FontFilePath:        "",
-		FontColor:           [3]int{255, 255, 255},
-		SaveBackgroundColor: [3]int{0, 0, 0},
-		Braille:             false,
-		Threshold:           128,
-		Dither:              false,
+		Complex:              false,
+		Dimensions:           nil,
+		Width:                0,
+		Height:               0,
+		SaveTxtPath:          "",
+		SaveImagePath:        "",
+		SaveGifPath:          "",
+		Negative:             false,
+		Colored:              false,
+		CharBackgroundColor:  false,
+		Grayscale:            false,
+		CustomMap:            "",
+		FlipX:                false,
+		FlipY:                false,
+		Full:                 false,
+		FontFilePath:         "",
+		FontColor:            [3]int{255, 255, 255},
+		SaveBackgroundColor:  [3]int{0, 0, 0},
+		Braille:              false,
+		Threshold:            128,
+		Dither:               false,
+		NoTermSizeComparison: false,
 	}
 }
 
@@ -96,6 +97,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	braille = flags.Braille
 	threshold = flags.Threshold
 	dither = flags.Dither
+	noTermSizeComparison = flags.NoTermSizeComparison
 
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (

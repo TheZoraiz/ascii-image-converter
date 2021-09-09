@@ -425,14 +425,14 @@ ascii-image-converter --formats
 
 ## Library Usage
 
-> **Note:** The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution). Furthermore, GIF conversion is not advised as it isn't fully library-compatible yet.
+> **Note:** The library may throw errors during Go tests due to some unresolved bugs with the [consolesize-go](https://github.com/nathan-fiscaletti/consolesize-go) package (Only during tests, not main program execution).
 
 First, install the library with:
 ```
 go get -u github.com/TheZoraiz/ascii-image-converter/aic_package
 ```
 
-The library is to be used as follows:
+For an image:
 
 ```go
 package main
@@ -460,6 +460,10 @@ func main() {
 	flags.FontFilePath = "./RobotoMono-Regular.ttf" // If file is in current directory
 	flags.SaveBackgroundColor = [3]int{50, 50, 50}
 	
+	// This MUST be set to true for environments where a terminal isn't available (such as web servers)
+	// However, for this, one of flags.Width, flags.Height or flags.Dimensions must be set.
+	flags.NoTermSizeComparison = true
+	
 	// Conversion for an image
 	asciiArt, err := aic_package.Convert(filePath, flags)
 	if err != nil {
@@ -467,19 +471,34 @@ func main() {
 	}
 
 	fmt.Printf("%v\n", asciiArt)
+}
+```
+<br>
 
-	// -----
-	// GIF CONVERSION IS AN EXPERIMENTAL FEATURE
-	// For a gif. This function may run infinitely, depending on the gif
-	// Work needs to be done on gif conversion to be more library-compatible
+> **Note:** GIF conversion is not advised as the function may run infinitely, depending on the GIF. More work needs to be done on this to make it more library-compatible.
 
+For a GIF:
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/TheZoraiz/ascii-image-converter/aic_package"
+)
+
+func main() {
 	filePath = "myGif.gif"
+
+	flags := aic_package.DefaultFlags()
 
 	_, err := aic_package.Convert(filePath, flags)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
+
 ```
 
 <br>

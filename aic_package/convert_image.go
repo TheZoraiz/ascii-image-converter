@@ -43,7 +43,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille, dither)
+	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille, dither, noTermSizeComparison)
 	if err != nil {
 		return "", err
 	}

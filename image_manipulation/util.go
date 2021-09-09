@@ -26,10 +26,6 @@ import (
 	"github.com/makeworld-the-better-one/dither/v2"
 )
 
-func resizeForBraille(asciiWidth, asciiHeight int) (int, int) {
-	return asciiWidth * 2, asciiHeight * 4
-}
-
 func ditherImage(img image.Image) image.Image {
 
 	palette := []color.Color{
@@ -87,6 +83,10 @@ func resizeImage(img image.Image, full, isBraille bool, dimensions []int, width,
 			asciiWidth = int(float64(asciiHeight) * aspectRatio)
 			asciiWidth = int(2 * float64(asciiWidth))
 
+			if asciiWidth == 0 {
+				asciiWidth = 1
+			}
+
 			if asciiWidth > terminalWidth-1 {
 				return nil, fmt.Errorf("width calculated with aspect ratio exceeds terminal width")
 			}
@@ -124,7 +124,58 @@ func resizeImage(img image.Image, full, isBraille bool, dimensions []int, width,
 	}
 
 	if isBraille {
-		asciiWidth, asciiHeight = resizeForBraille(asciiWidth, asciiHeight)
+		asciiWidth *= 2
+		asciiHeight *= 4
+	}
+	smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
+
+	return smallImg, nil
+}
+
+func resizeImageNoTerm(img image.Image, isBraille bool, dimensions []int, width, height int) (image.Image, error) {
+
+	var asciiWidth, asciiHeight int
+	var smallImg image.Image
+
+	imgWidth := float64(img.Bounds().Dx())
+	imgHeight := float64(img.Bounds().Dy())
+	aspectRatio := imgWidth / imgHeight
+
+	if (width != 0 || height != 0) && len(dimensions) == 0 {
+		if width != 0 && height == 0 {
+
+			asciiWidth = width
+			asciiHeight = int(float64(asciiWidth) / aspectRatio)
+			asciiHeight = int(0.5 * float64(asciiHeight))
+
+			if asciiHeight == 0 {
+				asciiHeight = 1
+			}
+
+		} else if height != 0 && width == 0 {
+
+			asciiHeight = height
+			asciiWidth = int(float64(asciiHeight) * aspectRatio)
+			asciiWidth = int(2 * float64(asciiWidth))
+
+			if asciiWidth == 0 {
+				asciiWidth = 1
+			}
+
+		} else {
+			return nil, fmt.Errorf("error: both width and height can't be set. Use dimensions instead")
+		}
+
+	} else if len(dimensions) != 0 {
+		asciiWidth = dimensions[0]
+		asciiHeight = dimensions[1]
+	} else {
+		return nil, fmt.Errorf("error: at least one of width, height or dimensions should be passed for NoTermSizeComparison")
+	}
+
+	if isBraille {
+		asciiWidth *= 2
+		asciiHeight *= 4
 	}
 	smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
 
