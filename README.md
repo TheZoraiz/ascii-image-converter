@@ -523,8 +523,6 @@ You can fork the project and implement any changes you want for a pull request. 
 
 [github.com/gookit/color](https://github.com/gookit/color)
 
-[github.com/asaskevich/govalidator](https://github.com/asaskevich/govalidator)
-
 [github.com/makeworld-the-better-one/dither](https://github.com/makeworld-the-better-one/dither)
 
 ## License
