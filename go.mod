@@ -3,7 +3,6 @@ module github.com/TheZoraiz/ascii-image-converter
 go 1.16
 
 require (
-	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/disintegration/imaging v1.6.2
 	github.com/fogleman/gg v1.3.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect

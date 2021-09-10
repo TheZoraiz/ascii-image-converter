@@ -120,7 +120,7 @@ func getFullSavePath(imageName, saveFilePath string) (string, error) {
 }
 
 func isURL(urlString string) bool {
-	if len(urlString) < 7 {
+	if len(urlString) < 8 {
 		return false
 	} else if urlString[:7] == "http://" || urlString[:8] == "https://" {
 		return true
