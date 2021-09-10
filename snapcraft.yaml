@@ -1,6 +1,6 @@
 name: ascii-image-converter
 base: core18 
-version: "1.9.1"
+version: "1.9.2"
 summary: Convert images and gifs into ascii art
 description: |
   ascii-image-converter is a command-line tool that converts images into ascii art and prints

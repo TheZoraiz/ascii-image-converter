@@ -32,7 +32,6 @@ import (
 	_ "golang.org/x/image/tiff"
 	_ "golang.org/x/image/webp"
 
-	"github.com/asaskevich/govalidator"
 	"github.com/golang/freetype/truetype"
 )
 
@@ -107,7 +106,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 		err         error
 	)
 
-	pathIsURl := govalidator.IsRequestURL(filePath)
+	pathIsURl := isURL(filePath)
 
 	// Different modes of reading data depending upon whether or not filePath is a url
 	if pathIsURl {

@@ -57,7 +57,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.9.1",
+		Version: "1.9.2",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -128,7 +128,7 @@ func init() {
 	rootCmd.Flags().SortFlags = false
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.ascii-image-converter.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&colored, "color", "C", false, "Display ascii art with original colors\n(Inverts with --negative flag)\n(Overrides --grayscale and --font-color flags)\n")
+	rootCmd.PersistentFlags().BoolVarP(&colored, "color", "C", false, "Display ascii art with original colors\nTerminal must support 24-bit colors\n(Inverts with --negative flag)\n(Overrides --grayscale and --font-color flags)\n")
 	rootCmd.PersistentFlags().BoolVar(&colorBg, "color-bg", false, "If some color flag is passed, use that color\non character background instead of foreground\n(Inverts with --negative flag)\n(Only applicable for terminal display)\n")
 	rootCmd.PersistentFlags().IntSliceVarP(&dimensions, "dimensions", "d", nil, "Set width and height for ascii art in CHARACTER length\ne.g. -d 60,30 (defaults to terminal height)\n(Overrides --width and --height flags)\n")
 	rootCmd.PersistentFlags().IntVarP(&width, "width", "W", 0, "Set width for ascii art in CHARACTER length\nHeight is kept to aspect ratio\ne.g. -W 60\n")
