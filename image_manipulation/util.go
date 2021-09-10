@@ -23,6 +23,7 @@ import (
 
 	"github.com/TheZoraiz/ascii-image-converter/aic_package/winsize"
 	"github.com/disintegration/imaging"
+	gookitColor "github.com/gookit/color"
 	"github.com/makeworld-the-better-one/dither/v2"
 )
 
@@ -199,4 +200,26 @@ func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
 	}
 
 	return imgSet
+}
+
+var termColorLevel string = gookitColor.TermColorLevel().String()
+
+// This functions calculates terminal color level between rgb colors, 256-colors, 16-colors
+// and returns the character with escape codes appropriately
+func getColoredCharForTerm(r, g, b uint8, char string, background bool) (string, error) {
+	var coloredChar string
+
+	if termColorLevel == "millions" {
+		colorRenderer := gookitColor.RGB(uint8(r), uint8(g), uint8(b), background)
+		coloredChar = colorRenderer.Sprintf("%v", char)
+
+	} else if termColorLevel == "hundreds" {
+		colorRenderer := gookitColor.RGB(uint8(r), uint8(g), uint8(b), background).C256()
+		coloredChar = colorRenderer.Sprintf("%v", char)
+
+	} else {
+		return "", fmt.Errorf("your terminal supports neither 24-bit nor 8-bit colors. Other coloring options aren't available")
+	}
+
+	return coloredChar, nil
 }

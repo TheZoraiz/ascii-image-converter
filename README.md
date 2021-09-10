@@ -162,9 +162,9 @@ ascii-image-converter myImage.jpeg
 
 #### --color OR -C
 
-> **Note:** Your terminal must support 24-bit colors for appropriate results
+> **Note:** Your terminal must support 24-bit or 8-bit colors for appropriate results. If 24-bit colors aren't supported, 8-bit color escape codes will be used
 
-Display ascii art with the colors from original image. Works with the --negative flag as well.
+Display ascii art with the colors from original image.
 
 ```
 ascii-image-converter [image paths/urls] -C

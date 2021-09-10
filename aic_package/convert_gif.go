@@ -91,7 +91,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 			// If a frame is found that is smaller than the first frame, then this gif contains smaller subimages that are
 			// positioned inside the original gif. This behavior isn't supported by this app
 			if firstGifFrameWidth != frameImage.Bounds().Dx() || firstGifFrameHeight != frameImage.Bounds().Dy() {
-				fmt.Println("Error: GIF contains subimages smaller than default width and height\nProcess aborted because ascii-image-converter doesn't support subimage placement and transparency in GIFs\n")
+				fmt.Printf("Error: GIF contains subimages smaller than default width and height\nProcess aborted because ascii-image-converter doesn't support subimage placement and transparency in GIFs\n\n")
 				os.Exit(0)
 			}
 
@@ -99,16 +99,21 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 
 			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille, dither, noTermSizeComparison)
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Printf("Error: %v\n", err)
 				os.Exit(0)
 			}
 
 			var asciiCharSet [][]imgManip.AsciiChar
 			if braille {
-				asciiCharSet = imgManip.ConvertToBrailleChars(imgSet, negative, colored, colorBg, fontColor, threshold)
+				asciiCharSet, err = imgManip.ConvertToBrailleChars(imgSet, negative, colored, grayscale, colorBg, fontColor, threshold)
 			} else {
-				asciiCharSet = imgManip.ConvertToAsciiChars(imgSet, negative, colored, complex, colorBg, customMap, fontColor)
+				asciiCharSet, err = imgManip.ConvertToAsciiChars(imgSet, negative, colored, grayscale, complex, colorBg, customMap, fontColor)
 			}
+			if err != nil {
+				fmt.Printf("Error: %v\n", err)
+				os.Exit(0)
+			}
+
 			gifFramesSlice[i].asciiCharSet = asciiCharSet
 			gifFramesSlice[i].delay = originalGif.Delay[i]
 
@@ -187,7 +192,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 					colored || grayscale,
 				)
 				if err != nil {
-					fmt.Println("Error:", err)
+					fmt.Printf("Error: %v\n", err)
 					os.Exit(0)
 				}
 

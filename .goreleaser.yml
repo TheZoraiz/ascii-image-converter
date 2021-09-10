@@ -29,7 +29,6 @@ builds:
       # - mipsle
       # - mips64
       # - mips64le
-
     
 archives:
   -
