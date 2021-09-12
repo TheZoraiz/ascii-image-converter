@@ -204,7 +204,7 @@ func reverse(imgSet [][]AsciiPixel, flipX, flipY bool) [][]AsciiPixel {
 
 var termColorLevel string = gookitColor.TermColorLevel().String()
 
-// This functions calculates terminal color level between rgb colors, 256-colors, 16-colors
+// This functions calculates terminal color level between rgb colors and 256-colors
 // and returns the character with escape codes appropriately
 func getColoredCharForTerm(r, g, b uint8, char string, background bool) (string, error) {
 	var coloredChar string
