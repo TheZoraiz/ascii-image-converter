@@ -59,7 +59,7 @@ sudo apt install -y ascii-image-converter
 To remove the package source (which means you won't be getting any further updates), execute this command:
 
 ```
-sudo rm -rfv /etc/apt/sources.list.d/ascii-image-converter.list
+sudo rm -v /etc/apt/sources.list.d/ascii-image-converter.list
 ```
 
 <hr>
