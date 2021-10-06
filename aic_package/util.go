@@ -28,7 +28,7 @@ import (
 	imgManip "github.com/TheZoraiz/ascii-image-converter/image_manipulation"
 )
 
-func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgName string) error {
+func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgName string, onlySave bool) error {
 	// To make sure uncolored ascii art is the one saved as .txt
 	saveAscii := flattenAscii(asciiSet, false, true)
 
@@ -46,7 +46,13 @@ func saveAsciiArt(asciiSet [][]imgManip.AsciiChar, imagePath, savePath, urlImgNa
 
 	// If path exists
 	if _, err := os.Stat(savePath); !os.IsNotExist(err) {
-		return ioutil.WriteFile(savePath+saveFileName, []byte(strings.Join(saveAscii, "\n")), 0666)
+		err := ioutil.WriteFile(savePath+saveFileName, []byte(strings.Join(saveAscii, "\n")), 0666)
+		if err != nil {
+			return err
+		} else if onlySave {
+			fmt.Println("Saved " + savePath + saveFileName)
+		}
+		return nil
 	} else {
 		return fmt.Errorf("save path %v does not exist", savePath)
 	}

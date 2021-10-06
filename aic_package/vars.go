@@ -99,36 +99,32 @@ type Flags struct {
 	// is meant for braille art. Therefore, it will be ignored if Flags.Braille is false
 	Dither bool
 
-	// Set this to true to disable comparing ascii art size to terminal. However, at least
-	// one of Flags.Width, Flags.Height or Flags.Dimensions should be passed to keep it from
-	// throwing an error.
-	//
-	// Note: This option is added for using the library in an environment without terminals (such as web servers).
-	// Furthermore, coloring options will not work outside of a terminal environment.
-	NoTermSizeComparison bool
+	// If Flags.SaveImagePath, Flags.SaveTxtPath or Flags.SaveGifPath are set, then don't
+	// print on terminal
+	OnlySave bool
 }
 
 var (
-	dimensions           []int
-	width                int
-	height               int
-	complex              bool
-	saveTxtPath          string
-	saveImagePath        string
-	saveGifPath          string
-	grayscale            bool
-	negative             bool
-	colored              bool
-	colorBg              bool
-	customMap            string
-	flipX                bool
-	flipY                bool
-	full                 bool
-	fontPath             string
-	fontColor            [3]int
-	saveBgColor          [3]int
-	braille              bool
-	threshold            int
-	dither               bool
-	noTermSizeComparison bool
+	dimensions    []int
+	width         int
+	height        int
+	complex       bool
+	saveTxtPath   string
+	saveImagePath string
+	saveGifPath   string
+	grayscale     bool
+	negative      bool
+	colored       bool
+	colorBg       bool
+	customMap     string
+	flipX         bool
+	flipY         bool
+	full          bool
+	fontPath      string
+	fontColor     [3]int
+	saveBgColor   [3]int
+	braille       bool
+	threshold     int
+	dither        bool
+	onlySave      bool
 )

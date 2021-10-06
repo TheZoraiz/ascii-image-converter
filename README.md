@@ -415,6 +415,14 @@ This flag takes an RGB value that sets the font color in saved png and gif files
 ascii-image-converter [image paths/urls] -s . --font-color 0,0,0 # For black font color
 ```
 
+#### --only-save
+
+Don't print ascii art on the terminal if some saving flag is passed.
+
+```
+ascii-image-converter [image paths/urls] -s . --only-save
+```
+
 #### --formats
 
 Display supported input formats.
@@ -462,9 +470,8 @@ func main() {
 	flags.FontFilePath = "./RobotoMono-Regular.ttf" // If file is in current directory
 	flags.SaveBackgroundColor = [3]int{50, 50, 50}
 	
-	// This MUST be set to true for environments where a terminal isn't available (such as web servers)
-	// However, for this, one of flags.Width, flags.Height or flags.Dimensions must be set.
-	flags.NoTermSizeComparison = true
+	// Note: For environments where a terminal isn't available (such as web servers), you MUST
+	// specify atleast one of flags.Width, flags.Height or flags.Dimensions
 	
 	// Conversion for an image
 	asciiArt, err := aic_package.Convert(filePath, flags)

@@ -19,8 +19,6 @@ package cmd
 import (
 	"fmt"
 	"path"
-
-	"github.com/TheZoraiz/ascii-image-converter/aic_package/winsize"
 )
 
 // Check input and flag values for detecting errors or invalid inputs
@@ -40,12 +38,12 @@ func checkInputAndFlags(args []string) bool {
 		}
 	}
 
-	if gifPresent && nonGifPresent {
+	if gifPresent && nonGifPresent && !onlySave {
 		fmt.Printf("Error: There are other inputs along with GIFs\nDue to the potential looping nature of GIFs, non-GIFs must not be supplied alongside\n\n")
 		return true
 	}
 
-	if gifCount > 1 {
+	if gifCount > 1 && !onlySave {
 		fmt.Printf("Error: There are multiple GIFs supplied\nDue to the potential looping nature of GIFs, only one GIF per command is supported\n\n")
 		return true
 	}
@@ -83,18 +81,6 @@ func checkInputAndFlags(args []string) bool {
 			fmt.Printf("Error: invalid values for dimensions\n\n")
 			return true
 		}
-
-		defaultTermWidth, _, err := winsize.GetTerminalSize()
-		if err != nil {
-			fmt.Printf("Error: %v\n\n", err)
-			return true
-		}
-
-		defaultTermWidth -= 1
-		if dimensions[0] > defaultTermWidth {
-			fmt.Printf("Error: set width must be lower than terminal width\n\n")
-			return true
-		}
 	}
 
 	if width != 0 || height != 0 {
@@ -102,20 +88,8 @@ func checkInputAndFlags(args []string) bool {
 		if width != 0 && height != 0 {
 			fmt.Printf("Error: both --width and --height can't be set. Use --dimensions instead\n\n")
 			return true
+
 		} else {
-
-			defaultTermWidth, _, err := winsize.GetTerminalSize()
-			if err != nil {
-				fmt.Printf("Error: %v\n\n", err)
-				return true
-			}
-
-			// Check if set width exceeds terminal
-			defaultTermWidth -= 1
-			if width > defaultTermWidth {
-				fmt.Printf("Error: set width must be lower than terminal width\n\n")
-				return true
-			}
 
 			if width < 0 {
 				fmt.Printf("Error: invalid value for width\n\n")
@@ -182,6 +156,11 @@ func checkInputAndFlags(args []string) bool {
 
 	if dither && !braille {
 		fmt.Printf("Error: image dithering is only reserved for --braille flag\n\n")
+		return true
+	}
+
+	if (saveTxtPath == "" && saveImagePath == "" && saveGifPath == "") && onlySave {
+		fmt.Printf("Error: you need to supply one of --save-img, --save-txt or --save-gif for using --only-save\n\n")
 		return true
 	}
 

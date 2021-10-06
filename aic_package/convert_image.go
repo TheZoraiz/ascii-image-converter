@@ -43,7 +43,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
 	}
 
-	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille, dither, noTermSizeComparison)
+	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille, dither)
 	if err != nil {
 		return "", err
 	}
@@ -67,6 +67,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 			saveImagePath,
 			imagePath,
 			urlImgName,
+			onlySave,
 		); err != nil {
 
 			return "", fmt.Errorf("can't save file: %v", err)
@@ -80,6 +81,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 			imagePath,
 			saveTxtPath,
 			urlImgName,
+			onlySave,
 		); err != nil {
 
 			return "", fmt.Errorf("can't save file: %v", err)
@@ -89,5 +91,8 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byt
 	ascii := flattenAscii(asciiSet, colored || grayscale, false)
 	result := strings.Join(ascii, "\n")
 
+	if onlySave {
+		return "", nil
+	}
 	return result, nil
 }

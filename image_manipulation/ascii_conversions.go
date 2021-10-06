@@ -124,13 +124,14 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, grayscale, co
 
 			var char AsciiChar
 
-			char.Simple = chosenTable[tempInt]
+			asciiChar := chosenTable[tempInt]
+			char.Simple = asciiChar
 
 			var err error
 			if colorBg {
-				char.OriginalColor, err = getColoredCharForTerm(uint8(r), uint8(g), uint8(b), chosenTable[tempInt], true)
+				char.OriginalColor, err = getColoredCharForTerm(uint8(r), uint8(g), uint8(b), asciiChar, true)
 			} else {
-				char.OriginalColor, err = getColoredCharForTerm(uint8(r), uint8(g), uint8(b), chosenTable[tempInt], false)
+				char.OriginalColor, err = getColoredCharForTerm(uint8(r), uint8(g), uint8(b), asciiChar, false)
 			}
 			if (colored || grayscale) && err != nil {
 				return nil, err
@@ -143,9 +144,9 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, grayscale, co
 				fcB := fontColor[2]
 
 				if colorBg {
-					char.SetColor, err = getColoredCharForTerm(uint8(fcR), uint8(fcG), uint8(fcB), chosenTable[tempInt], true)
+					char.SetColor, err = getColoredCharForTerm(uint8(fcR), uint8(fcG), uint8(fcB), asciiChar, true)
 				} else {
-					char.SetColor, err = getColoredCharForTerm(uint8(fcR), uint8(fcG), uint8(fcB), chosenTable[tempInt], false)
+					char.SetColor, err = getColoredCharForTerm(uint8(fcR), uint8(fcG), uint8(fcB), asciiChar, false)
 				}
 				if err != nil {
 					return nil, err

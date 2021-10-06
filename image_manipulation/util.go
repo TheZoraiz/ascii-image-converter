@@ -45,26 +45,22 @@ func resizeImage(img image.Image, full, isBraille bool, dimensions []int, width,
 	var asciiWidth, asciiHeight int
 	var smallImg image.Image
 
-	terminalWidth, terminalHeight, err := winsize.GetTerminalSize()
-	if err != nil {
-		return nil, err
-	}
-
 	imgWidth := float64(img.Bounds().Dx())
 	imgHeight := float64(img.Bounds().Dy())
 	aspectRatio := imgWidth / imgHeight
 
 	if full {
+		terminalWidth, _, err := winsize.GetTerminalSize()
+		if err != nil {
+			return nil, err
+		}
+
 		asciiWidth = terminalWidth - 1
 		asciiHeight = int(float64(asciiWidth) / aspectRatio)
 		asciiHeight = int(0.5 * float64(asciiHeight))
 
 	} else if (width != 0 || height != 0) && len(dimensions) == 0 {
 		// If either width or height is set and dimensions aren't given
-
-		if width > terminalWidth-1 {
-			return nil, fmt.Errorf("set width must be lower than terminal width")
-		}
 
 		if width != 0 && height == 0 {
 			// If width is set and height is not set, use width to calculate aspect ratio
@@ -88,16 +84,17 @@ func resizeImage(img image.Image, full, isBraille bool, dimensions []int, width,
 				asciiWidth = 1
 			}
 
-			if asciiWidth > terminalWidth-1 {
-				return nil, fmt.Errorf("width calculated with aspect ratio exceeds terminal width")
-			}
-
 		} else {
-			return nil, fmt.Errorf("both width and height can't be set. Use dimensions instead")
+			return nil, fmt.Errorf("error: both width and height can't be set. Use dimensions instead")
 		}
 
 	} else if len(dimensions) == 0 {
 		// This condition calculates aspect ratio according to terminal height
+
+		terminalWidth, terminalHeight, err := winsize.GetTerminalSize()
+		if err != nil {
+			return nil, err
+		}
 
 		asciiHeight = terminalHeight - 1
 		asciiWidth = int(float64(asciiHeight) * aspectRatio)
@@ -111,69 +108,13 @@ func resizeImage(img image.Image, full, isBraille bool, dimensions []int, width,
 		}
 
 	} else {
+		// Else, set passed dimensions
+
 		asciiWidth = dimensions[0]
 		asciiHeight = dimensions[1]
 	}
 
-	// Repeated despite being in cmd/root.go to maintain support for library
-	//
-	// If there are passed dimensions, check whether the width exceeds terminal width
-	if len(dimensions) > 0 && !full {
-		if dimensions[0] > terminalWidth-1 {
-			return nil, fmt.Errorf("set width must be lower than terminal width")
-		}
-	}
-
-	if isBraille {
-		asciiWidth *= 2
-		asciiHeight *= 4
-	}
-	smallImg = imaging.Resize(img, asciiWidth, asciiHeight, imaging.Lanczos)
-
-	return smallImg, nil
-}
-
-func resizeImageNoTerm(img image.Image, isBraille bool, dimensions []int, width, height int) (image.Image, error) {
-
-	var asciiWidth, asciiHeight int
-	var smallImg image.Image
-
-	imgWidth := float64(img.Bounds().Dx())
-	imgHeight := float64(img.Bounds().Dy())
-	aspectRatio := imgWidth / imgHeight
-
-	if (width != 0 || height != 0) && len(dimensions) == 0 {
-		if width != 0 && height == 0 {
-
-			asciiWidth = width
-			asciiHeight = int(float64(asciiWidth) / aspectRatio)
-			asciiHeight = int(0.5 * float64(asciiHeight))
-
-			if asciiHeight == 0 {
-				asciiHeight = 1
-			}
-
-		} else if height != 0 && width == 0 {
-
-			asciiHeight = height
-			asciiWidth = int(float64(asciiHeight) * aspectRatio)
-			asciiWidth = int(2 * float64(asciiWidth))
-
-			if asciiWidth == 0 {
-				asciiWidth = 1
-			}
-
-		} else {
-			return nil, fmt.Errorf("error: both width and height can't be set. Use dimensions instead")
-		}
-
-	} else if len(dimensions) != 0 {
-		asciiWidth = dimensions[0]
-		asciiHeight = dimensions[1]
-	} else {
-		return nil, fmt.Errorf("error: at least one of width, height or dimensions should be passed for NoTermSizeComparison")
-	}
-
+	// Because one braille character has 8 dots (4 rows and 2 columns)
 	if isBraille {
 		asciiWidth *= 2
 		asciiHeight *= 4

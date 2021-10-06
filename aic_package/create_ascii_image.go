@@ -17,6 +17,7 @@ limitations under the License.
 package aic_package
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 
@@ -48,7 +49,7 @@ images will considerably decrease ascii art quality because of smaller font size
 
 Size of resulting image may also be considerably larger than original image.
 */
-func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImagePath, imagePath, urlImgName string) error {
+func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImagePath, imagePath, urlImgName string, onlySave bool) error {
 
 	constant := 14.0
 
@@ -136,6 +137,10 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 	fullPathName, err := getFullSavePath(imageName, saveImagePath)
 	if err != nil {
 		return err
+	}
+
+	if onlySave {
+		fmt.Println("Saved " + fullPathName)
 	}
 
 	return dc.SavePNG(fullPathName)

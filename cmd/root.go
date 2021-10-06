@@ -52,12 +52,13 @@ var (
 	braille       bool
 	threshold     int
 	dither        bool
+	onlySave      bool
 
 	// Root commands
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.10.0",
+		Version: "1.11.0",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -68,28 +69,28 @@ var (
 			}
 
 			flags := aic_package.Flags{
-				Complex:              complex,
-				Dimensions:           dimensions,
-				Width:                width,
-				Height:               height,
-				SaveTxtPath:          saveTxtPath,
-				SaveImagePath:        saveImagePath,
-				SaveGifPath:          saveGifPath,
-				Negative:             negative,
-				Colored:              colored,
-				CharBackgroundColor:  colorBg,
-				Grayscale:            grayscale,
-				CustomMap:            customMap,
-				FlipX:                flipX,
-				FlipY:                flipY,
-				Full:                 full,
-				FontFilePath:         fontFile,
-				FontColor:            [3]int{fontColor[0], fontColor[1], fontColor[2]},
-				SaveBackgroundColor:  [3]int{saveBgColor[0], saveBgColor[1], saveBgColor[2]},
-				Braille:              braille,
-				Threshold:            threshold,
-				Dither:               dither,
-				NoTermSizeComparison: false,
+				Complex:             complex,
+				Dimensions:          dimensions,
+				Width:               width,
+				Height:              height,
+				SaveTxtPath:         saveTxtPath,
+				SaveImagePath:       saveImagePath,
+				SaveGifPath:         saveGifPath,
+				Negative:            negative,
+				Colored:             colored,
+				CharBackgroundColor: colorBg,
+				Grayscale:           grayscale,
+				CustomMap:           customMap,
+				FlipX:               flipX,
+				FlipY:               flipY,
+				Full:                full,
+				FontFilePath:        fontFile,
+				FontColor:           [3]int{fontColor[0], fontColor[1], fontColor[2]},
+				SaveBackgroundColor: [3]int{saveBgColor[0], saveBgColor[1], saveBgColor[2]},
+				Braille:             braille,
+				Threshold:           threshold,
+				Dither:              dither,
+				OnlySave:            onlySave,
 			}
 
 			for _, imagePath := range args {
@@ -106,7 +107,9 @@ var (
 						return
 					}
 				}
-				fmt.Println()
+				if !onlySave {
+					fmt.Println()
+				}
 			}
 		},
 	}
@@ -149,6 +152,7 @@ func init() {
 	rootCmd.PersistentFlags().IntSliceVar(&saveBgColor, "save-bg", nil, "Set background color for --save-img\nand --save-gif flags\nPass an RGB value\ne.g. --save-bg 255,255,255\n(Defaults to 0,0,0)\n")
 	rootCmd.PersistentFlags().StringVar(&fontFile, "font", "", "Set font for --save-img and --save-gif flags\nPass file path to font .ttf file\ne.g. --font ./RobotoMono-Regular.ttf\n(Defaults to Hack-Regular for ascii and\n DejaVuSans-Oblique for braille)\n")
 	rootCmd.PersistentFlags().IntSliceVar(&fontColor, "font-color", nil, "Set font color for terminal as well as\n--save-img and --save-gif flags\nPass an RGB value\ne.g. --font-color 0,0,0\n(Defaults to 255,255,255)\n")
+	rootCmd.PersistentFlags().BoolVar(&onlySave, "only-save", false, "Don't print ascii art on terminal\nif some saving flag is passed\n")
 	rootCmd.PersistentFlags().BoolVar(&formatsTrue, "formats", false, "Display supported input formats\n")
 
 	rootCmd.PersistentFlags().BoolP("help", "h", false, "Help for "+rootCmd.Name()+"\n")

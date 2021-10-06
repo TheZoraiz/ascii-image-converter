@@ -91,13 +91,17 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 			// If a frame is found that is smaller than the first frame, then this gif contains smaller subimages that are
 			// positioned inside the original gif. This behavior isn't supported by this app
 			if firstGifFrameWidth != frameImage.Bounds().Dx() || firstGifFrameHeight != frameImage.Bounds().Dy() {
-				fmt.Printf("Error: GIF contains subimages smaller than default width and height\nProcess aborted because ascii-image-converter doesn't support subimage placement and transparency in GIFs\n\n")
+				if urlImgName == "" {
+					fmt.Printf("Error: " + gifPath + " contains subimages smaller than default width and height\n\nProcess aborted because ascii-image-converter doesn't support subimage placement and transparency in GIFs\n\n")
+				} else {
+					fmt.Printf("Error: " + urlImgName + " contains subimages smaller than default width and height\n\nProcess aborted because ascii-image-converter doesn't support subimage placement and transparency in GIFs\n\n")
+				}
 				os.Exit(0)
 			}
 
 			var imgSet [][]imgManip.AsciiPixel
 
-			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille, dither, noTermSizeComparison)
+			imgSet, err = imgManip.ConvertToAsciiPixels(frameImage, dimensions, width, height, flipX, flipY, full, braille, dither)
 			if err != nil {
 				fmt.Printf("Error: %v\n", err)
 				os.Exit(0)
@@ -236,25 +240,29 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, l
 		gif.EncodeAll(gifFile, outGif)
 
 		fmt.Printf("                     \r")
+
+		fmt.Println("Saved " + fullPathName)
 	}
 
 	// Display the gif
-	loopCount := 0
-	for {
-		for i, asciiFrame := range asciiArtSet {
-			clearScreen()
-			fmt.Println(asciiFrame)
-			time.Sleep(time.Duration((time.Second * time.Duration(originalGif.Delay[i])) / 100))
-		}
+	if !onlySave {
+		loopCount := 0
+		for {
+			for i, asciiFrame := range asciiArtSet {
+				clearScreen()
+				fmt.Println(asciiFrame)
+				time.Sleep(time.Duration((time.Second * time.Duration(originalGif.Delay[i])) / 100))
+			}
 
-		// If gif is infinite loop
-		if originalGif.LoopCount == 0 {
-			continue
-		}
+			// If gif is infinite loop
+			if originalGif.LoopCount == 0 {
+				continue
+			}
 
-		loopCount++
-		if loopCount == originalGif.LoopCount {
-			break
+			loopCount++
+			if loopCount == originalGif.LoopCount {
+				break
+			}
 		}
 	}
 

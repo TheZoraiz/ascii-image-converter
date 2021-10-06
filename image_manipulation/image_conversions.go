@@ -34,16 +34,10 @@ getting numeric data for ASCII character comparison.
 
 The returned 2D AsciiPixel slice contains each corresponding pixel's values
 */
-func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full, isBraille, dither, noTermSizeComparison bool) ([][]AsciiPixel, error) {
+func ConvertToAsciiPixels(img image.Image, dimensions []int, width, height int, flipX, flipY, full, isBraille, dither bool) ([][]AsciiPixel, error) {
 
-	var smallImg image.Image
-	var err error
+	smallImg, err := resizeImage(img, full, isBraille, dimensions, width, height)
 
-	if noTermSizeComparison {
-		smallImg, err = resizeImageNoTerm(img, isBraille, dimensions, width, height)
-	} else {
-		smallImg, err = resizeImage(img, full, isBraille, dimensions, width, height)
-	}
 	if err != nil {
 		return nil, err
 	}
