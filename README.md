@@ -92,6 +92,16 @@ AUR helper:
 ```
 <aur-helper> -S ascii-image-converter-git
 ```
+<hr>
+
+### Scoop 
+
+```
+scoop bucket add dank-scoop https://github.com/brian6932/dank-scoop/
+```
+```
+scoop install ascii-image-converter
+```
 
 <hr>
 
