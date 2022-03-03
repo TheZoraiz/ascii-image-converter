@@ -28,6 +28,7 @@ Input formats currently supported:
 	*  [Debian / Ubuntu-based](#debian-or-ubuntu-based-distros)
 	*  [Homebrew](#homebrew)
 	*  [AUR](#aur)
+	*  [Scoop](#scoop)
 	*  [Snap](#snap)
 	*  [Go](#go)
 	*  [Linux (binaries)](#linux)
@@ -94,7 +95,9 @@ AUR helper:
 ```
 <hr>
 
-### Scoop 
+### Scoop
+
+The scoop bucket is maintained by [brian6932](https://github.com/brian6932)
 
 ```
 scoop bucket add dank-scoop https://github.com/brian6932/dank-scoop/
