@@ -74,10 +74,11 @@ func createImageToSave(asciiArt [][]imgManip.AsciiChar, colored bool, saveImageP
 	dc := gg.NewContext(imgWidth, imgHeight)
 
 	// Set image background
-	dc.SetRGB(
+	dc.SetRGBA(
 		float64(saveBgColor[0])/255,
 		float64(saveBgColor[1])/255,
 		float64(saveBgColor[2])/255,
+		float64(saveBgColor[3])/100,
 	)
 	dc.Clear()
 

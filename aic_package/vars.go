@@ -83,7 +83,7 @@ type Flags struct {
 
 	// Background RGB color in saved png or gif files.
 	// This will be ignored if Flags.SaveImagePath or Flags.SaveGifPath are not set
-	SaveBackgroundColor [3]int
+	SaveBackgroundColor [4]int
 
 	// Use braille characters instead of ascii. Terminal must support UTF-8 encoding.
 	// Otherwise, problems may be encountered with colored or even uncolored braille art.
@@ -122,7 +122,7 @@ var (
 	full          bool
 	fontPath      string
 	fontColor     [3]int
-	saveBgColor   [3]int
+	saveBgColor   [4]int
 	braille       bool
 	threshold     int
 	dither        bool

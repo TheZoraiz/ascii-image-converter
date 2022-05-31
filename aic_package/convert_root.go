@@ -56,7 +56,7 @@ func DefaultFlags() Flags {
 		Full:                false,
 		FontFilePath:        "",
 		FontColor:           [3]int{255, 255, 255},
-		SaveBackgroundColor: [3]int{0, 0, 0},
+		SaveBackgroundColor: [4]int{0, 0, 0, 100},
 		Braille:             false,
 		Threshold:           128,
 		Dither:              false,
