@@ -404,7 +404,7 @@ Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.g
 
 > **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set
 
-This flag takes an RGBA value that sets the background color in saved png and gif files.
+This flag takes an RGBA value that sets the background color in saved png and gif files. The fourth value (alpha value) is the measure of background opacity ranging between 0 and 100.
 
 ```
 ascii-image-converter [image paths/urls] -s . --save-bg 255,255,255,100 # For white background
