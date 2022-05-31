@@ -404,10 +404,10 @@ Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.g
 
 > **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set
 
-This flag takes an RGB value that sets the background color in saved png and gif files.
+This flag takes an RGBA value that sets the background color in saved png and gif files.
 
 ```
-ascii-image-converter [image paths/urls] -s . --save-bg 255,255,255 # For white background
+ascii-image-converter [image paths/urls] -s . --save-bg 255,255,255,100 # For white background
 ```
 
 #### --font
@@ -481,7 +481,7 @@ func main() {
 	flags.SaveImagePath = "."
 	flags.CustomMap = " .-=+#@"
 	flags.FontFilePath = "./RobotoMono-Regular.ttf" // If file is in current directory
-	flags.SaveBackgroundColor = [3]int{50, 50, 50}
+	flags.SaveBackgroundColor = [4]int{50, 50, 50, 100}
 	
 	// Note: For environments where a terminal isn't available (such as web servers), you MUST
 	// specify atleast one of flags.Width, flags.Height or flags.Dimensions

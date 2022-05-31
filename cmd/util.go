@@ -106,21 +106,23 @@ func checkInputAndFlags(args []string) bool {
 	}
 
 	if saveBgColor == nil {
-		saveBgColor = []int{0, 0, 0}
+		saveBgColor = []int{0, 0, 0, 100}
 	} else {
 		bgValues := len(saveBgColor)
-		if bgValues != 3 {
-			fmt.Printf("Error: --save-bg requires 3 values for RGB, got %v\n\n", bgValues)
+		if bgValues != 4 {
+			fmt.Printf("Error: --save-bg requires 4 values for RGBA, got %v\n\n", bgValues)
 			return true
 		}
 
-		if saveBgColor[0] < 0 || saveBgColor[1] < 0 || saveBgColor[2] < 0 {
+		if saveBgColor[0] < 0 || saveBgColor[1] < 0 || saveBgColor[2] < 0 || saveBgColor[3] < 0 {
 			fmt.Printf("Error: RBG values must be between 0 and 255\n\n")
+			fmt.Printf("Error: Opacity value must be between 0 and 100\n\n")
 			return true
 		}
 
-		if saveBgColor[0] > 255 || saveBgColor[1] > 255 || saveBgColor[2] > 255 {
+		if saveBgColor[0] > 255 || saveBgColor[1] > 255 || saveBgColor[2] > 255 || saveBgColor[3] > 100{
 			fmt.Printf("Error: RBG values must be between 0 and 255\n\n")
+			fmt.Printf("Error: Opacity value must be between 0 and 100\n\n")
 			return true
 		}
 	}
