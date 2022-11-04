@@ -2,7 +2,7 @@
 
 [![release-version](https://img.shields.io/github/v/release/TheZoraiz/ascii-image-converter?label=Latest%20Version)](https://github.com/TheZoraiz/ascii-image-converter/releases/latest)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/TheZoraiz/ascii-image-converter/blob/master/LICENSE.txt)
-[![language](https://img.shields.io/badge/Language-Go-blue)](https://golang.org/) 
+[![language](https://img.shields.io/badge/Language-Go-blue)](https://golang.org/)
 ![release-downloads](https://img.shields.io/github/downloads/TheZoraiz/ascii-image-converter/total?color=1d872d&label=Release%20Downloads)
 [![ascii-image-converter-snap](https://snapcraft.io/ascii-image-converter/badge.svg)](https://snapcraft.io/ascii-image-converter)
 
@@ -42,7 +42,7 @@ Input formats currently supported:
 
 ## Installation
 
-###  Debian or Ubuntu-based Distros
+### Debian or Ubuntu-based Distros
 
 Execute the following commands in order:
 
@@ -97,18 +97,15 @@ AUR helper:
 
 ### Scoop
 
-The scoop bucket is maintained by [brian6932](https://github.com/brian6932)
+The scoop manifest is maintained by [brian6932](https://github.com/brian6932)
 
-```
-scoop bucket add dank-scoop https://github.com/brian6932/dank-scoop/
-```
 ```
 scoop install ascii-image-converter
 ```
 
 <hr>
 
-### Snap 
+### Snap
 
 
 > **Note:** The snap will not have access to hidden files and files outside the $HOME directory. This includes write access for saving ascii art as well.
@@ -288,7 +285,7 @@ ascii-image-converter [image paths/urls] -H 60
 Pass a string of your own ascii characters to map against. Passed characters must start from darkest character and end with lightest. There is no limit to number of characters.
 
 Empty spaces can be passed if string is passed inside quotation marks. You can use both single or double quote for quotation marks. For repeating quotation mark inside string, append it with \ (such as  \\").
-  
+
 ```
 ascii-image-converter [image paths/urls] -m "<string-of-characters>"
 # Or
@@ -477,15 +474,15 @@ func main() {
 	// There are more flags, but these are the ones shown for demonstration
 	flags.Dimensions = []int{50, 25}
 	flags.Colored = true
-	flags.SaveTxtPath = "." 
+	flags.SaveTxtPath = "."
 	flags.SaveImagePath = "."
 	flags.CustomMap = " .-=+#@"
 	flags.FontFilePath = "./RobotoMono-Regular.ttf" // If file is in current directory
 	flags.SaveBackgroundColor = [4]int{50, 50, 50, 100}
-	
+
 	// Note: For environments where a terminal isn't available (such as web servers), you MUST
 	// specify atleast one of flags.Width, flags.Height or flags.Dimensions
-	
+
 	// Conversion for an image
 	asciiArt, err := aic_package.Convert(filePath, flags)
 	if err != nil {
