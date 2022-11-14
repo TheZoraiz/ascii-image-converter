@@ -18,6 +18,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 	"path"
 )
 
@@ -59,8 +60,8 @@ func checkInputAndFlags(args []string) bool {
 		return true
 	}
 
-	if len(args) < 1 {
-		fmt.Printf("Error: Need at least 1 input path/url\nUse the -h flag for more info\n\n")
+	if !isInputFromPipe() && len(args) < 1 {
+		fmt.Printf("Error: Need at least 1 input path/url or piped input\nUse the -h flag for more info\n\n")
 		return true
 	}
 
@@ -167,4 +168,9 @@ func checkInputAndFlags(args []string) bool {
 	}
 
 	return false
+}
+
+func isInputFromPipe() bool {
+	fileInfo, _ := os.Stdin.Stat()
+	return fileInfo.Mode()&os.ModeCharDevice == 0
 }

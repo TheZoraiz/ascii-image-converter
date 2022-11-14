@@ -56,9 +56,9 @@ var (
 
 	// Root commands
 	rootCmd = &cobra.Command{
-		Use:     "ascii-image-converter [image paths/urls]",
+		Use:     "ascii-image-converter [image paths/urls or piped stdin]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.12.0",
+		Version: "1.13.0",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -93,27 +93,39 @@ var (
 				OnlySave:            onlySave,
 			}
 
+			if isInputFromPipe() {
+				printAscii("", flags)
+				return
+			}
+
 			for _, imagePath := range args {
-
-				if asciiArt, err := aic_package.Convert(imagePath, flags); err == nil {
-					fmt.Printf("%s", asciiArt)
-				} else {
-					fmt.Printf("Error: %v\n", err)
-
-					// Because this error will then be thrown for every image path/url passed
-					// if save path is invalid
-					if err.Error()[:15] == "can't save file" {
-						fmt.Println()
-						return
-					}
-				}
-				if !onlySave {
-					fmt.Println()
+				if err := printAscii(imagePath, flags); err != nil {
+					return
 				}
 			}
 		},
 	}
 )
+
+func printAscii(imagePath string, flags aic_package.Flags) error {
+
+	if asciiArt, err := aic_package.Convert(imagePath, flags); err == nil {
+		fmt.Printf("%s", asciiArt)
+	} else {
+		fmt.Printf("Error: %v\n", err)
+
+		// Because this error will then be thrown for every image path/url passed
+		// if save path is invalid
+		if err.Error()[:15] == "can't save file" {
+			fmt.Println()
+			return err
+		}
+	}
+	if !onlySave {
+		fmt.Println()
+	}
+	return nil
+}
 
 // Cobra configuration from here on
 

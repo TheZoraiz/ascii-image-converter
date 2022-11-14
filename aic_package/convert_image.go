@@ -27,20 +27,26 @@ import (
 )
 
 // This function decodes the passed image and returns an ascii art string, optionaly saving it as a .txt and/or .png file
-func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes []byte, localImg *os.File) (string, error) {
+func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes, pipedInputBytes []byte, localImg *os.File) (string, error) {
 
 	var (
 		imData image.Image
 		err    error
 	)
 
-	if pathIsURl {
+	if isInputFromPipe() {
+		imData, _, err = image.Decode(bytes.NewReader(pipedInputBytes))
+	} else if pathIsURl {
 		imData, _, err = image.Decode(bytes.NewReader(urlImgBytes))
 	} else {
 		imData, _, err = image.Decode(localImg)
 	}
 	if err != nil {
-		return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
+		if isInputFromPipe() {
+			return "", fmt.Errorf("can't decode piped input: %v", err)
+		} else {
+			return "", fmt.Errorf("can't decode %v: %v", imagePath, err)
+		}
 	}
 
 	imgSet, err := imgManip.ConvertToAsciiPixels(imData, dimensions, width, height, flipX, flipY, full, braille, dither)

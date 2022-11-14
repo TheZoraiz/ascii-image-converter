@@ -67,6 +67,13 @@ func createSaveFileName(imagePath, urlImgName, label string) (string, error) {
 		return newName + label, nil
 	}
 
+	if isInputFromPipe() {
+		if inputIsGif {
+			return "piped-gif" + label, nil
+		}
+		return "piped-img" + label, nil
+	}
+
 	fileInfo, err := os.Stat(imagePath)
 	if err != nil {
 		return "", err
@@ -160,4 +167,9 @@ func clearScreen() {
 		fmt.Println("Error: your platform is unsupported, terminal can't be cleared")
 		os.Exit(0)
 	}
+}
+
+func isInputFromPipe() bool {
+	fileInfo, _ := os.Stdin.Stat()
+	return fileInfo.Mode()&os.ModeCharDevice == 0
 }

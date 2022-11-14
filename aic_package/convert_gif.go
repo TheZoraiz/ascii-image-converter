@@ -45,20 +45,26 @@ as an ascii art gif.
 
 Multi-threading has been implemented in multiple places due to long execution time
 */
-func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes []byte, localGif *os.File) error {
+func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes, pipedInputBytes []byte, localGif *os.File) error {
 
 	var (
 		originalGif *gif.GIF
 		err         error
 	)
 
-	if pathIsURl {
+	if isInputFromPipe() {
+		originalGif, err = gif.DecodeAll(bytes.NewReader(pipedInputBytes))
+	} else if pathIsURl {
 		originalGif, err = gif.DecodeAll(bytes.NewReader(urlImgBytes))
 	} else {
 		originalGif, err = gif.DecodeAll(localGif)
 	}
 	if err != nil {
-		return fmt.Errorf("can't decode %v: %v", gifPath, err)
+		if isInputFromPipe() {
+			return fmt.Errorf("can't decode piped input: %v", err)
+		} else {
+			return fmt.Errorf("can't decode %v: %v", gifPath, err)
+		}
 	}
 
 	var (

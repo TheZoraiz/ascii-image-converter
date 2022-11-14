@@ -127,4 +127,5 @@ var (
 	threshold     int
 	dither        bool
 	onlySave      bool
+	inputIsGif    bool
 )

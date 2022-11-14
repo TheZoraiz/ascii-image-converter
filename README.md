@@ -168,6 +168,12 @@ Example:
 ascii-image-converter myImage.jpeg
 ```
 
+> **Note:** Piped binary input is also supported
+> ```
+> cat myImage.png | ascii-image-converter
+> ```
+
+
 ### Flags
 
 #### --color OR -C

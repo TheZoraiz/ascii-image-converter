@@ -35,6 +35,14 @@ import (
 	"github.com/golang/freetype/truetype"
 )
 
+var pipedInputTypes = []string{
+	"image/png",
+	"image/jpeg",
+	"image/webp",
+	"image/tiff",
+	"image/bmp",
+}
+
 // Return default configuration for flags.
 // Can be sent directly to ConvertImage() for default ascii art
 func DefaultFlags() Flags {
@@ -98,42 +106,78 @@ func Convert(filePath string, flags Flags) (string, error) {
 	dither = flags.Dither
 	onlySave = flags.OnlySave
 
+	inputIsGif = path.Ext(filePath) == ".gif"
+
 	// Declared at the start since some variables are initially used in conditional blocks
 	var (
-		localFile   *os.File
-		urlImgBytes []byte
-		urlImgName  string = ""
-		err         error
+		localFile       *os.File
+		urlImgBytes     []byte
+		urlImgName      string = ""
+		pipedInputBytes []byte
+		err             error
 	)
 
 	pathIsURl := isURL(filePath)
 
 	// Different modes of reading data depending upon whether or not filePath is a url
-	if pathIsURl {
-		fmt.Printf("Fetching file from url...\r")
 
-		retrievedImage, err := http.Get(filePath)
-		if err != nil {
-			return "", fmt.Errorf("can't fetch content: %v", err)
+	if !isInputFromPipe() {
+		if pathIsURl {
+			fmt.Printf("Fetching file from url...\r")
+
+			retrievedImage, err := http.Get(filePath)
+			if err != nil {
+				return "", fmt.Errorf("can't fetch content: %v", err)
+			}
+
+			urlImgBytes, err = ioutil.ReadAll(retrievedImage.Body)
+			if err != nil {
+				return "", fmt.Errorf("failed to read fetched content: %v", err)
+			}
+			defer retrievedImage.Body.Close()
+
+			urlImgName = path.Base(filePath)
+			fmt.Printf("                          \r") // To erase "Fetching image from url..." text from terminal
+
+		} else {
+
+			localFile, err = os.Open(filePath)
+			if err != nil {
+				return "", fmt.Errorf("unable to open file: %v", err)
+			}
+			defer localFile.Close()
+
 		}
-
-		urlImgBytes, err = ioutil.ReadAll(retrievedImage.Body)
-		if err != nil {
-			return "", fmt.Errorf("failed to read fetched content: %v", err)
-		}
-		defer retrievedImage.Body.Close()
-
-		urlImgName = path.Base(filePath)
-		fmt.Printf("                          \r") // To erase "Fetching image from url..." text from terminal
 
 	} else {
+		// Check file/data type of piped input
 
-		localFile, err = os.Open(filePath)
+		pipedInputBytes, err = ioutil.ReadAll(os.Stdin)
 		if err != nil {
-			return "", fmt.Errorf("unable to open file: %v", err)
+			return "", fmt.Errorf("unable to read piped input: %v", err)
 		}
-		defer localFile.Close()
 
+		fileType := http.DetectContentType(pipedInputBytes)
+		invalidInput := true
+
+		if fileType == "image/gif" {
+			inputIsGif = true
+			invalidInput = false
+
+		} else {
+			for _, inputType := range pipedInputTypes {
+				if fileType == inputType {
+					invalidInput = false
+					break
+				}
+			}
+		}
+
+		// Not sure if I should uncomment this.
+		// The output may be piped to another program and a warning would contaminate that
+		if invalidInput {
+			// fmt.Println("Warning: file type of piped input could not be determined, treating it as an image")
+		}
 	}
 
 	// If path to font file is provided, use it
@@ -151,9 +195,9 @@ func Convert(filePath string, flags Flags) (string, error) {
 		tempFont, _ = truetype.Parse(embeddedDejaVuObliqueFont)
 	}
 
-	if path.Ext(filePath) == ".gif" {
-		return "", pathIsGif(filePath, urlImgName, pathIsURl, urlImgBytes, localFile)
+	if inputIsGif {
+		return "", pathIsGif(filePath, urlImgName, pathIsURl, urlImgBytes, pipedInputBytes, localFile)
 	} else {
-		return pathIsImage(filePath, urlImgName, pathIsURl, urlImgBytes, localFile)
+		return pathIsImage(filePath, urlImgName, pathIsURl, urlImgBytes, pipedInputBytes, localFile)
 	}
 }
