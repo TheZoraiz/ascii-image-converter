@@ -67,7 +67,7 @@ func createSaveFileName(imagePath, urlImgName, label string) (string, error) {
 		return newName + label, nil
 	}
 
-	if isInputFromPipe() {
+	if imagePath == "-" {
 		if inputIsGif {
 			return "piped-gif" + label, nil
 		}

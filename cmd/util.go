@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"path"
 )
 
@@ -28,6 +27,8 @@ func checkInputAndFlags(args []string) bool {
 	gifCount := 0
 	gifPresent := false
 	nonGifPresent := false
+	pipeCharPresent := false
+
 	for _, arg := range args {
 		extension := path.Ext(arg)
 
@@ -36,6 +37,10 @@ func checkInputAndFlags(args []string) bool {
 			gifCount++
 		} else {
 			nonGifPresent = true
+		}
+
+		if arg == "-" {
+			pipeCharPresent = true
 		}
 	}
 
@@ -60,8 +65,13 @@ func checkInputAndFlags(args []string) bool {
 		return true
 	}
 
-	if !isInputFromPipe() && len(args) < 1 {
+	if len(args) < 1 {
 		fmt.Printf("Error: Need at least 1 input path/url or piped input\nUse the -h flag for more info\n\n")
+		return true
+	}
+
+	if len(args) > 1 && pipeCharPresent {
+		fmt.Printf("Error: You cannot pass in piped input alongside other inputs\n\n")
 		return true
 	}
 
@@ -168,9 +178,4 @@ func checkInputAndFlags(args []string) bool {
 	}
 
 	return false
-}
-
-func isInputFromPipe() bool {
-	fileInfo, _ := os.Stdin.Stat()
-	return fileInfo.Mode()&os.ModeCharDevice == 0
 }

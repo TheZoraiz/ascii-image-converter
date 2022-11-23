@@ -34,7 +34,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes, pipe
 		err    error
 	)
 
-	if isInputFromPipe() {
+	if imagePath == "-" {
 		imData, _, err = image.Decode(bytes.NewReader(pipedInputBytes))
 	} else if pathIsURl {
 		imData, _, err = image.Decode(bytes.NewReader(urlImgBytes))
@@ -42,7 +42,7 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes, pipe
 		imData, _, err = image.Decode(localImg)
 	}
 	if err != nil {
-		if isInputFromPipe() {
+		if imagePath == "-" {
 			return "", fmt.Errorf("can't decode piped input: %v", err)
 		} else {
 			return "", fmt.Errorf("can't decode %v: %v", imagePath, err)

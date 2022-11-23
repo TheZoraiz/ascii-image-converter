@@ -52,7 +52,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes, pipedInp
 		err         error
 	)
 
-	if isInputFromPipe() {
+	if gifPath == "-" {
 		originalGif, err = gif.DecodeAll(bytes.NewReader(pipedInputBytes))
 	} else if pathIsURl {
 		originalGif, err = gif.DecodeAll(bytes.NewReader(urlImgBytes))
@@ -60,7 +60,7 @@ func pathIsGif(gifPath, urlImgName string, pathIsURl bool, urlImgBytes, pipedInp
 		originalGif, err = gif.DecodeAll(localGif)
 	}
 	if err != nil {
-		if isInputFromPipe() {
+		if gifPath == "-" {
 			return fmt.Errorf("can't decode piped input: %v", err)
 		} else {
 			return fmt.Errorf("can't decode %v: %v", gifPath, err)

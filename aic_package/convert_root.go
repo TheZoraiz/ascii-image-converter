@@ -121,7 +121,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 
 	// Different modes of reading data depending upon whether or not filePath is a url
 
-	if !isInputFromPipe() {
+	if filePath != "-" {
 		if pathIsURl {
 			fmt.Printf("Fetching file from url...\r")
 
@@ -151,6 +151,10 @@ func Convert(filePath string, flags Flags) (string, error) {
 
 	} else {
 		// Check file/data type of piped input
+
+		if !isInputFromPipe() {
+			return "", fmt.Errorf("there is no input being piped to stdin")
+		}
 
 		pipedInputBytes, err = ioutil.ReadAll(os.Stdin)
 		if err != nil {

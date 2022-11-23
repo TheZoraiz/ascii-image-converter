@@ -58,7 +58,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:     "ascii-image-converter [image paths/urls or piped stdin]",
 		Short:   "Converts images and gifs into ascii art",
-		Version: "1.13.0",
+		Version: "1.13.1",
 		Long:    "This tool converts images into ascii art and prints them on the terminal.\nFurther configuration can be managed with flags.",
 
 		// Not RunE since help text is getting larger and seeing it for every error impacts user experience
@@ -93,8 +93,8 @@ var (
 				OnlySave:            onlySave,
 			}
 
-			if isInputFromPipe() {
-				printAscii("", flags)
+			if args[0] == "-" {
+				printAscii(args[0], flags)
 				return
 			}
 

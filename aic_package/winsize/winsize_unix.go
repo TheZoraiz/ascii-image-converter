@@ -1,4 +1,5 @@
-// +build unix, !windows
+//go:build (unix && ignore) || !windows
+// +build unix,ignore !windows
 
 package winsize
 
