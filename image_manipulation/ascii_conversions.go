@@ -72,9 +72,11 @@ func ConvertToAsciiChars(imgSet [][]AsciiPixel, negative, colored, grayscale, co
 
 	} else {
 		chosenTable = map[int]string{}
+		index := 0
 
-		for index, char := range customMap {
+		for _, char := range customMap {
 			chosenTable[index] = string(char)
+			index++
 		}
 	}
 
