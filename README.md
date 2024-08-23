@@ -403,6 +403,16 @@ Saves the passed GIF as an ascii art GIF with the name `<image-name>-ascii-art.g
   <img src="https://raw.githubusercontent.com/TheZoraiz/ascii-image-converter/master/example_gifs/save.gif">
 </p>
 
+#### --save-html
+
+Similar to --save-img but it creates a HTML file with the name `<image-name>-ascii-art.html` in the directory path passed to the flag. Can save colored text, that can be copied from open html file.
+
+Example for current directory:
+
+```
+ascii-image-converter [image paths/urls] --save-html .
+```
+
 #### --save-bg
 
 > **Note:** This flag will be ignored if `--save-img` or `--save-gif` flags are not set

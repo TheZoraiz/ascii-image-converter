@@ -36,6 +36,7 @@ var (
 	height        int
 	saveTxtPath   string
 	saveImagePath string
+	saveHtmlPath  string
 	saveGifPath   string
 	negative      bool
 	formatsTrue   bool
@@ -76,6 +77,7 @@ var (
 				SaveTxtPath:         saveTxtPath,
 				SaveImagePath:       saveImagePath,
 				SaveGifPath:         saveGifPath,
+				SaveHtmlPath:        saveHtmlPath,
 				Negative:            negative,
 				Colored:             colored,
 				CharBackgroundColor: colorBg,
@@ -161,7 +163,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&saveImagePath, "save-img", "s", "", "Save ascii art as a .png file\nFormat: <image-name>-ascii-art.png\nImage will be saved in passed path\n(pass . for current directory)\n")
 	rootCmd.PersistentFlags().StringVar(&saveTxtPath, "save-txt", "", "Save ascii art as a .txt file\nFormat: <image-name>-ascii-art.txt\nFile will be saved in passed path\n(pass . for current directory)\n")
 	rootCmd.PersistentFlags().StringVar(&saveGifPath, "save-gif", "", "If input is a gif, save it as a .gif file\nFormat: <gif-name>-ascii-art.gif\nGif will be saved in passed path\n(pass . for current directory)\n")
-	rootCmd.PersistentFlags().IntSliceVar(&saveBgColor, "save-bg", nil, "Set background color for --save-img\nand --save-gif flags\nPass an RGBA value\ne.g. --save-bg 255,255,255,100\n(Defaults to 0,0,0,100)\n")
+	rootCmd.PersistentFlags().StringVar(&saveHtmlPath, "save-html", "", "Save ascii art as a .html file\nFormat: <image-name>-ascii-art.html\nFile will be saved in passed path\n(pass . for current directory)\n")
+	rootCmd.PersistentFlags().IntSliceVar(&saveBgColor, "save-bg", nil, "Set background color for --save-img\nand --save-gif \nand --save-html flags\nPass an RGBA value\ne.g. --save-bg 255,255,255,100\n(Defaults to 0,0,0,100)\n")
 	rootCmd.PersistentFlags().StringVar(&fontFile, "font", "", "Set font for --save-img and --save-gif flags\nPass file path to font .ttf file\ne.g. --font ./RobotoMono-Regular.ttf\n(Defaults to Hack-Regular for ascii and\n DejaVuSans-Oblique for braille)\n")
 	rootCmd.PersistentFlags().IntSliceVar(&fontColor, "font-color", nil, "Set font color for terminal as well as\n--save-img and --save-gif flags\nPass an RGB value\ne.g. --font-color 0,0,0\n(Defaults to 255,255,255)\n")
 	rootCmd.PersistentFlags().BoolVar(&onlySave, "only-save", false, "Don't print ascii art on terminal\nif some saving flag is passed\n")

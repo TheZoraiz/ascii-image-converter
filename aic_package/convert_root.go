@@ -54,6 +54,7 @@ func DefaultFlags() Flags {
 		SaveTxtPath:         "",
 		SaveImagePath:       "",
 		SaveGifPath:         "",
+		SaveHtmlPath:         "",
 		Negative:            false,
 		Colored:             false,
 		CharBackgroundColor: false,
@@ -90,6 +91,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 	saveTxtPath = flags.SaveTxtPath
 	saveImagePath = flags.SaveImagePath
 	saveGifPath = flags.SaveGifPath
+	saveHtmlPath = flags.SaveHtmlPath
 	negative = flags.Negative
 	colored = flags.Colored
 	colorBg = flags.CharBackgroundColor

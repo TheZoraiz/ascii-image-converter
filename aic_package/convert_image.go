@@ -94,6 +94,22 @@ func pathIsImage(imagePath, urlImgName string, pathIsURl bool, urlImgBytes, pipe
 		}
 	}
 
+	// Save ascii art as .html file before printing it, if --save-html flag is passed
+	if saveHtmlPath != "" {
+		if err := createHtmlToSave(
+			asciiSet,
+			colored,
+			saveHtmlPath,
+			imagePath,
+			urlImgName,
+			saveBgColor,
+			onlySave,
+		); err != nil {
+
+			return "", fmt.Errorf("can't save file: %v", err)
+		}
+	}
+
 	ascii := flattenAscii(asciiSet, colored || grayscale, false)
 	result := strings.Join(ascii, "\n")
 

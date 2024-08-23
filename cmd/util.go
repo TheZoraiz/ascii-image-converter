@@ -172,8 +172,8 @@ func checkInputAndFlags(args []string) bool {
 		return true
 	}
 
-	if (saveTxtPath == "" && saveImagePath == "" && saveGifPath == "") && onlySave {
-		fmt.Printf("Error: you need to supply one of --save-img, --save-txt or --save-gif for using --only-save\n\n")
+	if (saveTxtPath == "" && saveImagePath == "" && saveGifPath == "" && saveHtmlPath == "") && onlySave {
+		fmt.Printf("Error: you need to supply one of --save-img, --save-txt, --save-gif or --save-html for using --only-save\n\n")
 		return true
 	}
 

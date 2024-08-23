@@ -39,6 +39,9 @@ type Flags struct {
 	// Path to save ascii art .png file
 	SaveImagePath string
 
+	// Path to save ascii art .html file
+	SaveHtmlPath string
+
 	// Path to save ascii art .gif file, if gif is passed
 	SaveGifPath string
 
@@ -111,6 +114,7 @@ var (
 	complex       bool
 	saveTxtPath   string
 	saveImagePath string
+	saveHtmlPath  string
 	saveGifPath   string
 	grayscale     bool
 	negative      bool
