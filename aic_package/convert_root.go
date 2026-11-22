@@ -123,7 +123,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 
 	if filePath != "-" {
 		if pathIsURl {
-			fmt.Printf("Fetching file from url...\r")
+			fmt.Fprintf(os.Stderr, "Fetching file from url...\r")
 
 			retrievedImage, err := http.Get(filePath)
 			if err != nil {
@@ -137,7 +137,7 @@ func Convert(filePath string, flags Flags) (string, error) {
 			defer retrievedImage.Body.Close()
 
 			urlImgName = path.Base(filePath)
-			fmt.Printf("                          \r") // To erase "Fetching image from url..." text from terminal
+			fmt.Fprintf(os.Stderr, "                          \r") // To erase "Fetching image from url..." text from terminal
 
 		} else {
 
